@@ -62,7 +62,7 @@ export default function Header() {
           </Typography>
 
           {/* Center search bar */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
+          <Box sx={{ display: 'flex'}}>
             <Search>
               <StyledInputBase
                 placeholder="Restaurants..."
@@ -88,7 +88,7 @@ export default function Header() {
           </Box>
 
           {/* Right side buttons */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Typography
               variant="h6"
               noWrap
@@ -105,8 +105,8 @@ export default function Header() {
             >
               Write a Review
             </Typography>
-            <Button variant="outlined">Login</Button>
-            <Button variant="outlined">Sign Up</Button>
+            <Button variant="outlined" sx={{ display: { xs: 'none', sm: 'block' } }}>Login</Button>
+            <Button variant="outlined" sx = {{ display: { xs: 'none', sm: 'block' }, backgroundColor: '#0085FF', color: 'white'}}>Sign Up</Button>
           </Box>
         </Toolbar>
       </AppBar>
