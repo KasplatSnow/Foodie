@@ -1,5 +1,21 @@
-import { Box, Divider, Grid2 } from "@mui/material"
+import { Box, Divider, Grid2, ListItemButton } from "@mui/material"
 import Header from "../Components/Header"
+import ListItem from "../Components/Search/ListItem";
+
+const testList = [
+    {
+      name: 'test1',
+      description: 'Place that sells food',
+    },
+    {
+      name: 'test2',
+      description: 'Another place that sells food',
+    },
+    {
+      name: 'test3',
+      description: 'Last place',
+    }
+];
 
 export default function SearchPage() {
     return (
@@ -13,9 +29,16 @@ export default function SearchPage() {
                             Filtering
                         </Box>
                         <Divider></Divider>
-                        <Box>
-                            List of restaurants
+                        
+                        {/* List of Items */}
+                        <Box sx={{ height: '80%', overflowY: 'auto' }}>
+                        {testList.map((item, index) => (
+                            <ListItemButton component="a" href="#simple-list" sx = {{ height: '35%' }}>
+                                <ListItem />
+                            </ListItemButton>
+                        ))}
                         </Box>
+
                     </Box>
                 </Grid2>
                 
