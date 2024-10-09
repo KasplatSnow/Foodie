@@ -9,7 +9,7 @@ interface ListItemProps {
 
 export default function ListItem({ index, name, description, img }: ListItemProps) {
     return (
-        <Card sx = {{height: '100%' }}>
+        <Card sx = {{width: '100%', height: '100%' }}>
             <Grid2 container spacing={2} sx={{ height: '100%' }}>
                 {/* Image Section */}
                 <Grid2 size={4} sx={{ maxHeight: '100%', maxWidth: '100%' }}>
