@@ -1,4 +1,5 @@
 import {Box, Grid2, Card } from "@mui/material";
+import StarIcon from '@mui/icons-material/Star';
 
 interface ListItemProps {
     index: number;
@@ -25,16 +26,23 @@ export default function ListItem({ index, name, description, img }: ListItemProp
                 </Grid2>
 
                 {/* Text Section */}
-                <Grid2 size={8}>
-                    <Box>
-                        <h3>{index + 1}. {name}</h3>
-                        <p>Rating</p>
-                        <p>Categories</p>
+                <Grid2 size={8} sx = {{height: '100%'}}>
+                    <Box sx = {{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-around'}}>
+                        <h2 style = {{margin: 0}}>{index + 1}. {name}</h2>
+                        <Box sx={{ display: 'flex', alignItems: 'center', margin: 0 }}>
+                            {Array.from({ length: 5 }, (_, i) => (
+                                <StarIcon key={i} />
+                            ))}
+                            5
+                        </Box>
+                        <h4 style = {{margin: 0}}>Open or Closed</h4>
+                        <h4 style = {{margin: 0}}>Categories? $$$ Value</h4>
                         <p 
                             style={{
                                 overflow: 'hidden',      // Hide any overflowing text
                                 textOverflow: 'ellipsis', // Add "..." when text overflows
-                                whiteSpace: 'nowrap',     // Prevent text from wrapping to the next line
+                                textWrap: 'nowrap',
+                                margin: 0
                             }}
                         >
                             {description}
