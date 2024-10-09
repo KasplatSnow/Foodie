@@ -124,6 +124,7 @@ const Header = () => {
             color: '#111',
             cursor: 'pointer',
           }}
+          onClick={() => navigate('/search')}
         >
           <FontAwesomeIcon icon={faSearch} />
         </button>

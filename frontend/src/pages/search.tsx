@@ -29,7 +29,7 @@ export default function SearchPage() {
                 <Grid2 size={6}>
                     <Box sx = {{height: '100%', display: 'flex', flexDirection: 'column'}}>
                         <Box sx = {{height: '20%'}}>
-                            Filtering
+                            Filtering buttons go here, waiting for backend implementation
                         </Box>
                         <Divider></Divider>
                         
@@ -46,8 +46,8 @@ export default function SearchPage() {
                 </Grid2>
                 
                 <Grid2 size={6}>
-                    <Box sx = {{height: '100%', backgroundColor: 'blue'}}>
-                        Map
+                    <Box sx = {{height: '100%', backgroundColor: 'blue', background: `url('https://foodie.sysco.com/wp-content/uploads/2024/08/Sysco_Panchetta-64.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                        Map Using a temporary image until we decide on a map API or different usage for space
                     </Box>
                 </Grid2>
             </Grid2>
