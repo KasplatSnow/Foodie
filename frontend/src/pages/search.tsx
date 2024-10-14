@@ -1,6 +1,10 @@
-import { Box, List, Divider, Grid2, ListItemButton } from "@mui/material"
+import { Box, List, Divider, Grid2, ListItemButton, Button } from "@mui/material"
 import Header from "../Components/Header"
 import ListItem from "../Components/Search/ListItem";
+import StarIcon from '@mui/icons-material/Star';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+
+const cuisineList = ['Burgers', 'Delivery', 'Chinese', 'Mexican', 'Italian', 'Thai'];
 
 const testList = [
     {
@@ -69,8 +73,17 @@ const testList = [
     }
 ];
 
-
 export default function SearchPage() {
+    const handleStarClick = (rating: number) => {
+        console.log(`Star ${rating} clicked!`);
+        // Perform any action, e.g., set the rating state
+    };
+
+    const handlePriceClick = (price: number) => {
+        console.log(`Price ${price} clicked!`);
+        // Perform any action, e.g., set the rating state
+    };    
+
     return (
         <Box sx = {{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <Header />
@@ -78,15 +91,63 @@ export default function SearchPage() {
             <Grid2 container spacing={2} sx = {{height: '100%'}}>
                 <Grid2 size={6}>
                     <Box sx = {{height: '90vh', display: 'flex', flexDirection: 'column'}}>
-                        <Box sx = {{height: '20%'}}>
-                            Filtering buttons go here, waiting for backend implementation
+                        <Box sx = {{height: '30vh'}} mx = {{height: '20vh'}}>
+
+                            {/* Filtering options */}
+                            <Grid2 container spacing={2} sx = {{height: '100%'}}>
+                                {/* Cuisines */}
+                                <Grid2 size = {6}>
+                                    <h3 style = {{margin: 0, marginTop: '1rem', marginLeft: '1rem'}}>Cuisines</h3>
+                                    <Box sx = {{marginLeft: '1rem'}}>
+                                        <Grid2 container spacing = {2}>
+                                            {cuisineList.map((item, index) => (
+                                                <Grid2 size = {4} key = {index}>
+                                                    <Button sx = {{color: 'black'}}>
+                                                        <h5 style = {{margin: 0}}>{item}</h5>
+                                                    </Button>
+                                                </Grid2>
+                                            ))}
+                                        </Grid2>
+                                    </Box>
+                                </Grid2>
+
+                                {/* Rating/Price */}
+                                <Grid2 size = {6}>
+                                    <h3 style = {{margin: 0, marginTop: '1rem', marginLeft: '1rem'}}>Rating</h3>
+                                    <Box sx={{ display: 'flex', marginLeft: '1rem'}}>
+                                        {Array(5).fill(0).map((_, index) => (
+                                            <Button 
+                                                key={index} 
+                                                onClick={() => handleStarClick(index + 1)}
+                                                sx={{ minWidth: '3rem', width: '3rem' }}  // Set custom width
+                                            >
+                                                <StarIcon />
+                                            </Button>
+                                        ))}
+                                    </Box>
+
+                                    <h3 style = {{margin: 0, marginTop: '1rem', marginLeft: '1rem'}}>Price</h3>
+                                    <Box sx={{ display: 'flex', marginLeft: '1rem'}}>
+                                        {Array(5).fill(0).map((_, index) => (
+                                            <Button 
+                                            key={index} 
+                                            onClick={() => handlePriceClick(index + 1)}
+                                            sx={{ minWidth: '3rem', width: '3rem' }}  // Set custom width
+                                        >
+                                            <LocalAtmIcon />
+                                        </Button>
+                                        ))}
+                                    </Box>
+                                </Grid2>
+                            </Grid2>
+
                         </Box>
                         <Divider></Divider>
                         
                         {/* List of Items */}
                         <List sx={{ height: '100vh', overflowY: 'auto' }}>
                         {testList.map((item, index) => (
-                            <ListItemButton component="a" href="#simple-list" sx = {{ height: '30%' }}>
+                            <ListItemButton component="a" href="#simple-list" sx = {{ height: '30%' }} key = {index}>
                                 <ListItem index = {index} name = {item.name} description = {item.description} img = {item.image} />
                             </ListItemButton>
                         ))}
