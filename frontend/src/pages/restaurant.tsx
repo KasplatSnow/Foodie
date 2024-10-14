@@ -1,4 +1,4 @@
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Divider, Grid2, Card } from "@mui/material";
 import Header from "../Components/Header";
 
 const testRestaurantInfo = {
@@ -15,17 +15,19 @@ export default function RestaurantPage() {
     return (
         <Box sx={{ height: '100%' }}>
             <Header />
-            <Box sx={{ height: '100%' }}>
+            <Box>
                 {/* image header with dark overlay */}
                 <Box
                     sx={{
-                        position: 'relative', // Allows overlay to be positioned relative to the image
+                        position: 'relative',
                         width: '100%',
-                        height: '50vh', // Define a height for the image section
+                        height: '40vh', // Define a height for the image section
                         backgroundImage: `url("${testRestaurantInfo.image}")`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         color: 'white',
+                        display: 'flex', // Enables flexbox layout
+                        alignItems: 'flex-end', // Aligns content at the vertical bottom
                     }}
                 >
                     {/* Dark overlay */}
@@ -47,15 +49,45 @@ export default function RestaurantPage() {
                             position: 'relative',
                             zIndex: 2, // Ensures content is above the overlay
                             padding: '2rem',
-                            marginLeft: '1rem'
+                            marginLeft: '1rem',
                         }}
                     >
                         <h1 style={{ fontSize: '3rem' }}>{testRestaurantInfo.name}</h1>
                         <h2 style={{ fontSize: '2rem' }}>Rating</h2>
-                        <h3 style={{ fontSize: '1rem' }}>Pricing Tags</h3>
-                        <Button variant="contained">Write a Review</Button>
+                        <h3 style={{ fontSize: '1.5rem' }}>Pricing Tags</h3>
                     </Box>
                 </Box>
+            </Box>
+
+            <Box sx = {{marginLeft: '3rem', marginTop: '2rem', marginRight: '3rem', paddingBottom: '3rem'}}>
+                <Button variant = 'contained'>
+                    Write a Review
+                </Button>
+
+                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+
+                <h2>Location and Hours</h2>
+
+                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+
+                <h2>About the Business</h2>
+                <p>{testRestaurantInfo.description}</p>
+
+                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+
+                <h2>Reviews</h2>
+                {/* Section to fill in your review */}
+
+                <Card sx = {{height: '30vh', width: '50vw'}}>
+                    <Grid2 container>
+                        <Grid2 size = {6}>
+                            Overall Rating
+                        </Grid2>
+                        <Grid2 size = {6}>
+                            Distribution of Reviews
+                        </Grid2>
+                    </Grid2>
+                </Card>
             </Box>
         </Box>
     );
