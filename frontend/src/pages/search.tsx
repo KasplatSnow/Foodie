@@ -3,11 +3,13 @@ import Header from "../Components/Header"
 import ListItem from "../Components/Search/ListItem";
 import StarIcon from '@mui/icons-material/Star';
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+import { useNavigate } from 'react-router-dom';
 
 const cuisineList = ['Burgers', 'Delivery', 'Chinese', 'Mexican', 'Italian', 'Thai'];
 
 const testList = [
     {
+        id: '1',
         name: 'Joe\'s Pizza',
         description: 'Famous New York-style pizza with a thin crust and fresh toppings. Family-owned since 1985.',
         categories: ['Pizza', 'Italian', 'Fast Food'],
@@ -16,6 +18,7 @@ const testList = [
         image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
     },
     {
+        id: '2',
         name: 'Sushi Heaven',
         description: 'A traditional sushi restaurant with a modern twist. Known for the freshest sashimi and creative rolls.',
         categories: ['Sushi Bars', 'Japanese', 'Seafood'],
@@ -24,6 +27,7 @@ const testList = [
         image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
     },
     {
+        id: '3',
         name: 'Café Bliss',
         description: 'Cozy café with a wide variety of gourmet coffees, teas, and fresh-baked pastries. Perfect for relaxing or working.',
         categories: ['Cafes', 'Coffee & Tea', 'Bakeries'],
@@ -32,6 +36,7 @@ const testList = [
         image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
     },
     {
+        id: '4',
         name: 'Taco Fiesta',
         description: 'Vibrant taco joint serving up authentic Mexican street food. Try their famous carne asada tacos and homemade salsa.',
         categories: ['Mexican', 'Tacos', 'Street Food'],
@@ -39,41 +44,11 @@ const testList = [
         reviewCount: 450,
         image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
     },
-    {
-        name: 'Joe\'s Pizza',
-        description: 'Famous New York-style pizza with a thin crust and fresh toppings. Family-owned since 1985.',
-        categories: ['Pizza', 'Italian', 'Fast Food'],
-        rating: 4.5,
-        reviewCount: 200,
-        image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
-    },
-    {
-        name: 'Sushi Heaven',
-        description: 'A traditional sushi restaurant with a modern twist. Known for the freshest sashimi and creative rolls.',
-        categories: ['Sushi Bars', 'Japanese', 'Seafood'],
-        rating: 4.8,
-        reviewCount: 350,
-        image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
-    },
-    {
-        name: 'Café Bliss',
-        description: 'Cozy café with a wide variety of gourmet coffees, teas, and fresh-baked pastries. Perfect for relaxing or working.',
-        categories: ['Cafes', 'Coffee & Tea', 'Bakeries'],
-        rating: 4.2,
-        reviewCount: 180,
-        image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
-    },
-    {
-        name: 'Taco Fiesta',
-        description: 'Vibrant taco joint serving up authentic Mexican street food. Try their famous carne asada tacos and homemade salsa.',
-        categories: ['Mexican', 'Tacos', 'Street Food'],
-        rating: 4.7,
-        reviewCount: 450,
-        image: 'https://content.sportslogos.net/logos/34/828/full/san_jose_state_spartans_logo_primary_dark_2018_sportslogosnet-9968.png',
-    }
 ];
 
 export default function SearchPage() {
+    const navigate = useNavigate();
+
     const handleStarClick = (rating: number) => {
         console.log(`Star ${rating} clicked!`);
         // Perform any action, e.g., set the rating state
@@ -83,6 +58,10 @@ export default function SearchPage() {
         console.log(`Price ${price} clicked!`);
         // Perform any action, e.g., set the rating state
     };    
+
+    const handleRestaurantClick = (id: string) => {
+        navigate(`/restaurant?${id}`);
+    }
 
     return (
         <Box sx = {{height: '100vh', display: 'flex', flexDirection: 'column'}}>
@@ -147,7 +126,7 @@ export default function SearchPage() {
                         {/* List of Items */}
                         <List sx={{ height: '100vh', overflowY: 'auto' }}>
                         {testList.map((item, index) => (
-                            <ListItemButton component="a" href="#simple-list" sx = {{ height: '30%' }} key = {index}>
+                            <ListItemButton component="a" sx = {{ height: '30%' }} key = {index} onClick = {() => handleRestaurantClick(item.id)}>
                                 <ListItem index = {index} name = {item.name} description = {item.description} img = {item.image} />
                             </ListItemButton>
                         ))}
