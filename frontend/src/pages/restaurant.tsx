@@ -1,5 +1,6 @@
-import { Box, Button, Divider, Grid2, Card } from "@mui/material";
+import { Box, Button, Divider, Grid2, Card, TextField, Typography } from "@mui/material";
 import Header from "../Components/Header";
+import StarIcon from '@mui/icons-material/Star';
 
 const testRestaurantInfo = {
     id: '1',
@@ -12,6 +13,11 @@ const testRestaurantInfo = {
 };
 
 export default function RestaurantPage() {
+    const handleStarClick = (rating: number) => {
+        console.log(`Star ${rating} clicked!`);
+        // Perform any action, e.g., set the rating state
+    };
+
     return (
         <Box sx={{ height: '100%' }}>
             <Header />
@@ -59,31 +65,61 @@ export default function RestaurantPage() {
                 </Box>
             </Box>
 
-            <Box sx = {{marginLeft: '3rem', marginTop: '2rem', marginRight: '3rem', paddingBottom: '3rem'}}>
-                <Button variant = 'contained'>
+            <Box sx={{ marginLeft: '3rem', marginTop: '2rem', marginRight: '3rem', paddingBottom: '3rem' }}>
+                <Button variant='contained'>
                     Write a Review
                 </Button>
 
-                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+                <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
                 <h2>Location and Hours</h2>
 
-                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+                <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
                 <h2>About the Business</h2>
                 <p>{testRestaurantInfo.description}</p>
 
-                <Divider sx = {{marginTop: '2rem', marginBottom: '2rem'}} />
+                <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
                 <h2>Reviews</h2>
-                {/* Section to fill in your review */}
+                {/* Review section */}
+                <Card sx={{ padding: '2rem', marginTop: '2rem' }}>
+                    <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
+                        Write Your Review
+                    </Typography>
+                    <TextField
+                        label="Your Review"
+                        variant="outlined"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        sx={{ marginBottom: '1rem' }}
+                    />
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex'}}>
+                            <Typography variant="h6">Rating:</Typography>
+                            {Array(5).fill(0).map((_, index) => (
+                                <Button 
+                                    key={index} 
+                                    onClick={() => handleStarClick(index + 1)}
+                                    sx={{ minWidth: '3rem', width: '3rem' }}  // Set custom width
+                                >
+                                    <StarIcon />
+                                </Button>
+                            ))}
+                        </Box>
+                        <Button variant="contained">Submit Review</Button>
+                    </Box>
+                </Card>
 
-                <Card sx = {{height: '30vh', width: '50vw'}}>
+                <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
+
+                <Card sx={{ height: '30vh'}}>
                     <Grid2 container>
-                        <Grid2 size = {6}>
+                        <Grid2 size={6}>
                             Overall Rating
                         </Grid2>
-                        <Grid2 size = {6}>
+                        <Grid2 size={6}>
                             Distribution of Reviews
                         </Grid2>
                     </Grid2>
