@@ -1,4 +1,4 @@
-package foodie.backend;
+package foodie.backend.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
