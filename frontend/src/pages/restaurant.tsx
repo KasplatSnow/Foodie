@@ -123,7 +123,7 @@ export default function RestaurantPage() {
                             resize: 'none',
                         }}
                     />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ display: {xs: 'none', sm: 'flex'}, justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex'}}>
                             <Typography variant="h6">Rating:</Typography>
                             {Array(5).fill(0).map((_, index) => (
@@ -131,6 +131,23 @@ export default function RestaurantPage() {
                                     key={index} 
                                     onClick={() => handleStarClick(index + 1)}
                                     sx={{ minWidth: '3rem', width: '3rem' }}  // Set custom width
+                                >
+                                    <StarIcon />
+                                </Button>
+                            ))}
+                        </Box>
+                        <Button variant="contained">Submit Review</Button>
+                    </Box>
+
+                    {/* Responsive mobile view for Review */}
+                    <Box sx = {{display: {xs: 'block', sm: 'none'}}}>
+                        <Box sx={{ display: 'flex'}}>
+                            <Typography variant="h6">Rating:</Typography>
+                            {Array(5).fill(0).map((_, index) => (
+                                <Button 
+                                    key={index} 
+                                    onClick={() => handleStarClick(index + 1)}
+                                    sx={{ minWidth: '2rem', width: '2rem' }}  // Set custom width
                                 >
                                     <StarIcon />
                                 </Button>
