@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid2, Card, TextareaAutosize, Typography, List, ListItem } from "@mui/material";
-import Header from "../Components/Header";
+import Header from "../Components/Home/Header";
 import StarIcon from '@mui/icons-material/Star';
 import ReviewItem from "../Components/Restaurant/ReviewItem";
 
@@ -41,7 +41,7 @@ export default function RestaurantPage() {
     return (
         <Box sx={{ height: '100%' }}>
             <Header />
-            <Box>
+            <Box sx = {{marginTop: '4rem'}}>
                 {/* image header with dark overlay */}
                 <Box
                     sx={{

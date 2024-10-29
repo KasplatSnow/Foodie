@@ -1,5 +1,5 @@
 import { Box, List, Divider, Grid2, ListItemButton, Button } from "@mui/material"
-import Header from "../Components/Header"
+import Header from "../Components/Home/Header"
 import ListItem from "../Components/Search/ListItem";
 import StarIcon from '@mui/icons-material/Star';
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
@@ -67,7 +67,7 @@ export default function SearchPage() {
         <Box sx = {{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <Header />
             
-            <Grid2 container spacing={2} sx = {{height: '100%'}}>
+            <Grid2 container spacing={2} sx = {{height: '100%', marginTop: '4rem'}}>
                 <Grid2 size={6}>
                     <Box sx = {{height: '90vh', display: 'flex', flexDirection: 'column'}}>
                         <Box sx = {{height: '30vh'}} mx = {{height: '20vh'}}>
