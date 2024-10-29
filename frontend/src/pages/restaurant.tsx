@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid2, Card, TextField, Typography, List, ListItem } from "@mui/material";
+import { Box, Button, Divider, Grid2, Card, TextareaAutosize, Typography, List, ListItem } from "@mui/material";
 import Header from "../Components/Header";
 import StarIcon from '@mui/icons-material/Star';
 import ReviewItem from "../Components/Restaurant/ReviewItem";
@@ -6,7 +6,7 @@ import ReviewItem from "../Components/Restaurant/ReviewItem";
 const testRestaurantInfo = {
     id: '1',
     name: 'Joe\'s Pizza',
-    description: 'Famous New York-style pizza with a thin crust and fresh toppings. Family-owned since 1985.',
+    description: `NY-style thin crust pizza. We offer a 20" pie or made to order slices. Our dough as well as our sauce is made fresh everyday with only the best ingredients. When it comes to the cheese we don't skimp either. All our pizzas come with nearly 1lb of a very special mozzarella cheese. The mozzarella is actually a blend of buffalo milk and cows milk which will give your pizza a very unique and flavorful taste. If you are trying our pizza for the first time I always recommend a plain cheese as your first pie, that way you can taste the quality that goes into our dough/sauce/cheese. A good pizza, doesn't need toppings! Tax is always included in the price.`,
     categories: ['Pizza', 'Italian', 'Fast Food'],
     rating: 4.5,
     reviewCount: 200,
@@ -111,13 +111,17 @@ export default function RestaurantPage() {
                     <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
                         Write Your Review
                     </Typography>
-                    <TextField
-                        label="Your Review"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        fullWidth
-                        sx={{ marginBottom: '1rem' }}
+                    <TextareaAutosize
+                        minRows={4} // Initial rows
+                        maxRows={10} // max rows
+                        placeholder="Your Review"
+                        style={{
+                            width: '97%',
+                            padding: '16.5px 14px',
+                            marginBottom: '1rem',
+                            font: 'inherit',
+                            resize: 'none',
+                        }}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex'}}>

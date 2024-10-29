@@ -1,4 +1,4 @@
-import {Box, Card, Grid2 } from "@mui/material";
+import {Box, Card } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
 
 interface ReviewItemProps {
