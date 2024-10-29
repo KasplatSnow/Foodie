@@ -150,9 +150,9 @@ export default function RestaurantPage() {
                 </Card>
 
                 {/* List of Reviews */}
-                <List sx={{ height: '100vh', overflowY: 'auto' }}>
+                <List>
                     {testReviews.map((item, index) => (
-                        <ListItem sx = {{ height: '30%' }} key = {index}>
+                        <ListItem sx = {{padding: 0, marginTop: '1rem'}} key = {index}>
                             <ReviewItem user = {item.user} rating = {item.rating} content = {item.content} />
                         </ListItem>
                     ))}
