@@ -1,6 +1,7 @@
-import { Box, Button, Divider, Grid2, Card, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid2, Card, TextField, Typography, List, ListItem } from "@mui/material";
 import Header from "../Components/Header";
 import StarIcon from '@mui/icons-material/Star';
+import ReviewItem from "../Components/Restaurant/ReviewItem";
 
 const testRestaurantInfo = {
     id: '1',
@@ -11,6 +12,25 @@ const testRestaurantInfo = {
     reviewCount: 200,
     image: 'https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg',
 };
+
+const testReviews = [
+    {
+        user: {
+            name: "Brandon Llanes",
+            img: "https://media.licdn.com/dms/image/v2/C5603AQFEfnRKb5rOcA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1622597713152?e=1735776000&v=beta&t=cMOaSPN8uqkh_rbhu6NWPiUgDlq1tN7rWWCo8bQ02DM"
+        },
+        rating: 5,
+        content: "Outstanding NY style pizza. I'd give a 9/10 for the pizza but ambiance is a 10/10 as you never see the cool outdoor patio tables with a TV to boot. California weather with NY pizza--makes a very hard combo to beat. Cheese pizza was great with nice thin crispy crust that surprisingly held up well when held--this is the first NY pizza test. Some stringy cheese but not that much (I think they needed a bit more mozzarella). Zangy tomato sauce was perfect. My only ask is in the dough taste--it was missing a tad bit of that yeasty punch that is so common in NY. We'll be back hoping to find that elusive NY dough...this checked off nearly all the boxes. Great job to the crew here!"
+    },
+    {
+        user: {
+            name: "John Smith",
+            img: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        },
+        rating: 5,
+        content: "This place brings me LIFE! Service, food, vibes, everything is on point. Their food is so fresh, full of flavor, and loadedddd. Can't wait to come back."
+    },
+];
 
 export default function RestaurantPage() {
     const handleStarClick = (rating: number) => {
@@ -72,7 +92,11 @@ export default function RestaurantPage() {
 
                 <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
+                {/* Replace with actual info later */}
                 <h2>Location and Hours</h2>
+                <p>1431 Bird Avenue</p>
+                <p>San Jose, CA, 95125</p>
+                <p>Willow Glen</p>
 
                 <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
@@ -124,6 +148,15 @@ export default function RestaurantPage() {
                         </Grid2>
                     </Grid2>
                 </Card>
+
+                {/* List of Reviews */}
+                <List sx={{ height: '100vh', overflowY: 'auto' }}>
+                    {testReviews.map((item, index) => (
+                        <ListItem sx = {{ height: '30%' }} key = {index}>
+                            <ReviewItem user = {item.user} rating = {item.rating} content = {item.content} />
+                        </ListItem>
+                    ))}
+                </List>
             </Box>
         </Box>
     );
