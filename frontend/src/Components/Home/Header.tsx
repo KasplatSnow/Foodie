@@ -72,6 +72,7 @@ const Header = () => {
             marginRight: '10px',
             background: 'none',
           }}
+          onClick={() => {navigate('/Home')}}
         />
         <button
           style={{
