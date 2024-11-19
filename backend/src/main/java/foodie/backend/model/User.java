@@ -1,72 +1,84 @@
-package foodie.backend.model;
-
-import java.util.List;
-import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Table(name = "user")
-@Inheritance(strategy = InheritanceType.JOINED)
-@Data
-@NoArgsConstructor
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long UserID;
-
-  @Column(nullable = false, unique = true)
-  private String username;
-
-  @Column(nullable = false)
-  private String password;
-
-  @Column(nullable = false, unique = true)
-  private String email;
-
-  @Column(nullable = false, unique = true)
-  private String phoneNumber;
-
-  @Column(nullable = false)
-  private String role;
-
-  public User(
+    private String username, role, password, email, address, phoneNumber;
+    private long userID;
+    public User(
     String username,
+    String role,
     String password,
     String email,
-    String phoneNumber,
-    String role
-  ) {
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
-    this.role = role;
-  }
+    String address,
+    String phoneNumber
+    ) {
+        this.username = username;
+        this.role = role;
+        this.password = password;
+        this.email = email;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 
-  // Search restaurants by name, category, price, etc.
-  public List<Restaurant> searchRestaurants(
-    String name,
-    String category,
-    String priceRange,
-    int rating
-  ) {
-    //code here
-    return null;
-  }
+    // Search restaurants by name, category, price, etc.
+    public ResultSet searchRestaurants(
+        Connection con, String name,
+        String category,
+        String priceRange,
+        int rating
+    ) throws Exception {
 
-  // Submit a review and rating
-  public void submitReview(
-    Restaurant restaurant,
-    String reviewText,
-    int rating
-  ) {
-    //code here
-  }
+        String query = "FROM Restaurant R WHERE R.name = ?, R.category = ?, R.priceRange = ?, R.rating = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet;
+    }
 
-  // View restaurant details including reviews
-  public Restaurant viewRestaurantDetails(Long restaurantId) {
-    // Implementation to fetch restaurant details, reviews, and ratings
-    return null;
-  }
+    // Submit a review and rating
+    public void submitReview(
+        Restaurant restaurant,
+        String reviewText,
+        int rating
+    ) {
+    }
+
+    // View restaurant details including reviews
+    public Restaurant viewRestaurantDetails(Long restaurantId) {
+        // Implementation to fetch restaurant details, reviews, and ratings
+        return null;
+    }
+
+    public long getUserID(){
+        return userID;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public String getRole(){
+        return role;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
+
+    public void setUserID(long userID){
+        this.userID = userID;
+    }
+
+    public void search(){
+
+    }
 }
+
