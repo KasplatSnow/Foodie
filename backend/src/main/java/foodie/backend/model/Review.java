@@ -1,26 +1,37 @@
-package foodie.backend.model;
-
-import javax.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Table(name = "reviews")
-@Data
-@NoArgsConstructor
 public class Review {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    private User user;
+    private Restaurant restaurant;
+    private String reviewText;
+    private float rating; // 1-5 stars
 
-  @ManyToOne
-  @JoinColumn(name = "restaurant_id")
-  private Restaurant restaurant;
+    public Review(User user, Restaurant restaurant, String reviewText, float rating){
+        this.user = user;
+        this.restaurant = restaurant;
+        this.reviewText = reviewText;
+        this.rating = rating;
+    }
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+    public void setReviewText(String reviewText){
+        this.reviewText = reviewText;
+    }
 
-  private String reviewText;
-  private int rating; // 1-5 stars
+    public void setRating(float rating){
+        this.rating = rating;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public Restaurant getRestaurant(){
+        return restaurant;
+    }
+
+    public User getUser(){
+        return user;
+    }
 }
