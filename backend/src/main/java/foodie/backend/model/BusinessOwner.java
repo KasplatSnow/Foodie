@@ -1,57 +1,64 @@
-package foodie.backend.model;
-
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "business_owners")
-@Data
-@NoArgsConstructor
-public class BusinessOwner extends User {
-  private String businessName; // Example field specific to business owner
+public class BusinessOwner extends User{
+private String username, role, password, email, address, phoneNumber;
+private List<Restaurant> restaurants;
+private long userID;
 
   public BusinessOwner(
     String username,
+    String role,
     String password,
     String email,
-    String phoneNumber,
-    String businessName
+    String address,
+    String phoneNumber
   ) {
-    super(username, password, email, phoneNumber, "business_owners");
-    this.businessName = businessName;
+    super(username, "BUSINESS", password, email, address, phoneNumber);
   }
 
-  @OneToMany(mappedBy = "owner")
-  private List<Restaurant> restaurants;
 
-  // Add a new restaurant listing
-  public void addRestaurant(Restaurant restaurant) {
-    restaurant.setOwner(this); // Set the owner of the restaurant
+  //add a new restaurant listing
+  public void createNewRestaurant(long restaurantID,
+  String name,
+  BusinessOwner owner,
+  String address,
+  int zipCode,
+  String phoneNumber,
+  String email,
+  String cuisine,
+  String hours,
+  String description,
+  float rating,
+  int price) {
+    Restaurant restaurant = new Restaurant(restaurantID, name, this, address, zipCode, phoneNumber, email, cuisine, hours, description, rating, price);
     restaurants.add(restaurant);
   }
 
-  // Update an existing restaurant's details
+  public void addRestaurant(Restaurant restaurant){
+    restaurant.setBusinessOwner(this);
+    restaurants.add(restaurant);
+  }
+
+  //update an existing restaurant's details
   public void updateRestaurantDetails(
     Restaurant restaurant,
     String name,
+    BusinessOwner owner,
     String address,
-    String contactInfo,
+    String phoneNumber,
     String hours,
     String description
   ) {
     restaurant.setName(name);
     restaurant.setAddress(address);
-    restaurant.setContactInfo(contactInfo);
+    restaurant.setPhoneNumber(phoneNumber);
     restaurant.setHours(hours);
     restaurant.setDescription(description);
   }
 
-  // View owned list of restaurants
+  //view owned list of restaurants
   public List<Restaurant> viewOwnedRestaurants() {
+    //depending on page, will loop through restaurants to display them
     return this.restaurants;
   }
 }
