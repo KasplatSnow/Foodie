@@ -1,6 +1,29 @@
+package foodie.backend.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "review")
 public class Review {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long reviewID;
+
+    @ManyToOne
+    @JoinColumn(name = "userID")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurantID")
     private Restaurant restaurant;
+
     private String reviewText;
     private float rating; // 1-5 stars
 
@@ -11,6 +34,9 @@ public class Review {
         this.rating = rating;
     }
 
+    public Review(){
+        
+    }
     public void setReviewText(String reviewText){
         this.reviewText = reviewText;
     }

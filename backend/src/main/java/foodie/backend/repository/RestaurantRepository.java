@@ -33,4 +33,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   List<Restaurant> checkForDuplicateListings();
 
   void removeClosedRestaurant(Long restaurantId);
+  
+  List<Restaurant> searchRestaurants(String name, String cuisine, int price, float rating);
 }

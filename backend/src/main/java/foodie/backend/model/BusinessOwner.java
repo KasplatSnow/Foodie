@@ -1,64 +1,65 @@
+package foodie.backend.model;
+
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
+@DiscriminatorValue("BUSINESS")
 public class BusinessOwner extends User{
-private String username, role, password, email, address, phoneNumber;
-private List<Restaurant> restaurants;
-private long userID;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long userID;
+
+  private String username, password, email, address, phoneNumber;
+
+  @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Restaurant> restaurants;
 
   public BusinessOwner(
     String username,
-    String role,
     String password,
     String email,
     String address,
     String phoneNumber
   ) {
-    super(username, "BUSINESS", password, email, address, phoneNumber);
+    super(username, password, email, address, phoneNumber);
   }
 
+  public BusinessOwner(){
 
-  //add a new restaurant listing
-  public void createNewRestaurant(long restaurantID,
-  String name,
-  BusinessOwner owner,
-  String address,
-  int zipCode,
-  String phoneNumber,
-  String email,
-  String cuisine,
-  String hours,
-  String description,
-  float rating,
-  int price) {
-    Restaurant restaurant = new Restaurant(restaurantID, name, this, address, zipCode, phoneNumber, email, cuisine, hours, description, rating, price);
+  }
+
+  // Add a new restaurant listing
+  public void addRestaurant(Restaurant restaurant) {
+    restaurant.setOwner(this); // Set the owner of the restaurant
     restaurants.add(restaurant);
   }
 
-  public void addRestaurant(Restaurant restaurant){
-    restaurant.setBusinessOwner(this);
-    restaurants.add(restaurant);
-  }
-
-  //update an existing restaurant's details
+  // Update an existing restaurant's details
   public void updateRestaurantDetails(
     Restaurant restaurant,
     String name,
-    BusinessOwner owner,
     String address,
-    String phoneNumber,
     String hours,
     String description
   ) {
     restaurant.setName(name);
     restaurant.setAddress(address);
-    restaurant.setPhoneNumber(phoneNumber);
     restaurant.setHours(hours);
     restaurant.setDescription(description);
   }
 
-  //view owned list of restaurants
+  // View owned list of restaurants
   public List<Restaurant> viewOwnedRestaurants() {
-    //depending on page, will loop through restaurants to display them
     return this.restaurants;
   }
 }
