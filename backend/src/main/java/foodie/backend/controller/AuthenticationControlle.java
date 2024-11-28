@@ -19,24 +19,24 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // Extract email, password, and role from the request body
+        //extract email, password, and role from the request body
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         String role = loginRequest.getRole();
 
         User user = userService.getUserByEmail(email);
 
-        // Simple login validation (replace with database or service call)
+        //simple login validation (replace with database or service call)
         if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
             
-            // Check role and return a corresponding response
+            //check role and return a corresponding response
             if (role.equals(user.getRole().toString())) {
                 return ResponseEntity.ok("Login successful");
             }else{
                 return ResponseEntity.badRequest().body("Invalid role");
             }
         } else {
-            // Invalid credentials
+            //invalid credentials
             return ResponseEntity.status(401).body("Invalid email or password");
         }
     }
