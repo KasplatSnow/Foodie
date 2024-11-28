@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationRequest registrationRequest) {
-        // Validate the incoming request
+        //verify request
         if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
             return ResponseEntity.badRequest().body("Email is required");
         }
@@ -41,12 +41,12 @@ public class UserController {
             return ResponseEntity.badRequest().body("Role is required");
         }
 
-        // Check if user already exists
+        //check if user already exists via
         if (userService.getUserByEmail(registrationRequest.getEmail()) != null) {
             return ResponseEntity.badRequest().body("Email is already registered");
         }
 
-        // Create a new User object to save
+        //create User obj then check role to determine type, then set data
         User newUser;
         String role = registrationRequest.getRole();
         if(role.equals("USER")){
@@ -67,10 +67,10 @@ public class UserController {
         newUser.setUsername(registrationRequest.getUsername());
         newUser.setPhoneNumber(registrationRequest.getPhoneNumber());
         
-        // Save the user to the database
+        //save the user to the database
         userService.createUser(newUser);
 
-        // Return success message
+        //return success message
         return ResponseEntity.ok("Registration successful");
     }
 
