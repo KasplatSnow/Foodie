@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { REACT_APP_GOOGLE_API_KEY } from '../../constants'
+import { useNavigate } from 'react-router-dom';
 
 const mapContainerStyle = {
   width: '100%',
@@ -117,6 +118,11 @@ const MapSearch: React.FC = () => {
   const [reviewComment, setReviewComment] = useState('')
   const [reviewRating, setReviewRating] = useState<number | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
+
+  const navigate = useNavigate();
+  const handleRestaurantClick = (id: string) => {
+    navigate(`/restaurant?${id}`);
+  }
 
   const handleSearch = () => {
     let results = mockRestaurants
@@ -302,7 +308,7 @@ const MapSearch: React.FC = () => {
           }}
         >
           {filteredRestaurants.map((restaurant) => (
-            <Card key={restaurant.id} sx={{ mb: 2 }}>
+            <Card key={restaurant.id} sx={{ mb: 2 }} onClick = {() => handleRestaurantClick(restaurant.id)} >
               <CardContent>
                 <Typography variant="h6">{restaurant.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
