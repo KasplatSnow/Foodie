@@ -10,6 +10,7 @@ import './App.css'
 import SubmitReviewPage from './Components/Restaurant/Review'
 import MapSearchWithReview from './Components/Restaurant/RestaurantSearch'
 import Logout from './Components/Auth/Logout'
+import ProfilePage from './pages/profile'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           path="/restaurant_management"
           element={<RestaurantManagement />}
         />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   )
