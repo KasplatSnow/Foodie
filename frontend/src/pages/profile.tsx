@@ -44,31 +44,52 @@ export default function ProfilePage() {
             <Box sx = {{marginTop: '0', background: `url('https://foodie.sysco.com/wp-content/uploads/2024/08/Sysco_Panchetta-64.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100%'}}>
                 <Grid container spacing={2}>
                     <Grid size={4} sx = {{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                        <Card sx = {{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: '70%', marginTop: '4rem'}}>
+                        <Card sx = {{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: {xs: '60%', md: '70%'}, marginTop: {xs: '3rem', md: '4rem'}}}>
                             <Avatar
                                 alt="Profile Picture"
                                 src="/path/to/your/image.jpg"
                                 sx={{
-                                    width: 200,
-                                    height: 200,
-                                    marginBottom: '5rem',
+                                    width: {xs: 100, md: 200},
+                                    height: {xs: 100, md: 200},
+                                    marginBottom: {xs: '2rem', md: '5rem'},
                                     borderRadius: 0, // Make it square
                                 }}
                             />
 
                             
-                            <Typography variant="h5" fontWeight={"bold"}>First Last</Typography>
+                            <Typography 
+                                variant="h5" 
+                                fontWeight={"bold"} 
+                                sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
+                            >
+                                First Last
+                            </Typography>
 
-                            <Typography variant="h6">Email</Typography>
+                            <Typography 
+                                variant="h6" 
+                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
+                            >
+                                Email
+                            </Typography>
 
-                            <Typography variant="h6">Address</Typography>
+                            <Typography 
+                                variant="h6" 
+                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
+                            >
+                                Address
+                            </Typography>
 
-                            <Typography variant="h6">Phone Number</Typography>
+                            <Typography 
+                                variant="h6" 
+                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                            >
+                                Phone Number
+                            </Typography>
                         </Card>
                     </Grid>
                     <Grid size={8}>
                         {/* List of Reviews */}
-                        <Box sx={{ maxHeight: {xs: '300px', md: '750px'}, overflowY: 'auto', padding: 1, marginTop: '5rem' }}>
+                        <Box sx={{ maxHeight: {xs: '400px', md: '750px'}, overflowY: 'auto', padding: 1, marginTop: {xs: '2rem', md: '5rem'} }}>
                             <List>
                                 {testReviews.map((item, index) => (
                                     <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
