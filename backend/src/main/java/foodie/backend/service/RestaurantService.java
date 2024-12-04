@@ -14,8 +14,61 @@ public class RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+/*
+ * FIGURE OUT WHY JPA CANT FIND A FLOAT WITH A DEMICAL PLACE
+ * AND
+ * DIFFERENTIATE INT FROM FLOAT FOR PRICE AND RATING
+ *
+ */
+    public List<Restaurant> searchRestaurants(String query){
+        if(query != null){
+            if(isFloat(query)){
+                Float rating = Float.parseFloat(query);
+                return restaurantRepository.findByRating(rating);
+            }
+            else if(isInteger(query)){
+                Integer price = Integer.parseInt(query);
+                return restaurantRepository.findByPrice(price);
+            }
+            else{
+                return restaurantRepository.findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCase(query, query);
+            }
+        }
+        return List.of();
+    }
 
-    public List<Restaurant> searchRestaurants(String name, String cuisine, int price, float rating) {
-        return restaurantRepository.searchRestaurants(name, cuisine, price, rating);
+    Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
+        Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
+        currentRestaurant.setName(updates.getName());
+        currentRestaurant.setAddress(updates.getAddress());
+        currentRestaurant.setPhoneNumber(updates.getPhoneNumber());
+        currentRestaurant.setHours(updates.getHours());
+        currentRestaurant.setDescription(updates.getDescription());
+
+        return restaurantRepository.save(currentRestaurant);
+    }
+
+    public List<Restaurant> getByZipCode(String zipCode){
+        return restaurantRepository.findByZipCode(zipCode);
+    }
+
+    private boolean isFloat(String string){
+        try{
+            Float.parseFloat(string);
+            return true;
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    private boolean isInteger(String string){
+        try{
+            Integer.parseInt(string);
+            return true;
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
     }
 }
