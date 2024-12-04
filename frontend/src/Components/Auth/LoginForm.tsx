@@ -1,5 +1,5 @@
 // src/LoginForm.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom' // Update to useNavigate
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
@@ -17,6 +17,8 @@ interface FormData {
   role: string
 }
 
+import { LoginContext } from '../../context/login'
+
 // Environment variable to configure API URL
 // const LOGIN_API_URL = process.env.REACT_APP_API_LOGIN_URL;
 
@@ -28,11 +30,24 @@ const LoginForm: React.FC = () => {
   } = useForm<FormData>()
   const [role, setRole] = useState<string>('user')
 
+  const loginContext = React.useContext(LoginContext);
+
   const navigate = useNavigate() // Use useNavigate instead of useHistory
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log('Logging in as:', data)
-    if (data.role === 'owner') {
+    // static for now
+    loginContext.setId("123");
+    loginContext.setAccessToken("Test Access Token");
+    loginContext.setUserName("TestUser");
+
+    /* IDEALLY WE RETURN THESE INFO ON LOGIN SUCCESS TO STORE
+    loginContext.setId(json.data.login.id)
+    loginContext.setAccessToken(json.data.login.accessToken)
+    loginContext.setUserName(json.data.login.name)
+    */
+
+    if (data.role !== 'owner') {
       navigate('/home')
     } else {
       navigate('/user-dashboard')
