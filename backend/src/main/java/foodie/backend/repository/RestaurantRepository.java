@@ -8,31 +8,27 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
-  // Find a restaurant by id
-  Restaurant findByID(Long restaurantID);
+  
+  List<Restaurant> findByRating(Float rating);
 
-  // Find a restaurant by address
-  Restaurant findByAddress(String address);
+  List<Restaurant> findByPrice(Integer price);
+  
+  @Query("SELECT r FROM Restaurant r WHERE r.zip_code = :zip_code")
+  List<Restaurant> findByZipCode(@Param("zip_code") String zip_code);
 
-  // Find a restaurant by name
-  Restaurant findByName(String name);
+  List<Restaurant> findByAddressContainingIgnoreCase(String address);
 
-  // Find restaurants by type of cuisine
-  List<Restaurant> findByCuisineType(String cuisineType);
+  List<Restaurant> findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCase(String name, String cuisine);
+
+  @Query("SELECT r FROM Restaurant r WHERE r.restaurantID = :restaurantID")
+  Restaurant findByRestaurantID(@Param("restaurantID") Long restaurantID);
 
   // Check if a restaurant exists by ID
   boolean existsById(Long id);
 
-  // Add a new restaurant
-  void createRestaurant(Restaurant restaurant);
-
   List<Restaurant> findByBusinessOwner(BusinessOwner businessOwner);
-
-  List<Restaurant> findByAddressZipcode(String zipcode);
 
   List<Restaurant> checkForDuplicateListings();
 
   void removeClosedRestaurant(Long restaurantId);
-  
-  List<Restaurant> searchRestaurants(String name, String cuisine, int price, float rating);
 }
