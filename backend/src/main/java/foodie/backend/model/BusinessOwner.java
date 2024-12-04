@@ -37,29 +37,13 @@ public class BusinessOwner extends User{
   public BusinessOwner(){
 
   }
-
-  // Add a new restaurant listing
-  public void addRestaurant(Restaurant restaurant) {
-    restaurant.setOwner(this); // Set the owner of the restaurant
-    restaurants.add(restaurant);
-  }
-
-  // Update an existing restaurant's details
-  public void updateRestaurantDetails(
-    Restaurant restaurant,
-    String name,
-    String address,
-    String hours,
-    String description
-  ) {
-    restaurant.setName(name);
-    restaurant.setAddress(address);
-    restaurant.setHours(hours);
-    restaurant.setDescription(description);
-  }
-
+  
   // View owned list of restaurants
-  public List<Restaurant> viewOwnedRestaurants() {
+  public List<Restaurant> getRestaurants() {
     return this.restaurants;
   }
+  
+  public List<Long> getRestaurantID(){
+    return restaurants.stream().map(Restaurant::getRestaurantID).collect(Collectors.toList());
+  } 
 }
