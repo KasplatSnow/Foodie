@@ -1,6 +1,7 @@
 package foodie.backend.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
