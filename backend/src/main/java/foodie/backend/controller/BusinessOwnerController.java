@@ -1,14 +1,25 @@
 package foodie.backend.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import foodie.backend.model.BusinessOwner;
+import foodie.backend.model.Restaurant;
+import foodie.backend.repository.BusinessOwnerRepository;
+import foodie.backend.service.BusinessOwnerService;
+import foodie.backend.service.RestaurantService;
+
 @RestController
 @RequestMapping("/business-owner")
 public class BusinessOwnerController {
+  
+    @Autowired
+    private BusinessOwnerService businessOwnerService;
   
     @GetMapping("/getrestaurants/userID/{userID}")
     public List<RestaurantDTO> getRestaurantsByID(@PathVariable("userID") Long userID) {
