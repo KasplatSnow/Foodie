@@ -13,10 +13,6 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    //this is a simple in-memory user storage for demonstration purposes
-    private static final String VALID_EMAIL = "user@example.com";
-    private static final String VALID_PASSWORD = "password123";
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         //extract email, password, and role from the request body
@@ -25,7 +21,10 @@ public class AuthenticationController {
         String role = loginRequest.getRole();
 
         User user = userService.getUserByEmail(email);
-
+        
+        if(user == null){
+            return ResponseEntity.status(404).body("Email does not exist");
+        }
         //simple login validation (replace with database or service call)
         if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
             
