@@ -10,16 +10,17 @@ import {
   Card,
   CardContent,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Rating,
-  Snackbar,
+  // Dialog,
+  // DialogTitle,
+  // DialogContent,
+  // Rating,
+  // Snackbar,
   InputAdornment,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { REACT_APP_GOOGLE_API_KEY } from '../../constants'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
+import Header from '../Home/Header'
 
 const mapContainerStyle = {
   width: '100%',
@@ -109,19 +110,19 @@ const MapSearch: React.FC = () => {
     categories: '',
   })
 
-  const [
-    selectedRestaurant,
-    setSelectedRestaurant,
-  ] = useState<Restaurant | null>(null)
-  const [reviewFormOpen, setReviewFormOpen] = useState(false)
-  const [reviewName, setReviewName] = useState('')
-  const [reviewComment, setReviewComment] = useState('')
-  const [reviewRating, setReviewRating] = useState<number | null>(null)
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  // const [
+  //   selectedRestaurant,
+  //   setSelectedRestaurant,
+  // ] = useState<Restaurant | null>(null)
+  // const [reviewFormOpen, setReviewFormOpen] = useState(false)
+  // const [reviewName, setReviewName] = useState('')
+  // const [reviewComment, setReviewComment] = useState('')
+  // const [reviewRating, setReviewRating] = useState<number | null>(null)
+  // const [snackbarOpen, setSnackbarOpen] = useState(false)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const handleRestaurantClick = (id: string) => {
-    navigate(`/restaurant?${id}`);
+    navigate(`/restaurant?${id}`)
   }
 
   const handleSearch = () => {
@@ -177,50 +178,62 @@ const MapSearch: React.FC = () => {
     setFilteredRestaurants(results)
   }
 
-  const handleOpenReviewForm = (restaurant: Restaurant) => {
-    setSelectedRestaurant(restaurant)
-    setReviewFormOpen(true)
-  }
+  // const handleOpenReviewForm = (restaurant: Restaurant) => {
+  //   setSelectedRestaurant(restaurant)
+  //   setReviewFormOpen(true)
+  // }
 
-  const handleSubmitReview = async () => {
-    if (!reviewName || !reviewComment || !reviewRating || !selectedRestaurant) {
-      alert('Please fill in all fields to submit a review.')
-      return
-    }
+  // const handleSubmitReview = async () => {
+  //   if (!reviewName || !reviewComment || !reviewRating || !selectedRestaurant) {
+  //     alert('Please fill in all fields to submit a review.')
+  //     return
+  //   }
 
-    const newReview = {
-      id: Date.now().toString(),
-      name: reviewName,
-      comment: reviewComment,
-      rating: reviewRating,
-      date: new Date().toLocaleString(),
-    }
+  //   const newReview = {
+  //     id: Date.now().toString(),
+  //     name: reviewName,
+  //     comment: reviewComment,
+  //     rating: reviewRating,
+  //     date: new Date().toLocaleString(),
+  //   }
 
-    setFilteredRestaurants((prevRestaurants) => {
-      const updatedRestaurants = prevRestaurants.map((restaurant) =>
-        restaurant.id === selectedRestaurant.id
-          ? {
-              ...restaurant,
-              reviews: [...(restaurant.reviews || []), newReview],
-            }
-          : restaurant,
-      )
+  //   setFilteredRestaurants((prevRestaurants) => {
+  //     const updatedRestaurants = prevRestaurants.map((restaurant) =>
+  //       restaurant.id === selectedRestaurant.id
+  //         ? {
+  //             ...restaurant,
+  //             reviews: [...(restaurant.reviews || []), newReview],
+  //           }
+  //         : restaurant,
+  //     )
 
-      console.log('Updated Restaurants:', updatedRestaurants)
-      return updatedRestaurants
-    })
+  //     console.log('Updated Restaurants:', updatedRestaurants)
+  //     return updatedRestaurants
+  //   })
 
-    setReviewName('')
-    setReviewComment('')
-    setReviewRating(null)
-    setReviewFormOpen(false)
-    setSnackbarOpen(true)
-  }
+  //   setReviewName('')
+  //   setReviewComment('')
+  //   setReviewRating(null)
+  //   setReviewFormOpen(false)
+  //   setSnackbarOpen(true)
+  // }
 
   if (!isLoaded) return <div>Loading...</div>
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <Box
+        sx={{
+          width: '100%',
+          backgroundColor: '#fff', // Optional: for a clean background
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Optional: adds shadow for separation
+          zIndex: 10,
+        }}
+      >
+        <Header />
+      </Box>
+
       {/* Search Filters */}
       <Box
         sx={{
@@ -228,12 +241,12 @@ const MapSearch: React.FC = () => {
           alignItems: 'center',
           p: 2,
           borderBottom: '1px solid #ddd',
+          marginTop: '60px', // Add margin to push it below the header
         }}
       >
         <TextField
           placeholder="Search for restaurants"
           variant="outlined"
-          fullWidth
           value={filters.searchTerm}
           onChange={(e) =>
             setFilters({ ...filters, searchTerm: e.target.value })
@@ -245,7 +258,10 @@ const MapSearch: React.FC = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ mr: 2 }}
+          sx={{
+            width: '850px', // Set the desired width
+            mr: 2, // Margin-right for spacing
+          }}
         />
         <TextField
           placeholder="Zipcode"
@@ -289,7 +305,7 @@ const MapSearch: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={handleSearch}
-          sx={{ height: 56 }}
+          sx={{ height: 56, width: '150px' }}
         >
           Search
         </Button>
@@ -308,7 +324,11 @@ const MapSearch: React.FC = () => {
           }}
         >
           {filteredRestaurants.map((restaurant) => (
-            <Card key={restaurant.id} sx={{ mb: 2 }} onClick = {() => handleRestaurantClick(restaurant.id)} >
+            <Card
+              key={restaurant.id}
+              sx={{ mb: 2 }}
+              onClick={() => handleRestaurantClick(restaurant.id)}
+            >
               <CardContent>
                 <Typography variant="h6">{restaurant.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
@@ -317,14 +337,14 @@ const MapSearch: React.FC = () => {
                 <Typography variant="body2">
                   {restaurant.description}
                 </Typography>
-                <Button
+                {/* <Button
                   variant="outlined"
                   color="primary"
                   sx={{ mt: 2 }}
                   onClick={() => handleOpenReviewForm(restaurant)}
                 >
                   Submit Review
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           ))}
@@ -353,7 +373,7 @@ const MapSearch: React.FC = () => {
       </Grid>
 
       {/* Review Form Dialog */}
-      <Dialog
+      {/* <Dialog
         open={reviewFormOpen}
         onClose={() => setReviewFormOpen(false)}
         maxWidth="sm"
@@ -392,15 +412,15 @@ const MapSearch: React.FC = () => {
             </Button>
           </Box>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Snackbar */}
-      <Snackbar
+      {/* <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
         message="Review submitted successfully!"
-      />
+      /> */}
     </Box>
   )
 }

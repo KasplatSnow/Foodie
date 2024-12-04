@@ -4,7 +4,7 @@ import RegisterForm from './Components/Auth/RegisterForm'
 import Home from './Components/Home/Home'
 import SearchPage from './pages/search'
 import RestaurantPage from './pages/restaurant'
-import RestaurantManagement from './Components/Restaurant/ManageRestaurant'
+import OwnerPage from './Components/User/OwnerPage'
 import MapSearch from './Components/Restaurant/MapSearch'
 import './App.css'
 import SubmitReviewPage from './Components/Restaurant/Review'
@@ -25,10 +25,7 @@ function App() {
           <Route path="/mapsearch" element={<MapSearch />} />
           <Route path="/restaurant" element={<RestaurantPage />} />
           <Route path="/review" element={<SubmitReviewPage />} />
-            <Route
-            path="/restaurant_management"
-            element={<RestaurantManagement />}
-          />
+          <Route path="/owner" element={<OwnerPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </Router>
