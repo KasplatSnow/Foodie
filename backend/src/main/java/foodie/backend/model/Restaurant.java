@@ -1,6 +1,7 @@
 package foodie.backend.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,7 +22,8 @@ public class Restaurant {
     private long restaurantID;
 
     private String name, address, phoneNumber, email, cuisine, hours, description;
-    private int zipCode, price;
+    private String zip_code;
+    private int price;
     private float rating;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -37,7 +39,7 @@ public class Restaurant {
         String name, 
         BusinessOwner owner,
         String address, 
-        int zipCode, 
+        String zip_code, 
         String phoneNumber, 
         String email, 
         String cuisine, 
@@ -48,7 +50,7 @@ public class Restaurant {
         this.name = name;
         this.owner = owner;
         this.address = address;
-        this.zipCode = zipCode;
+        this.zip_code = zip_code;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.cuisine = cuisine;
@@ -68,115 +70,107 @@ public class Restaurant {
   }
    */
 
-
-  // Update the contact info and hours
-  public void updateContactInfo(
-    String email,
-    String hours,
-    String description
-  ) {
-    this.email = email;
-    this.hours = hours;
-    this.description = description;
-  }
-
-  public void setRestaurantID(int restaurantID) {
-    this.restaurantID = restaurantID;
-}
-
-public void setName(String name) {
-    this.name = name;
-}
-
-public void setOwner(BusinessOwner owner){
-    this.owner = owner;
-}
-
-public void setAddress(String address) {
-    this.address = address;
-}
-
-public void setZipCode(int zipCode) {
-    this.zipCode = zipCode;
-}
-
-public void setPhoneNumber(String phoneNumber){
-    this.phoneNumber = phoneNumber;
-}
-
-public void setEmail(String email) {
-    this.email = email;
-}
-
-public void setCuisine(String cuisine) {
-    this.cuisine = cuisine;
-}
-
-public void setHours(String hours) {
-    this.hours = hours;
-}
-
-public void setDescription(String description) {
-    this.description = description;
-}
-
-public void setRating(float rating) {
-    this.rating = rating;
-}
-
-public void setPrice(int price) {
-    this.price = price;
-}
-
-public long getRestaurantID(){
-    return restaurantID;
-}
-
-public String getName() {
-    return name;
-}
-
-public BusinessOwner getBusinessOwner(){
-    return owner;
-}
-
-public long getOwnerID(){
-    return owner.getUserID();
-}
-
-public String getAddress() {
-    return address;
-}
-
-public int getZipCode() {
-    return zipCode;
-}
-
-public String getPhoneNumber() {
-    return phoneNumber;
-}
-
-public String getEmail() {
-    return email;
-}
-
-public String getCuisine() {
-    return cuisine;
-}
-
-public String getHours() {
-    return hours;
-}
-
-public String getDescription() {
-    return description;
-}
-
-public float getRating() {
-    return rating;
-}
-
-public int getPrice() {
-    return price;
-}
+    public void setRestaurantID(int restaurantID) {
+        this.restaurantID = restaurantID;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setOwner(BusinessOwner owner){
+        this.owner = owner;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
+    public void setZipCode(String zip_code) {
+        this.zip_code = zip_code;
+    }
+    
+    public void setPhoneNumber(String phoneNumber){
+        this.phoneNumber = phoneNumber;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
+    
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+    
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    
+    public long getRestaurantID(){
+        return restaurantID;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public BusinessOwner getBusinessOwner(){
+        return owner;
+    }
+    
+    public long getOwnerID(){
+        return owner.getUserID();
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public String getZipCode() {
+        return zip_code;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public String getCuisine() {
+        return cuisine;
+    }
+    
+    public String getHours() {
+        return hours;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public float getRating() {
+        return rating;
+    }
+    
+    public int getPrice() {
+        return price;
+    }
+    
+    public List<Long> getReviewID(){
+      return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
+    }
 }
