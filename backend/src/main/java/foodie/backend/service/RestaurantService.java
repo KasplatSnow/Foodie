@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import foodie.backend.model.Restaurant;
-
+import foodie.backend.model.RestaurantRegistrationRequest;
 import foodie.backend.repository.RestaurantRepository;
 
 @Service
@@ -37,7 +37,7 @@ public class RestaurantService {
         return List.of();
     }
 
-    Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
+    public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
         Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
         currentRestaurant.setName(updates.getName());
         currentRestaurant.setAddress(updates.getAddress());
