@@ -1,4 +1,4 @@
-package com.example;
+package foodie.backend.controller;
 
 import java.util.List;
 
