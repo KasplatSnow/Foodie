@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import foodie.backend.model.Restaurant;
 import foodie.backend.model.BusinessOwner;
 import foodie.backend.repository.BusinessOwnerRepository;
 
