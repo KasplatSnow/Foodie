@@ -130,7 +130,26 @@ public class User {
   public void setReviews(List<Review> reviews) {
       this.reviews = reviews;
   }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public void setRole(Role role) {
+      this.role = role;
+  }
+ 
   public List<Long> getReviewID(){
       return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
   }
