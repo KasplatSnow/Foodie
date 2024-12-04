@@ -8,7 +8,6 @@ import RestaurantManagement from './Components/Restaurant/ManageRestaurant'
 import MapSearch from './Components/Restaurant/MapSearch'
 import './App.css'
 import SubmitReviewPage from './Components/Restaurant/Review'
-import MapSearchWithReview from './Components/Restaurant/RestaurantSearch'
 import Logout from './Components/Auth/Logout'
 import ProfilePage from './pages/profile'
 import { LoginProvider } from './context/login'
@@ -26,8 +25,7 @@ function App() {
           <Route path="/mapsearch" element={<MapSearch />} />
           <Route path="/restaurant" element={<RestaurantPage />} />
           <Route path="/review" element={<SubmitReviewPage />} />
-          <Route path="/searchreview" element={<MapSearchWithReview />} />
-          <Route
+            <Route
             path="/restaurant_management"
             element={<RestaurantManagement />}
           />
