@@ -41,6 +41,14 @@ const LoginForm: React.FC = () => {
     loginContext.setAccessToken("Test Access Token");
     loginContext.setUserName("TestUser");
 
+    /* OR WE CAN USE LOCAL STORAGE
+      localStorage.setItem("user", JSON.stringify({
+        "username": "testuser",
+        "id": 123
+      }));
+      localStorage.setItem("authToken", "123");
+    */
+
     /* IDEALLY WE RETURN THESE INFO ON LOGIN SUCCESS TO STORE
     loginContext.setId(json.data.login.id)
     loginContext.setAccessToken(json.data.login.accessToken)
