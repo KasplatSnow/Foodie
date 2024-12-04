@@ -1,6 +1,7 @@
 package foodie.backend.model;
  
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -128,6 +129,10 @@ public class User {
 
   public void setReviews(List<Review> reviews) {
       this.reviews = reviews;
+  }
+
+  public List<Long> getReviewID(){
+      return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
   }
 }
 
