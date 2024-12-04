@@ -1,6 +1,9 @@
 package foodie.backend.repository;
 
+import java.util.List;
+
 import foodie.backend.model.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +25,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
   
   // Find a user by email
   User findByEmail(String email);
-
+  
+  List<User> findByUsername(String username);
+  
   // Check if a email already exists
   boolean existsByEmail(String email);
 }
