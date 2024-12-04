@@ -2,16 +2,28 @@ package foodie.backend.controller;
 
 import foodie.backend.model.BusinessOwner;
 import foodie.backend.model.Restaurant;
+import foodie.backend.model.RestaurantRegistrationRequest;
+import foodie.backend.service.RestaurantService;
 import foodie.backend.repository.RestaurantRepository;
+
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
   @Autowired
-  private RestaurantRepository restaurantService;
+  private RestaurantService restaurantService;
 
     @GetMapping("/restaurantbyzipcode/{zipCode}")
     public List<RestaurantDTO> getRestaurantByZipCode(@PathVariable("zipCode") String zipCode) {
@@ -72,19 +84,4 @@ public class RestaurantController {
             updateRestaurant.getReviewID());
         return ResponseEntity.ok(updatedRestaurant);
     }
-
-  @PostMapping
-  public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
-    return restaurantService.save(restaurant);
-  }
-
-  // Remove a restaurant if it closes down
-  public void removeClosedRestaurant(Long userID, Long restaurantId) {
-    restaurantService.deleteById(restaurantId);
-  }
-
-  // Get restaurants owned by a specific business owner
-  public List<Restaurant> getOwnedRestaurants(BusinessOwner businessOwner) {
-    return restaurantService.findByBusinessOwner(businessOwner);
-  }
 }
