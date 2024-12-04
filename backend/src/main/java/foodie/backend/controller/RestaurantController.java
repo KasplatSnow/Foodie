@@ -13,19 +13,69 @@ public class RestaurantController {
   @Autowired
   private RestaurantRepository restaurantService;
 
-  @GetMapping("/{id}")
-  public Restaurant getRestaurant(@PathVariable Long id) {
-    return restaurantService.findByID(id);
-  }
+    @GetMapping("/restaurantbyzipcode/{zipCode}")
+    public List<RestaurantDTO> getRestaurantByZipCode(@PathVariable("zipCode") String zipCode) {
+        List<Restaurant> restaurants = restaurantService.getByZipCode(zipCode);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine(),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getReviewID())).collect(Collectors.toList());
+
+    }
+    
+    @GetMapping("/search/query/{query}")
+    public List<RestaurantDTO> getRestaurantByName(@PathVariable String query) {
+        List<Restaurant> restaurants = restaurantService.searchRestaurants(query);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getPhoneNumber(),
+            restaurant.getZipCode(),
+            restaurant.getEmail(),
+            restaurant.getCuisine(),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getReviewID())).collect(Collectors.toList());
+    }
+
+
+    @PutMapping("update/restaurantid/{restaurantID}")
+    public ResponseEntity<RestaurantDTO> putUpdateRestaurant(@PathVariable Long restaurantID, @RequestBody RestaurantRegistrationRequest updates) {
+        Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurantID,updates);
+        RestaurantDTO updatedRestaurant = new RestaurantDTO(
+            updateRestaurant.getRestaurantID(),
+            updateRestaurant.getName(),
+            updateRestaurant.getAddress(),
+            updateRestaurant.getZipCode(),
+            updateRestaurant.getPhoneNumber(),
+            updateRestaurant.getEmail(),
+            updateRestaurant.getCuisine(),
+            updateRestaurant.getHours(),
+            updateRestaurant.getDescription(),
+            updateRestaurant.getRating(),
+            updateRestaurant.getPrice(),
+            updateRestaurant.getOwnerID(),
+            updateRestaurant.getReviewID());
+        return ResponseEntity.ok(updatedRestaurant);
+    }
 
   @PostMapping
   public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
     return restaurantService.save(restaurant);
-  }
-
-  // Search by location (zipcode)
-  public List<Restaurant> searchByLocation(String zipcode) {
-    return restaurantService.findByAddressZipcode(zipcode);
   }
 
   // Remove a restaurant if it closes down
