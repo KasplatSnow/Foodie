@@ -6,12 +6,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-  // Find a user by id
-  User findByUserID(Long userID);
+
+  //checks if email of user already exists for user registration
+  @Query("SELECT u FROM User u WHERE u.email = :email")
+  List<User> findEmails(@Param("email") String email);
+
+  @Query("SELECT u FROM User u WHERE u.userID = :userID")
+  List<User> findByID(@Param("userID") Long id);
+
+  @Override
+  @Query("SELECT u FROM User u")
+  List<User> findAll();
+  
   // Find a user by email
   User findByEmail(String email);
-  // Find a user by email
-  User findByUserName(String userName);
+
   // Check if a email already exists
   boolean existsByEmail(String email);
 }
