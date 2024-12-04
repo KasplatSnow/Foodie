@@ -73,7 +73,35 @@ public class UserController {
         //return success message
         return ResponseEntity.ok("Registration successful");
     }
-
+  
+    @GetMapping("/getuserbyid/userID/{userID}")
+    public List<UserDTO> getUserById(@PathVariable Long userID) {
+        List<User> users = userService.getUserByID(userID);
+        return users.stream().map(user -> new UserDTO(
+            user.getUserID(),
+            user.getUsername(),
+            user.getRole().toString(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getAddress(),
+            user.getPhoneNumber(),
+            user.getReviewID())).collect(Collectors.toList());
+    }
+    
+    @GetMapping("getuserbyusername/username/{username}")
+    public List<UserDTO> getUserByUsername(@PathVariable String username) {
+        List<User> users = userService.getUserByUsername(username);
+        return users.stream().map(user -> new UserDTO(
+            user.getUserID(),
+            user.getUsername(),
+            user.getRole().toString(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getAddress(),
+            user.getPhoneNumber(),
+            user.getReviewID())).collect(Collectors.toList());
+    }
+  
   @GetMapping("/allusers")
   List<User> getAllUsers() {
     return userService.getAllUsers();
