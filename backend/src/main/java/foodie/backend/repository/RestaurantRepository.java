@@ -28,12 +28,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   Restaurant findByRestaurantID(@Param("restaurantID") Long restaurantID);
 
   // Check if a restaurant exists by ID
-  boolean existsById(Long id);
+  //boolean existsById(Long id);
 
-  List<Restaurant> findByBusinessOwner(BusinessOwner businessOwner);
+  //List<Restaurant> findByBusinessOwner(BusinessOwner businessOwner);
 
   //implement
-  List<Restaurant> checkForDuplicateListings();
+  //List<Restaurant> checkForDuplicateListings();
 
-  void removeClosedRestaurant(Long restaurantId);
+  //void removeClosedRestaurant(Long restaurantId);
 }
