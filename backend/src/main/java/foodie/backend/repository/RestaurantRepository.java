@@ -2,9 +2,13 @@ package foodie.backend.repository;
 
 import foodie.backend.model.BusinessOwner;
 import foodie.backend.model.Restaurant;
+
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -28,6 +32,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
   List<Restaurant> findByBusinessOwner(BusinessOwner businessOwner);
 
+  //implement
   List<Restaurant> checkForDuplicateListings();
 
   void removeClosedRestaurant(Long restaurantId);
