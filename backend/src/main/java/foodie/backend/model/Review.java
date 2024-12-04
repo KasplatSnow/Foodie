@@ -60,4 +60,8 @@ public class Review {
     public User getUser(){
         return user;
     }
+    
+    public Long getReviewID(){
+        return reviewID;
+    }
 }
