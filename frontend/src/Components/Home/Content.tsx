@@ -6,11 +6,13 @@ import {
   CardContent,
   Card,
 } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 import Header from './Header'
 import { boxes } from '../types/popular.type'
 import { business } from '../types/business.type'
 const LandingPage = () => {
+  const navigate = useNavigate()
   return (
     <div>
       <Header />
@@ -60,6 +62,7 @@ const LandingPage = () => {
               Welcome to Foodie
             </Typography>
             <Button
+              onClick={() => navigate('/register')}
               variant="contained"
               sx={{
                 minHeight: '50px',
@@ -75,6 +78,7 @@ const LandingPage = () => {
               Register
             </Button>
             <Button
+              onClick={() => navigate('/login')}
               variant="contained"
               sx={{
                 minHeight: '50px',

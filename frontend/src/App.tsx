@@ -10,13 +10,16 @@ import './App.css'
 import SubmitReviewPage from './Components/Restaurant/Review'
 import Logout from './Components/Auth/Logout'
 import ProfilePage from './pages/profile'
-import { LoginProvider } from './context/login'
+// import { LoginProvider } from './context/login'
+import { AuthProvider } from './Components/Auth/AuthContext'
 
 function App() {
   return (
-    <LoginProvider>
+    // <LoginProvider>
+    <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/logout" element={<Logout />} />
@@ -25,11 +28,12 @@ function App() {
           <Route path="/mapsearch" element={<MapSearch />} />
           <Route path="/restaurant" element={<RestaurantPage />} />
           <Route path="/review" element={<SubmitReviewPage />} />
-          <Route path="/owner" element={<OwnerPage />} />
+          <Route path="/profile/owner" element={<OwnerPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </Router>
-    </LoginProvider>
+      {/* </LoginProvider> */}
+    </AuthProvider>
   )
 }
 

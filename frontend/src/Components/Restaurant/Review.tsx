@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Typography,
@@ -9,6 +9,8 @@ import {
   Rating,
   Snackbar,
 } from '@mui/material'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../Auth/AuthContext' // Import the useAuth hook
 
 interface Review {
   id: string
@@ -25,7 +27,20 @@ const SubmitReviewPage: React.FC = () => {
   const [rating, setRating] = useState<number | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { isLoggedIn } = useAuth()
+
+  // Retrieve restaurant name from state
+  const restaurantName = location.state?.restaurantName || 'Restaurant'
+
   const handleSubmit = () => {
+    if (!isLoggedIn) {
+      alert('You must be logged in to submit a review.')
+      navigate('/login')
+      return
+    }
+
     if (!name || !comment || !rating) {
       alert('Please fill in all fields before submitting your review.')
       return
@@ -46,10 +61,15 @@ const SubmitReviewPage: React.FC = () => {
     setSnackbarOpen(true)
   }
 
+  useEffect(() => {
+    console.log('Current Reviews:', reviews)
+  }, [reviews])
+
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 4 }}>
+      {/* Display the restaurant name */}
       <Typography variant="h4" gutterBottom>
-        Submit Your Review
+        Submit Your Review for {restaurantName}
       </Typography>
 
       {/* Review Form */}
