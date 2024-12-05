@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Typography,
@@ -9,6 +9,8 @@ import {
   Rating,
   Snackbar,
 } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../Auth/AuthContext' // Import the useAuth hook
 
 interface Review {
   id: string
@@ -25,7 +27,16 @@ const SubmitReviewPage: React.FC = () => {
   const [rating, setRating] = useState<number | null>(null)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
+  const navigate = useNavigate()
+  const { isLoggedIn } = useAuth()
+
   const handleSubmit = () => {
+    if (!isLoggedIn) {
+      alert('You must be logged in to submit a review.')
+      navigate('/login')
+      return
+    }
+
     if (!name || !comment || !rating) {
       alert('Please fill in all fields before submitting your review.')
       return
@@ -45,6 +56,10 @@ const SubmitReviewPage: React.FC = () => {
     setRating(null)
     setSnackbarOpen(true)
   }
+
+  useEffect(() => {
+    console.log('Current Reviews:', reviews)
+  }, [reviews])
 
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 4 }}>
