@@ -1,6 +1,5 @@
-// src/LoginForm.tsx
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom' // Update to useNavigate
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import {
   TextField,
@@ -11,16 +10,14 @@ import {
   Tabs,
   Tab,
 } from '@mui/material'
+import uniqid from 'uniqid' // Import uniqid
+import { useAuth } from '../Auth/AuthContext' // Adjust path as needed
+
 interface FormData {
   email: string
   password: string
   role: string
 }
-
-import { LoginContext } from '../../context/login'
-
-// Environment variable to configure API URL
-// const LOGIN_API_URL = process.env.REACT_APP_API_LOGIN_URL;
 
 const LoginForm: React.FC = () => {
   const {
@@ -30,30 +27,21 @@ const LoginForm: React.FC = () => {
   } = useForm<FormData>()
   const [role, setRole] = useState<string>('user')
 
-  const loginContext = React.useContext(LoginContext);
-
-  const navigate = useNavigate() // Use useNavigate instead of useHistory
+  const { logIn } = useAuth() // Access the AuthContext using the useAuth hook
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log('Logging in as:', data)
-    // static for now
-    loginContext.setId("123");
-    loginContext.setAccessToken("Test Access Token");
-    loginContext.setUserName("TestUser");
 
-    /* OR WE CAN USE LOCAL STORAGE
-      localStorage.setItem("user", JSON.stringify({
-        "username": "testuser",
-        "id": 123
-      }));
-      localStorage.setItem("authToken", "123");
-    */
+    // Generate a unique ID for the user
+    const userId = uniqid()
 
-    /* IDEALLY WE RETURN THESE INFO ON LOGIN SUCCESS TO STORE
-    loginContext.setId(json.data.login.id)
-    loginContext.setAccessToken(json.data.login.accessToken)
-    loginContext.setUserName(json.data.login.name)
-    */
+    // Set context values
+    logIn(role, userId) // Pass role and userId to the AuthContext logIn method
+
+    console.log(`User ID: ${userId}`)
+    console.log(`Role: ${role}`)
+    console.log(`Email: ${data.email}`)
 
     if (data.role !== 'owner') {
       navigate('/home')
@@ -62,38 +50,14 @@ const LoginForm: React.FC = () => {
     }
   }
 
-  //   const onSubmit = async (data) => {
-  //     try {
-  //       const response = await fetch(`${LOGIN_API_URL}`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       });
-
-  //       if (response.ok) {
-  //         const responseData = await response.json();
-  //         console.log("Login successful:", responseData);
-  //         // Handle login success (e.g., redirect, store token)
-  //         reset(); // Reset the form
-  //       } else {
-  //         console.error("Login failed");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during login:", error);
-  //     }
-  //   };
-
-  // Redirect to registration page
   const handleRegister = () => {
     navigate('/register')
   }
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log(event.target)
     setRole(newValue)
   }
+
   return (
     <div>
       <Box
@@ -112,7 +76,6 @@ const LoginForm: React.FC = () => {
           justifyContent="center"
         >
           <Paper elevation={3} style={{ padding: 20, width: '20%' }}>
-            {/* <Container maxWidth="sm"> */}
             <h2>Login</h2>
             <Tabs
               value={role}

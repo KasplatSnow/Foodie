@@ -9,7 +9,7 @@ import {
   Rating,
   Snackbar,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../Auth/AuthContext' // Import the useAuth hook
 
 interface Review {
@@ -28,7 +28,11 @@ const SubmitReviewPage: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
   const navigate = useNavigate()
+  const location = useLocation()
   const { isLoggedIn } = useAuth()
+
+  // Retrieve restaurant name from state
+  const restaurantName = location.state?.restaurantName || 'Restaurant'
 
   const handleSubmit = () => {
     if (!isLoggedIn) {
@@ -63,8 +67,9 @@ const SubmitReviewPage: React.FC = () => {
 
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', padding: 4 }}>
+      {/* Display the restaurant name */}
       <Typography variant="h4" gutterBottom>
-        Submit Your Review
+        Submit Your Review for {restaurantName}
       </Typography>
 
       {/* Review Form */}

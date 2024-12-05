@@ -12,6 +12,7 @@ import {
   Avatar,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../Auth/AuthContext' // Import useAuth hook
 
 const Header = () => {
   const [value, setValue] = useState(0)
@@ -19,10 +20,9 @@ const Header = () => {
     profileMenuAnchor,
     setProfileMenuAnchor,
   ] = useState<null | HTMLElement>(null) // Profile dropdown
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // Login state
-  const [userRole, setUserRole] = useState<'customer' | 'owner' | null>(null) // User role
 
   const navigate = useNavigate()
+  const { isLoggedIn, userRole, logIn, logOut } = useAuth() // Access AuthContext
 
   // Handle tab change
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -50,26 +50,6 @@ const Header = () => {
       navigate('/profile/owner') // Redirect to owner profile
     }
     handleProfileMenuClose()
-  }
-
-  // Simulate login
-  const handleLogin = (role: 'customer' | 'owner') => {
-    setIsLoggedIn(true)
-    setUserRole(role)
-
-    // Redirect based on role
-    if (role === 'customer') {
-      navigate('/customer-home') // Customer's home page
-    } else if (role === 'owner') {
-      navigate('/owner-dashboard') // Owner's dashboard
-    }
-  }
-
-  const handleLogout = () => {
-    setIsLoggedIn(false) // Simulate logout
-    setUserRole(null) // Clear user role
-    setProfileMenuAnchor(null) // Close profile menu
-    navigate('/login') // Redirect to login page
   }
 
   return (
@@ -136,7 +116,14 @@ const Header = () => {
                 onClose={handleProfileMenuClose}
               >
                 <MenuItem onClick={handleProfileNavigation}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logOut()
+                    navigate('/home')
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </Menu>
             </>
           ) : (
@@ -144,11 +131,11 @@ const Header = () => {
               variant="contained"
               color="primary"
               onClick={() => {
-                handleLogin('customer') // Simulate login as customer
-                navigate('/login') // Redirect to login page
+                logIn('customer')
+                navigate('/login')
               }}
             >
-              Sign In
+              Log In
             </Button>
           )}
         </Box>

@@ -178,46 +178,6 @@ const MapSearch: React.FC = () => {
     setFilteredRestaurants(results)
   }
 
-  // const handleOpenReviewForm = (restaurant: Restaurant) => {
-  //   setSelectedRestaurant(restaurant)
-  //   setReviewFormOpen(true)
-  // }
-
-  // const handleSubmitReview = async () => {
-  //   if (!reviewName || !reviewComment || !reviewRating || !selectedRestaurant) {
-  //     alert('Please fill in all fields to submit a review.')
-  //     return
-  //   }
-
-  //   const newReview = {
-  //     id: Date.now().toString(),
-  //     name: reviewName,
-  //     comment: reviewComment,
-  //     rating: reviewRating,
-  //     date: new Date().toLocaleString(),
-  //   }
-
-  //   setFilteredRestaurants((prevRestaurants) => {
-  //     const updatedRestaurants = prevRestaurants.map((restaurant) =>
-  //       restaurant.id === selectedRestaurant.id
-  //         ? {
-  //             ...restaurant,
-  //             reviews: [...(restaurant.reviews || []), newReview],
-  //           }
-  //         : restaurant,
-  //     )
-
-  //     console.log('Updated Restaurants:', updatedRestaurants)
-  //     return updatedRestaurants
-  //   })
-
-  //   setReviewName('')
-  //   setReviewComment('')
-  //   setReviewRating(null)
-  //   setReviewFormOpen(false)
-  //   setSnackbarOpen(true)
-  // }
-
   if (!isLoaded) return <div>Loading...</div>
 
   return (
@@ -226,8 +186,8 @@ const MapSearch: React.FC = () => {
       <Box
         sx={{
           width: '100%',
-          backgroundColor: '#fff', // Optional: for a clean background
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Optional: adds shadow for separation
+          backgroundColor: '#fff',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
           zIndex: 10,
         }}
       >
@@ -241,7 +201,7 @@ const MapSearch: React.FC = () => {
           alignItems: 'center',
           p: 2,
           borderBottom: '1px solid #ddd',
-          marginTop: '60px', // Add margin to push it below the header
+          marginTop: '60px',
         }}
       >
         <TextField
@@ -259,8 +219,8 @@ const MapSearch: React.FC = () => {
             ),
           }}
           sx={{
-            width: '850px', // Set the desired width
-            mr: 2, // Margin-right for spacing
+            width: '850px',
+            mr: 2,
           }}
         />
         <TextField
@@ -337,14 +297,6 @@ const MapSearch: React.FC = () => {
                 <Typography variant="body2">
                   {restaurant.description}
                 </Typography>
-                {/* <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                  onClick={() => handleOpenReviewForm(restaurant)}
-                >
-                  Submit Review
-                </Button> */}
               </CardContent>
             </Card>
           ))}
