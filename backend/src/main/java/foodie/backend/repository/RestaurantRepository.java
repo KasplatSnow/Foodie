@@ -17,6 +17,15 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
   List<Restaurant> findByPrice(Integer price);
   
+  List<Restaurant> findByName(String name);
+
+  List<Restaurant> findAll();
+
+  boolean existsByAddress(String address);
+  
+  @Override
+  void deleteById(Long restaurantID);
+
   @Query("SELECT r FROM Restaurant r WHERE r.zip_code = :zip_code")
   List<Restaurant> findByZipCode(@Param("zip_code") String zip_code);
 
@@ -26,6 +35,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
   @Query("SELECT r FROM Restaurant r WHERE r.restaurantID = :restaurantID")
   Restaurant findByRestaurantID(@Param("restaurantID") Long restaurantID);
+  
+  @Query("SELECT r FROM Restaurant r WHERE r.name = :name AND r.address = :address")
+  boolean existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(@Param("name") String name, @Param("address") String address);
 
   // Check if a restaurant exists by ID
   //boolean existsById(Long id);
