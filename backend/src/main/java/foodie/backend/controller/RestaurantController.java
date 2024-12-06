@@ -20,13 +20,57 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
-  @Autowired
-  private RestaurantService restaurantService;
+    @Autowired
+    private RestaurantService restaurantService;
 
-    @GetMapping("/restaurantbyzipcode/{zipCode}")
-    public List<RestaurantDTO> getRestaurantByZipCode(@PathVariable("zipCode") String zipCode) {
+    @Autowired
+    private BusinessOwnerService businessOwnerService;
+  
+    @PostMapping("/register")
+    public ResponseEntity<?> createRestaurant(@RequestBody RestaurantRegistrationRequest registrationRequest) {
+            //check if restaurant already exists via
+            if(restaurantService.getAddressExist(registrationRequest.getAddress())){
+                return ResponseEntity.badRequest().body("Address is already registered");
+            }
+        
+            //verify request
+            if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
+                return ResponseEntity.badRequest().body("Email is required");
+            }
+            if (registrationRequest.getZipCode() == null) { //in react, ensure an int
+                return ResponseEntity.badRequest().body("Password is required");
+            }
+            if (registrationRequest.getName() == null || registrationRequest.getName().isEmpty()) {
+                return ResponseEntity.badRequest().body("Role is required");
+            }
+            if (registrationRequest.getBusinessOwnerId() == 0) {
+            return ResponseEntity.badRequest().body("Role is required");
+            }
+            if (registrationRequest.getAddress() == null || registrationRequest.getAddress().isEmpty()) {
+            return ResponseEntity.badRequest().body("Role is required");
+            
+            Restaurant newRestaurant = new Restaurant();
+            newRestaurant.setBusinessOwner(businessOwnerService.getBusinessOwnerByID(registrationRequest.getBusinessOwnerId()));
+            newRestaurant.setEmail(registrationRequest.getEmail());
+            newRestaurant.setZipCode(registrationRequest.getZipCode());
+            newRestaurant.setName(registrationRequest.getName());
+            newRestaurant.setPhoneNumber(registrationRequest.getPhoneNumber());
+            newRestaurant.setAddress(registrationRequest.getAddress());
+            newRestaurant.setCuisine(registrationRequest.getCuisine());
+            newRestaurant.setDescription(registrationRequest.getDescription());
+            newRestaurant.setHours(registrationRequest.getHours());
+
+            //save the user to the database
+            restaurantService.createRestaurant(newRestaurant);
+
+            //return success message
+            return ResponseEntity.ok("Registration successful");
+    }
+      
+    @GetMapping("/getrestaurant/restaurantbyzipcode/{zipCode}")
+    public List<RestaurantDTO> getRestaurantByZipCode(@PathVariable String zipCode) {
         List<Restaurant> restaurants = restaurantService.getByZipCode(zipCode);
         return restaurants.stream().map(restaurant -> new RestaurantDTO(
             restaurant.getRestaurantID(),
@@ -46,7 +90,7 @@ public class RestaurantController {
     }
     
     @GetMapping("/search/query/{query}")
-    public List<RestaurantDTO> getRestaurantByName(@PathVariable String query) {
+    public List<RestaurantDTO> getRestaurantSearch(@PathVariable String query) {
         List<Restaurant> restaurants = restaurantService.searchRestaurants(query);
         return restaurants.stream().map(restaurant -> new RestaurantDTO(
             restaurant.getRestaurantID(),
