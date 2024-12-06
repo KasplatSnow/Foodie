@@ -1,4 +1,4 @@
-package com.example;
+package foodie.backend.controller;
 
 public class ReviewDTO {
     private Long reviewID, restaurantID, userID;
