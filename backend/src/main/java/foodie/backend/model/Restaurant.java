@@ -78,7 +78,7 @@ public class Restaurant {
         this.name = name;
     }
     
-    public void setOwner(BusinessOwner owner){
+    public void setBusinessOwner(BusinessOwner owner){
         this.owner = owner;
     }
     

@@ -3,7 +3,9 @@ package foodie.backend.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import foodie.backend.service.ReviewService;
+import foodie.backend.model.Review;
+import foodie.backend.model.ReviewWriteRequest;
+import foodie.backend.repository.ReviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,7 @@ public class ReviewController {
             return ResponseEntity.badRequest().body("UserID is required");
         }
 
-        Review newReview= new Review(writeRequest.getUser(), writeRequest.getRestaurant(), writeRequest.getReviewText(), writeRequest.getRating());
+        Review newReview = new Review(writeRequest.getUser(), writeRequest.getRestaurant(), writeRequest.getReviewText(), writeRequest.getRating());
         
         //save the user to the database
         reviewService.createReview(newReview);
