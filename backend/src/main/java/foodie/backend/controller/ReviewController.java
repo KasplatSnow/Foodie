@@ -21,9 +21,7 @@ public class ReviewController {
     @Autowired
     private final ReviewService reviewService;
 
-    public ReviewController(RestaurantService restaurantService, UserService userService, ReviewService reviewService) {
-        this.restaurantService = restaurantService;
-        this.userService = userService;
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
