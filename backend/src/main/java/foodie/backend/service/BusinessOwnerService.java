@@ -23,7 +23,7 @@ public class BusinessOwnerService {
         return businessOwnerRepository.findRestaurantByOwnerID(userID);
     }
 
-    public List<BusinessOwner> getBusinessOwnerByID(Long userID){
+    public BusinessOwner getBusinessOwnerByID(Long userID){
         return businessOwnerRepository.findBusinessOwnerByID(userID);
     }
 }
