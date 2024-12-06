@@ -24,21 +24,21 @@ public class Review {
     @JoinColumn(name = "restaurantID")
     private Restaurant restaurant;
 
-    private String reviewText;
+    private String review_text;
     private float rating; // 1-5 stars
 
-    public Review(User user, Restaurant restaurant, String reviewText, float rating){
+    public Review(User user, Restaurant restaurant, String review_text, float rating){
         this.user = user;
         this.restaurant = restaurant;
-        this.reviewText = reviewText;
+        this.review_text = review_text;
         this.rating = rating;
     }
 
     public Review(){
         
     }
-    public void setReviewText(String reviewText){
-        this.reviewText = reviewText;
+    public void setReviewText(String review_text){
+        this.review_text = review_text;
     }
 
     public void setRating(float rating){
@@ -46,7 +46,7 @@ public class Review {
     }
 
     public String getReviewText() {
-        return reviewText;
+        return review_text;
     }
 
     public float getRating() {
