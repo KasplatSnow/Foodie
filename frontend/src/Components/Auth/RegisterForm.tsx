@@ -21,10 +21,13 @@ interface FormData {
   username: string
   email: string
   password: string
+  address: string
+  phoneNumber: string
   role: string
   businessName?: string
   businessAddress?: string
 }
+
 // Environment variables to configure API URL
 // const API_URL = process.env.REACT_APP_API_URL;
 
@@ -33,6 +36,7 @@ const RegisterForm: React.FC = () => {
     register,
     watch,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -40,6 +44,8 @@ const RegisterForm: React.FC = () => {
       username: '',
       email: '',
       password: '',
+      address: '',
+      phoneNumber: '',
       role: '',
       businessName: '',
       businessAddress: '',
@@ -48,31 +54,32 @@ const RegisterForm: React.FC = () => {
   const navigate = useNavigate()
 
   const [role, setRole] = useState('')
-  const onSubmit = (data: FormData) => {
-    console.log('Form submitted:', data)
-    // Handle form submission (e.g., send data to the server)
-  }
+  // const onSubmit = (data: FormData) => {
+  //   console.log('Form submitted:', data)
+  //   // Handle form submission (e.g., send data to the server)
+  // }
   // Function to handle form submission
-  // const onSubmit = async (data) => {
-  //   try {
-  //     const response = await fetch(`${API_URL}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
+  const onSubmit = async (data: FormData) => {
+    console.log(JSON.stringify(data));
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  //     if (response.ok) {
-  //       console.log("Registration successful:", data);
-  //       reset(); // Reset the form on successful submission
-  //     } else {
-  //       console.error("Registration failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error during registration:", error);
-  //   }
-  // };
+      if (response.ok) {
+        console.log("Registration successful:", data);
+        reset(); // Reset the form on successful submission
+      } else {
+        console.error("Registration failed");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
 
   const handleRoleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value)
@@ -145,6 +152,28 @@ const RegisterForm: React.FC = () => {
                 />
               </div>
               <div style={{ marginTop: '16px' }}>
+                <TextField
+                  label="Address"
+                  variant="outlined"
+                  fullWidth
+                  {...register('address', {
+                    required: 'Address is required',
+                  })}
+                  error={!!errors.address}
+                />
+              </div>
+              <div style={{ marginTop: '16px' }}>
+                <TextField
+                  label="Phone Number"
+                  variant="outlined"
+                  fullWidth
+                  {...register('phoneNumber', {
+                    required: 'Phone Number is required',
+                  })}
+                  error={!!errors.phoneNumber}
+                />
+              </div>
+              <div style={{ marginTop: '16px' }}>
                 <FormControl fullWidth error={!!errors.role}>
                   <InputLabel>Role</InputLabel>
                   <Select
@@ -152,8 +181,8 @@ const RegisterForm: React.FC = () => {
                     value={role}
                     onChange={handleRoleChange}
                   >
-                    <MenuItem value="owner">Owner</MenuItem>
-                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="BUSINESS">Owner</MenuItem>
+                    <MenuItem value="USER">User</MenuItem>
                   </Select>
                 </FormControl>
               </div>
