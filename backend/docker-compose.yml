@@ -6,12 +6,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Welcome123456
       MYSQL_DATABASE: foodie
-      MYSQL_USER: root
-      MYSQL_PASSWORD: Welcome123456
     ports:
      - "3306:3306"
     volumes:
-     - db_data:/var/lib/mysql
+     - ./mysql:/var/lib/mysql
+     - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   db_data:
