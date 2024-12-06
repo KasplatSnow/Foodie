@@ -20,9 +20,10 @@ public class BusinessOwnerController {
   
     @Autowired
     private BusinessOwnerService businessOwnerService;
-  
+    
+    //get All restaurants of a BusinessOwner
     @GetMapping("/getrestaurants/userID/{userID}")
-    public List<RestaurantDTO> getRestaurantsByID(@PathVariable("userID") Long userID) {
+    public List<RestaurantDTO> getRestaurantsByID(@PathVariable Long userID) {
         List<Restaurant> restaurants = businessOwnerService.getRestaurantByID(userID);
 
         return restaurants.stream().map(restaurant -> new RestaurantDTO(
@@ -44,14 +45,14 @@ public class BusinessOwnerController {
     //gets ALL BusinessOwner details
     //check if has userID property(if wanting to check properties)
     @GetMapping("/getbusinessowner/userID/{userID}")
-    public List<BusinessOwnerDTO> getBusinessOwnerByID(@PathVariable("userID") Long userID) {
-        List<BusinessOwner> businessOwners = businessOwnerService.getBusinessOwnerByID(userID);
-        return businessOwners.stream().map(businessOwner -> new BusinessOwnerDTO(
+    public BusinessOwnerDTO getBusinessOwnerByID(@PathVariable Long userID) {
+        BusinessOwner businessOwner = businessOwnerService.getBusinessOwnerByID(userID);
+        return new BusinessOwnerDTO(
             businessOwner.getUserID(),
             businessOwner.getUsername(),
             businessOwner.getAddress(),
             businessOwner.getPhoneNumber(),
             businessOwner.getEmail(),
-            businessOwner.getRestaurantID())).collect(Collectors.toList());
+            businessOwner.getRestaurantID());
     }
 }
