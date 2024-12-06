@@ -19,5 +19,5 @@ public interface BusinessOwnerRepository extends JpaRepository<BusinessOwner, Lo
   List<Restaurant> findRestaurantByOwnerID(@Param("userID") Long userID);
 
   @Query("SELECT b FROM User b WHERE b.role = BUSINESS AND b.userID = :userID")
-  List<BusinessOwner> findBusinessOwnerByID(@Param("userID") Long userID);
+  BusinessOwner findBusinessOwnerByID(@Param("userID") Long userID);
 }
