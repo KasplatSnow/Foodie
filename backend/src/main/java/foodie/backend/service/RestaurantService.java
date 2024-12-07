@@ -83,9 +83,15 @@ public class RestaurantService {
         return restaurantRepository.findByRestaurantID(restaurantID);
     }
     
-/*STILL SPECIFYING */
     public boolean checkExistByNameAndAddress(String name, String address){
-        return restaurantRepository.existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(name, address);
+        List<Restaurant> restaurants = restaurantRepository.existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(name, address);
+        if(restaurants.size() > 1){
+            for(int i = 1; i < restaurants.size(); i++){
+                restaurantRepository.deleteById(restaurants.get(i).getRestaurantID());
+            }
+            return true;
+        }
+        return false;    
     }
 
     private boolean isFloat(String string){
