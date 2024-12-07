@@ -39,6 +39,9 @@ public class BusinessOwnerController {
             restaurant.getRating(),
             restaurant.getPrice(),
             restaurant.getOwnerID(),
+            restaurant.getPhoto(),
+            restaurant.getLng(),
+            restaurant.getLat(),
             restaurant.getReviewID())).collect(Collectors.toList());
     }
 
