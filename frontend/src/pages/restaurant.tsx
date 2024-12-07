@@ -9,21 +9,36 @@ import {
   List,
   ListItem,
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../Components/Home/Header'
 import StarIcon from '@mui/icons-material/Star'
 import ReviewItem from '../Components/Restaurant/ReviewItem'
+import { useState, useEffect } from 'react'
 
-const testRestaurantInfo = {
-  id: '1',
-  name: "Joe's Pizza",
-  description: `NY-style thin crust pizza. We offer a 20" pie or made to order slices. Our dough as well as our sauce is made fresh everyday with only the best ingredients. When it comes to the cheese we don't skimp either. All our pizzas come with nearly 1lb of a very special mozzarella cheese. The mozzarella is actually a blend of buffalo milk and cows milk which will give your pizza a very unique and flavorful taste. If you are trying our pizza for the first time I always recommend a plain cheese as your first pie, that way you can taste the quality that goes into our dough/sauce/cheese. A good pizza, doesn't need toppings! Tax is always included in the price.`,
-  categories: ['Pizza', 'Italian', 'Fast Food'],
-  rating: 4.5,
-  reviewCount: 200,
-  image:
-    'https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg',
+interface FetchRestaurantData {
+  setRestaurantData: React.Dispatch<React.SetStateAction<any>>;
+  restaurantId: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
 }
+
+const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
+  fetch(`http://localhost:8080/api/restaurants/search/${restaurantId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurantData(json);
+      console.log(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurantData([]);
+    });
+};
 
 const testReviews = [
   {
@@ -49,6 +64,15 @@ const testReviews = [
 ]
 
 export default function RestaurantPage() {
+  const [restaurantData, setRestaurantData] = useState({});
+  const [error, setError] = useState("");
+  const [searchParams] = useSearchParams();
+
+  // Fetch restaurant data once the component mounts
+  useEffect(() => {
+    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError });
+  }, [searchParams.get('id')]);  // Run only when restaurantId changes
+
   const handleStarClick = (rating: number) => {
     console.log(`Star ${rating} clicked!`)
     // Perform any action, e.g., set the rating state
@@ -65,7 +89,7 @@ export default function RestaurantPage() {
             position: 'relative',
             width: '100%',
             height: '40vh', // Define a height for the image section
-            backgroundImage: `url("${testRestaurantInfo.image}")`,
+            backgroundImage: `url("${restaurantData.photo}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
@@ -95,9 +119,20 @@ export default function RestaurantPage() {
               marginLeft: '1rem',
             }}
           >
-            <h1 style={{ fontSize: '3rem' }}>{testRestaurantInfo.name}</h1>
-            <h2 style={{ fontSize: '2rem' }}>Rating</h2>
-            <h3 style={{ fontSize: '1.5rem' }}>Pricing Tags</h3>
+            <h1 style={{ fontSize: '3rem' }}>{restaurantData.name}</h1>
+            
+            <Box>
+            {restaurantData.rating
+              ? Array.from({ length: Math.floor(restaurantData.rating) }).map((_, index) => (
+                  <StarIcon key={index} />
+                ))
+              : ''}
+          </Box>
+
+            <h3 style={{ fontSize: '1.5rem' }}>
+              {restaurantData.price ? '$'.repeat(restaurantData.price) : ''} {restaurantData.cuisine}
+            </h3>
+
           </Box>
         </Box>
       </Box>
@@ -114,7 +149,7 @@ export default function RestaurantPage() {
           variant="contained"
           onClick={() =>
             navigate('/review', {
-              state: { restaurantName: testRestaurantInfo.name },
+              state: { restaurantName: restaurantData.name },
             })
           }
         >
@@ -123,16 +158,23 @@ export default function RestaurantPage() {
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
-        {/* Replace with actual info later */}
         <h2>Location and Hours</h2>
-        <p>1431 Bird Avenue</p>
-        <p>San Jose, CA, 95125</p>
-        <p>Willow Glen</p>
+        {restaurantData.address && (() => {
+          const [street, cityState] = restaurantData.address.split(/,(.+)/); // Split on first comma
+          return (
+            <>
+              <p>{street.trim()}</p>
+              <p>{cityState.trim()}</p>
+            </>
+          );
+        })()}
+        <p>{restaurantData.zipCode}</p>
+        <Typography sx = {{fontWeight: 'bold'}}>{restaurantData.hours}</Typography>
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <h2>About the Business</h2>
-        <p>{testRestaurantInfo.description}</p>
+        <p>{restaurantData.description}</p>
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
@@ -209,16 +251,23 @@ export default function RestaurantPage() {
 
         {/* List of Reviews */}
         <List>
-          {testReviews.map((item, index) => (
-            <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
-              <ReviewItem
-                user={item.user}
-                rating={item.rating}
-                content={item.content}
-              />
-            </ListItem>
-          ))}
+          {restaurantData.reviewID && restaurantData.reviewID.length > 0 ? (
+            restaurantData.reviewID.map((item, index) => (
+              <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
+                <ReviewItem
+                  user={item.user}
+                  rating={item.rating}
+                  content={item.content}
+                />
+              </ListItem>
+            ))
+          ) : (
+            <Typography variant="body1" sx={{ textAlign: 'center', marginTop: '1rem' }}>
+              No reviews yet, be the first to review!
+            </Typography>
+          )}
         </List>
+
       </Box>
     </Box>
   )

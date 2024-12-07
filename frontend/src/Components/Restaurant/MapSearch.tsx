@@ -146,7 +146,7 @@ const MapSearch: React.FC = () => {
 
   const navigate = useNavigate()
   const handleRestaurantClick = (id: string) => {
-    navigate(`/restaurant?${id}`)
+    navigate(`/restaurant?id=${id}`)
   }
 
   const handleSearch = () => {
