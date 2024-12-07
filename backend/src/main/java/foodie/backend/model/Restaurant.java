@@ -21,20 +21,19 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long restaurantID;
 
-    private String name, address, phoneNumber, email, cuisine, hours, description;
+    private String name, address, phoneNumber, email, cuisine, hours, description, photo;
     private String zip_code;
     private int price;
     private float rating;
-
+    private double lng, lat;
+    
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Review> reviews;
 
     @ManyToOne
     @JoinColumn(name = "ownerID", nullable = false)
     private BusinessOwner owner;
-
-    //List<> photos;
-
+    
     public Restaurant(
         String name, 
         BusinessOwner owner,
@@ -46,7 +45,10 @@ public class Restaurant {
         String hours, 
         String description, 
         float rating, 
-        int price){
+        int price
+        String photo,
+        double lng,
+        double lat){
         this.name = name;
         this.owner = owner;
         this.address = address;
@@ -58,17 +60,14 @@ public class Restaurant {
         this.description = description;
         this.rating = rating;
         this.price = price;
+        this.photo = photo;
+        this.lng = lng;
+        this.lat = lat;
     }
 
     public Restaurant(){
 
     }
-  // Add a photo to the restaurant
-  /*
-   *   public void addPhoto(String photoUrl) {
-    this.photos.add(photoUrl);
-  }
-   */
 
     public void setRestaurantID(int restaurantID) {
         this.restaurantID = restaurantID;
@@ -172,5 +171,28 @@ public class Restaurant {
     
     public List<Long> getReviewID(){
       return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
+    }
+        public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
