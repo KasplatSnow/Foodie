@@ -30,23 +30,41 @@ const LoginForm: React.FC = () => {
   const { logIn } = useAuth() // Access the AuthContext using the useAuth hook
   const navigate = useNavigate()
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     console.log('Logging in as:', data)
 
-    // Generate a unique ID for the user
-    const userId = uniqid()
+    const loginData = {
+      ...data,
+      role: role === 'user' ? 'USER' : 'BUSINESS', // Add role explicitly
+    };
 
-    // Set context values
-    logIn(role, userId) // Pass role and userId to the AuthContext logIn method
+    try {
+      const response = await fetch(`http://localhost:8080/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
 
-    console.log(`User ID: ${userId}`)
-    console.log(`Role: ${role}`)
-    console.log(`Email: ${data.email}`)
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Login successful:", responseData);
 
-    if (data.role !== 'owner') {
-      navigate('/home')
-    } else {
-      navigate('/user-dashboard')
+        // Extract userID and role from the response and set context
+        const { userID, role } = responseData;
+        logIn(role, userID)
+
+        if (data.role !== 'owner') {
+          navigate('/home')
+        } else {
+          navigate('/user-dashboard')
+        }
+      } else {
+        console.error("Registration failed");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
     }
   }
 
