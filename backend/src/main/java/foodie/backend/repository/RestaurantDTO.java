@@ -9,20 +9,20 @@ public class RestaurantDTO {
     private String zipCode;
     private String phoneNumber;
     private String email;
-    private String cuisine;
+    private List<String> cuisine;
     private String hours;
     private String description;
     private float rating;
     private int price;
     private long ownerID;
-    private String photo;
+    private List<String> photo;
     private double lng;
     private double lat;
     private List<Long> reviewID;
     
     public RestaurantDTO(long restaurantID, String name, String address, String zipCode, 
-                         String phoneNumber, String email, String cuisine, String hours, 
-                         String description, float rating, int price, long ownerID, String photo, double lng, double lat, List<Long> reviewID) {
+                         String phoneNumber, String email, List<String> cuisine, String hours, 
+                         String description, float rating, int price, long ownerID, List<String> photo, double lng, double lat, List<Long> reviewID) {
         this.restaurantID = restaurantID;
         this.name = name;
         this.address = address;
@@ -89,11 +89,11 @@ public class RestaurantDTO {
         this.email = email;
     }
 
-    public String getCuisine() {
+    public List<String> getCuisine() {
         return cuisine;
     }
 
-    public void setCuisine(String cuisine) {
+    public void setCuisine(List<String> cuisine) {
         this.cuisine = cuisine;
     }
 
@@ -165,6 +165,14 @@ public class RestaurantDTO {
     }
 
     public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+    
+    public List<String> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(List<String> photo) {
         this.photo = photo;
     }
 }
