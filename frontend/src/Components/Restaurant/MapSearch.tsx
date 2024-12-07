@@ -257,7 +257,7 @@ const MapSearch: React.FC = () => {
           variant="outlined"
           value={filters.zipcode}
           onChange={(e) => setFilters({ ...filters, zipcode: e.target.value })}
-          sx={{ width: 150, mr: 2 }}
+          sx={{ width: 110, mr: 2 }}
         />
         <TextField
           placeholder="Categories (e.g., Vietnamese, Coffee)"
@@ -266,13 +266,13 @@ const MapSearch: React.FC = () => {
           onChange={(e) =>
             setFilters({ ...filters, categories: e.target.value })
           }
-          sx={{ width: 250, mr: 2 }}
+          sx={{ width: 300, mr: 2 }}
         />
         <Select
           value={filters.price}
           onChange={(e) => setFilters({ ...filters, price: e.target.value })}
           displayEmpty
-          sx={{ width: 150, mr: 2 }}
+          sx={{ width: 110, mr: 2 }}
         >
           <MenuItem value="">Price</MenuItem>
           <MenuItem value="1">Low</MenuItem>
@@ -283,7 +283,7 @@ const MapSearch: React.FC = () => {
           value={filters.rating}
           onChange={(e) => setFilters({ ...filters, rating: e.target.value })}
           displayEmpty
-          sx={{ width: 150, mr: 2 }}
+          sx={{ width: 110, mr: 2 }}
         >
           <MenuItem value="">Rating</MenuItem>
           <MenuItem value="3">3 Stars & Up</MenuItem>
@@ -294,7 +294,7 @@ const MapSearch: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={handleSearch}
-          sx={{ height: 56, width: '150px' }}
+          sx={{ height: 56, width: '200px' }}
         >
           Search
         </Button>
