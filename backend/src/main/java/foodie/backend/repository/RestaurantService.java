@@ -14,34 +14,32 @@ public class RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
-/*
- * FIGURE OUT WHY JPA CANT FIND A FLOAT WITH A DEMICAL PLACE
- * AND
- * DIFFERENTIATE INT FROM FLOAT FOR PRICE AND RATING
- *
- */
-
-    public Restaurant createRestaurant(Restaurant restaurant) {
-        return restaurantRepository.save(restaurant);
-    }
     
-    public List<Restaurant> searchRestaurants(String query){
-        if(query != null){
-            if(isFloat(query)){
-                Float rating = Float.parseFloat(query);
-                return restaurantRepository.findByRating(rating);
-            }
-            else if(isInteger(query)){
-                Integer price = Integer.parseInt(query);
-                return restaurantRepository.findByPrice(price);
-            }
-            else{
-                return restaurantRepository.findByNameContainingIgnoreCaseOrCuisineContainingIgnoreCase(query, query);
-            }
-        }
-        return List.of();
-    }
+    @Autowired
+    private PhotoRepository photoRepository;
 
+    @Autowired
+    private CuisineRepository cuisineRepository;
+    
+    public void createRestaurant(Restaurant restaurant, List<String> photos, List<String> cuisines) {
+        restaurantRepository.save(restaurant);
+
+        // Save cuisines
+        for (String cuisine : cuisines) {
+            Cuisine cuisineList = new Cuisine();
+            cuisineList.setCuisine(cuisine);
+            cuisineList.setRestaurant(restaurant);
+            cuisineRepository.save(cuisineList);
+        }
+        
+        // Save photos
+        for (String photo : photos) {
+            Photo photoList = new Photo();
+            photoList.setPhoto(photo);
+            photoList.setRestaurant(restaurant);
+            photoRepository.save(photoList);
+        }
+    }
     public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
         Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
         currentRestaurant.setName(updates.getName());
@@ -92,25 +90,5 @@ public class RestaurantService {
             return true;
         }
         return false;    
-    }
-
-    private boolean isFloat(String string){
-        try{
-            Float.parseFloat(string);
-            return true;
-        }
-        catch(NumberFormatException e){
-            return false;
-        }
-    }
-
-    private boolean isInteger(String string){
-        try{
-            Integer.parseInt(string);
-            return true;
-        }
-        catch(NumberFormatException e){
-            return false;
-        }
     }
 }
