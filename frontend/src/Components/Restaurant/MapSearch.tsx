@@ -95,11 +95,14 @@ const mockRestaurants: Restaurant[] = [
 ]
 
 interface FetchRestaurantParams {
-  setRestaurants: React.Dispatch<React.SetStateAction<any>>;
-  setError: React.Dispatch<React.SetStateAction<string>>;
+  setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
-const fetchRestaurants = ({ setRestaurants, setError }: FetchRestaurantParams) => {
+const fetchRestaurants = ({
+  setRestaurants,
+  setError,
+}: FetchRestaurantParams) => {
   fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
     method: 'GET',
     headers: {
@@ -108,15 +111,15 @@ const fetchRestaurants = ({ setRestaurants, setError }: FetchRestaurantParams) =
   })
     .then((res) => res.json())
     .then((json) => {
-      setError('');
-      setRestaurants(json[0]);
-      console.log(json[0]);
+      setError('')
+      setRestaurants(json[0])
+      console.log(json[0])
     })
     .catch((e) => {
-      setError(e.toString());
-      setRestaurants([]);
-    });
-};
+      setError(e.toString())
+      setRestaurants([])
+    })
+}
 
 const MapSearch: React.FC = () => {
   const { isLoaded } = useJsApiLoader({
@@ -134,22 +137,12 @@ const MapSearch: React.FC = () => {
     categories: '',
   })
 
-  const [restaurants, setRestaurants] = useState([]);
-  const [error, setError] = useState("");
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchRestaurants({ setRestaurants, setError });
-  }, []);
-
-  // const [
-  //   selectedRestaurant,
-  //   setSelectedRestaurant,
-  // ] = useState<Restaurant | null>(null)
-  // const [reviewFormOpen, setReviewFormOpen] = useState(false)
-  // const [reviewName, setReviewName] = useState('')
-  // const [reviewComment, setReviewComment] = useState('')
-  // const [reviewRating, setReviewRating] = useState<number | null>(null)
-  // const [snackbarOpen, setSnackbarOpen] = useState(false)
+    fetchRestaurants({ setRestaurants, setError })
+  }, [])
 
   const navigate = useNavigate()
   const handleRestaurantClick = (id: string) => {
@@ -224,6 +217,11 @@ const MapSearch: React.FC = () => {
       >
         <Header />
       </Box>
+      {error && (
+        <Typography color="error" sx={{ marginBottom: '16px' }}>
+          {error}
+        </Typography>
+      )}
 
       {/* Search Filters */}
       <Box
@@ -354,56 +352,6 @@ const MapSearch: React.FC = () => {
           </GoogleMap>
         </Grid>
       </Grid>
-
-      {/* Review Form Dialog */}
-      {/* <Dialog
-        open={reviewFormOpen}
-        onClose={() => setReviewFormOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Submit Review for {selectedRestaurant?.name}</DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              label="Your Name"
-              value={reviewName}
-              onChange={(e) => setReviewName(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Your Review"
-              value={reviewComment}
-              onChange={(e) => setReviewComment(e.target.value)}
-              multiline
-              rows={4}
-              fullWidth
-            />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Typography>Rating:</Typography>
-              <Rating
-                value={reviewRating}
-                onChange={(e, newValue) => setReviewRating(newValue)}
-              />
-            </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitReview}
-            >
-              Submit Review
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog> */}
-
-      {/* Snackbar */}
-      {/* <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message="Review submitted successfully!"
-      /> */}
     </Box>
   )
 }
