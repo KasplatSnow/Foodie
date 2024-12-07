@@ -10,11 +10,6 @@ import {
   Card,
   CardContent,
   Typography,
-  // Dialog,
-  // DialogTitle,
-  // DialogContent,
-  // Rating,
-  // Snackbar,
   InputAdornment,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
@@ -28,131 +23,167 @@ const mapContainerStyle = {
 }
 
 const defaultCenter = {
-  lat: 37.3382,
-  lng: -121.8863,
+  lat: 37.3294,
+  lng: -121.86,
 }
+// Mock restaurant data
+const mockRestaurants = [
+  {
+    id: 'mock1',
+    name: 'Mock Restaurant 1',
+    address: '123 Street st, San Jose, CA',
+    photos: ['https://via.placeholder.com/400'],
+    lat: 37.3284,
+    lng: -121.861,
+    rating: 4.5,
+    price: 2,
+    categories: ['Mock Category 1'],
+  },
+  {
+    id: 'mock2',
+    name: 'Mock Restaurant 2',
+    address: '338 Story Rd, San Jose, CA',
+    photos: ['https://via.placeholder.com/400'],
+    lat: 37.3314,
+    lng: -121.8625,
+    rating: 4.0,
+    price: 3,
+    categories: ['Mock Category 2'],
+  },
+]
 
-// Define the type for Restaurant data
 interface Restaurant {
   id: string
   name: string
   address: string
-  contactInfo: string
-  hours: string
-  description: string
-  photos: string[]
-  zipcode: string
+  description?: string
+  photos?: string[]
+  zipcode?: string
   price?: number
   rating?: number
   categories?: string[]
   lat?: number
   lng?: number
-  reviews?: Review[]
-}
-
-interface Review {
-  id: string
-  name: string
-  comment: string
-  rating: number
-  date: string
-}
-
-// Mock restaurant data
-const mockRestaurants: Restaurant[] = [
-  {
-    id: '1',
-    name: 'Pho Ha Noi',
-    address: '123 Main St, San Jose, CA',
-    contactInfo: '123-456-7890',
-    hours: '9:00 AM - 9:00 PM',
-    description: 'A cozy place for delicious Vietnamese food.',
-    photos: ['https://cdn.example.com/photo1.jpg'],
-    zipcode: '95122',
-    price: 2,
-    rating: 4.5,
-    categories: ['Vietnamese', 'Noodles'],
-    lat: 37.3382,
-    lng: -121.889,
-    reviews: [],
-  },
-  {
-    id: '2',
-    name: 'Coffee and Co.',
-    address: '789 Coffee Ln, San Jose, CA',
-    contactInfo: '987-654-3210',
-    hours: '10:00 AM - 10:00 PM',
-    description: 'Famous for the best coffee in town.',
-    photos: ['https://cdn.example.com/photo2.jpg'],
-    zipcode: '95113',
-    price: 1,
-    rating: 4.8,
-    categories: ['Coffee', 'Cafe'],
-    lat: 37.336,
-    lng: -121.8905,
-    reviews: [],
-  },
-]
-
-interface FetchRestaurantParams {
-  setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>
-  setError: React.Dispatch<React.SetStateAction<string>>
-}
-
-const fetchRestaurants = ({
-  setRestaurants,
-  setError,
-}: FetchRestaurantParams) => {
-  fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      setError('')
-      setRestaurants(json[0])
-      console.log(json[0])
-    })
-    .catch((e) => {
-      setError(e.toString())
-      setRestaurants([])
-    })
 }
 
 const MapSearch: React.FC = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: REACT_APP_GOOGLE_API_KEY || '',
-  })
-
-  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>(
-    mockRestaurants,
-  )
-  const [filters, setFilters] = useState({
-    searchTerm: '',
-    rating: '',
-    price: '',
-    zipcode: '',
-    categories: '',
+    libraries: ['places'],
   })
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    fetchRestaurants({ setRestaurants, setError })
-  }, [])
+  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>(
+    [],
+  )
+  const [filters, setFilters] = useState({
+    searchTerm: '',
+    zipcode: '',
+    categories: '',
+    price: '',
+    rating: '',
+  })
+  const [error, setError] = useState<string>('')
 
   const navigate = useNavigate()
-  const handleRestaurantClick = (id: string) => {
-    navigate(`/restaurant?id=${id}`)
+
+  const handleRestaurantClick = (
+    id: string,
+    name: string,
+    photos?: string,
+    price?: number,
+    rating?: number,
+  ) => {
+    navigate(`/restaurant?id=${id}`, {
+      state: { name, price, rating, photos },
+    })
+  }
+
+  const fetchRestaurantsFromGoogleAPI = async (
+    location: google.maps.LatLngLiteral,
+  ): Promise<Restaurant[]> => {
+    const service = new google.maps.places.PlacesService(
+      document.createElement('div'),
+    )
+
+    return new Promise<Restaurant[]>((resolve, reject) => {
+      service.nearbySearch(
+        {
+          location: new google.maps.LatLng(location.lat, location.lng),
+          radius: 15000, // 15km
+          type: 'restaurant',
+        },
+        (results, status) => {
+          // searching for nearby locations
+          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            console.log('result from google map api ', results)
+
+            // const filteredResults = results.filter((place) =>
+            //   place.types?.includes('restaurant'),
+            // )
+
+            const restaurants = results.map((place) => ({
+              id: place.place_id || 'Unknown',
+              name: place.name || 'Unknown',
+              address: place.vicinity || 'Unknown',
+              photos: place.photos
+                ? place.photos.map((photo) =>
+                    photo.getUrl({ maxWidth: 400, maxHeight: 300 }),
+                  )
+                : [],
+              lat: place.geometry?.location?.lat(),
+              lng: place.geometry?.location?.lng(),
+              rating: place.rating || undefined,
+              price: place.price_level || 0,
+              categories: place.types || [],
+              zipcode: '',
+            }))
+            resolve(restaurants)
+          } else {
+            console.error('Service error:', status)
+            reject('Unable to fetch restaurants from Google Places.')
+          }
+        },
+      )
+    })
+  }
+  // Fetch all restaurants
+  const fetchRestaurants = async () => {
+    try {
+      const apiRestaurants = await fetchRestaurantsFromGoogleAPI(defaultCenter)
+
+      // Ensure API data matches the Restaurant type
+      const RestaurantData: Restaurant[] = apiRestaurants.map((restaurant) => ({
+        id: restaurant.id,
+        name: restaurant.name,
+        address: restaurant.address,
+        photos: restaurant.photos,
+        rating: restaurant.rating,
+        price: restaurant.price,
+        lat: restaurant.lat,
+        lng: restaurant.lng,
+        categories: restaurant.categories,
+        zipcode: '',
+        // description: '',
+      }))
+
+      // Combine mock data and google map API data
+      const combinedRestaurants: Restaurant[] = [
+        ...mockRestaurants,
+        ...RestaurantData,
+      ]
+
+      setRestaurants(combinedRestaurants)
+      setFilteredRestaurants(combinedRestaurants)
+    } catch (error) {
+      console.error(error)
+      setError('Unable to fetch restaurants. Please try again later.')
+    }
   }
 
   const handleSearch = () => {
     let results = restaurants
 
-    // Filter by search term
     if (filters.searchTerm) {
       results = results.filter((restaurant) =>
         restaurant.name
@@ -161,35 +192,12 @@ const MapSearch: React.FC = () => {
       )
     }
 
-    // Filter by rating
-    if (filters.rating) {
-      results = results.filter(
-        (restaurant) =>
-          restaurant.rating && restaurant.rating >= parseFloat(filters.rating),
-      )
-    }
-
-    // Filter by price
-    if (filters.price) {
-      results = results.filter(
-        (restaurant) =>
-          restaurant.price && restaurant.price === parseInt(filters.price),
-      )
-    }
-
-    // Filter by zipcode
-    if (filters.zipcode) {
-      results = results.filter(
-        (restaurant) => restaurant.zipcode === filters.zipcode,
-      )
-    }
-
-    // Filter by categories
     if (filters.categories) {
       const categoriesArray = filters.categories
         .toLowerCase()
         .split(',')
         .map((cat) => cat.trim())
+
       results = results.filter((restaurant) =>
         categoriesArray.some((cat) =>
           (restaurant.categories ?? [])
@@ -199,14 +207,39 @@ const MapSearch: React.FC = () => {
       )
     }
 
+    if (filters.zipcode) {
+      results = results.filter((restaurant) =>
+        restaurant.zipcode?.includes(filters.zipcode),
+      )
+    }
+
+    if (filters.rating) {
+      results = results.filter(
+        (restaurant) =>
+          restaurant.rating && restaurant.rating >= parseFloat(filters.rating),
+      )
+    }
+
+    if (filters.price) {
+      results = results.filter(
+        (restaurant) =>
+          restaurant.price && restaurant.price === parseInt(filters.price, 10),
+      )
+    }
+
     setFilteredRestaurants(results)
   }
+
+  useEffect(() => {
+    if (isLoaded) {
+      fetchRestaurants()
+    }
+  }, [isLoaded])
 
   if (!isLoaded) return <div>Loading...</div>
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
       <Box
         sx={{
           width: '100%',
@@ -222,8 +255,7 @@ const MapSearch: React.FC = () => {
           {error}
         </Typography>
       )}
-
-      {/* Search Filters */}
+      {/* Search textfields  */}
       <Box
         sx={{
           display: 'flex',
@@ -247,20 +279,10 @@ const MapSearch: React.FC = () => {
               </InputAdornment>
             ),
           }}
-          sx={{
-            width: '850px',
-            mr: 2,
-          }}
+          sx={{ width: '300px', mr: 2 }}
         />
         <TextField
-          placeholder="Zipcode"
-          variant="outlined"
-          value={filters.zipcode}
-          onChange={(e) => setFilters({ ...filters, zipcode: e.target.value })}
-          sx={{ width: 110, mr: 2 }}
-        />
-        <TextField
-          placeholder="Categories (e.g., Vietnamese, Coffee)"
+          placeholder="Categories (e.g. Coffee, Thai)"
           variant="outlined"
           value={filters.categories}
           onChange={(e) =>
@@ -290,6 +312,13 @@ const MapSearch: React.FC = () => {
           <MenuItem value="4">4 Stars & Up</MenuItem>
           <MenuItem value="5">5 Stars</MenuItem>
         </Select>
+        <TextField
+          placeholder="Zipcode"
+          variant="outlined"
+          value={filters.zipcode}
+          onChange={(e) => setFilters({ ...filters, zipcode: e.target.value })}
+          sx={{ width: 120, mr: 2 }}
+        />
         <Button
           variant="contained"
           color="primary"
@@ -299,8 +328,6 @@ const MapSearch: React.FC = () => {
           Search
         </Button>
       </Box>
-
-      {/* Main Content */}
       <Grid container sx={{ flexGrow: 1 }}>
         <Grid
           item
@@ -315,28 +342,79 @@ const MapSearch: React.FC = () => {
           {filteredRestaurants.map((restaurant) => (
             <Card
               key={restaurant.id}
-              sx={{ mb: 2 }}
-              onClick={() => handleRestaurantClick(restaurant.id)}
+              sx={{ mb: 2, cursor: 'pointer' }}
+              onClick={() =>
+                handleRestaurantClick(
+                  restaurant.id,
+                  restaurant.name,
+                  restaurant.photos && restaurant.photos[0]
+                    ? restaurant.photos[0]
+                    : '',
+                )
+              }
             >
+              {/* Restaurant List on the left */}
               <CardContent>
-                <Typography variant="h6">{restaurant.name}</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {restaurant.address}
-                </Typography>
-                <Typography variant="body2">
-                  {restaurant.description}
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box sx={{ flex: 1, pr: 2 }}>
+                    <Typography variant="h6">{restaurant.name}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {restaurant.address}
+                    </Typography>
+                    {restaurant.rating && (
+                      <Typography variant="body2" color="textSecondary">
+                        <strong>Rating:</strong> {restaurant.rating} stars
+                      </Typography>
+                    )}
+
+                    {restaurant.price !== undefined && (
+                      <Typography variant="body2" color="textSecondary">
+                        <strong>Price Level:</strong>{' '}
+                        {'$'.repeat(restaurant.price ?? 0)}
+                      </Typography>
+                    )}
+                  </Box>
+                  {restaurant.photos && restaurant.photos.length > 0 && (
+                    <Box
+                      sx={{
+                        width: 120,
+                        height: 120,
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <img
+                        src={restaurant.photos[0]}
+                        alt={`${restaurant.name}`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Box>
               </CardContent>
             </Card>
           ))}
         </Grid>
-
-        {/* Map */}
+        {/* Map maker */}
         <Grid item xs={8}>
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={defaultCenter}
-            zoom={12}
+            zoom={15}
           >
             {filteredRestaurants.map(
               (restaurant) =>
