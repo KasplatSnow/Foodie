@@ -1,8 +1,5 @@
 package foodie.backend.repository;
 
-import foodie.backend.model.BusinessOwner;
-import foodie.backend.model.Restaurant;
-
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,7 +34,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   Restaurant findByRestaurantID(@Param("restaurantID") Long restaurantID);
   
   @Query("SELECT r FROM Restaurant r WHERE r.name = :name AND r.address = :address")
-  boolean existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(@Param("name") String name, @Param("address") String address);
+  List<Restaurant> existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(@Param("name") String name, @Param("address") String address);
 
   // Check if a restaurant exists by ID
   //boolean existsById(Long id);
