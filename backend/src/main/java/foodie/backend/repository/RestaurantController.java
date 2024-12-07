@@ -57,14 +57,13 @@ public class RestaurantController {
         newRestaurant.setName(registrationRequest.getName());
         newRestaurant.setPhoneNumber(registrationRequest.getPhoneNumber());
         newRestaurant.setAddress(registrationRequest.getAddress());
-        newRestaurant.setCuisine(registrationRequest.getCuisine());
         newRestaurant.setDescription(registrationRequest.getDescription());
         newRestaurant.setHours(registrationRequest.getHours());
-        newRestaurant.setPhoto(registrationRequest.getPhoto());
         newRestaurant.setLng(registrationRequest.getLng());
         newRestaurant.setLat(registrationRequest.getLat());
-        //save the user to the database
-        restaurantService.createRestaurant(newRestaurant);
+        
+        //send newly created restaurant to be saved, so new photos and cuisines can be added to their own tables
+        restaurantService.createRestaurant(newRestaurant, registrationRequest.getPhoto(), registrationRequest.getCuisine());
 
         //return success message
         return ResponseEntity.ok("Registration successful");
@@ -80,41 +79,18 @@ public class RestaurantController {
             restaurant.getZipCode(),
             restaurant.getPhoneNumber(),
             restaurant.getEmail(),
-            restaurant.getCuisine(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
             restaurant.getHours(),
             restaurant.getDescription(),
             restaurant.getRating(),
             restaurant.getPrice(),
             restaurant.getOwnerID(),
-            restaurant.getPhoto(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
             restaurant.getLng(),
             restaurant.getLat(),
             restaurant.getReviewID())).collect(Collectors.toList());
 
     }
-    
-    @GetMapping("/search/query/{query}")
-    public List<RestaurantDTO> getRestaurantSearch(@PathVariable String query) {
-        List<Restaurant> restaurants = restaurantService.searchRestaurants(query);
-        return restaurants.stream().map(restaurant -> new RestaurantDTO(
-            restaurant.getRestaurantID(),
-            restaurant.getName(),
-            restaurant.getAddress(),
-            restaurant.getPhoneNumber(),
-            restaurant.getZipCode(),
-            restaurant.getEmail(),
-            restaurant.getCuisine(),
-            restaurant.getHours(),
-            restaurant.getDescription(),
-            restaurant.getRating(),
-            restaurant.getPrice(),
-            restaurant.getOwnerID(),
-            restaurant.getPhoto(),
-            restaurant.getLng(),
-            restaurant.getLat(),
-            restaurant.getReviewID())).collect(Collectors.toList());
-    }
-
 
     @PutMapping("update/restaurantid/{restaurantID}")
     public ResponseEntity<RestaurantDTO> putUpdateRestaurant(@PathVariable Long restaurantID, @RequestBody RestaurantRegistrationRequest updates) {
@@ -126,13 +102,13 @@ public class RestaurantController {
             updateRestaurant.getZipCode(),
             updateRestaurant.getPhoneNumber(),
             updateRestaurant.getEmail(),
-            updateRestaurant.getCuisine(),
+            updateRestaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
             updateRestaurant.getHours(),
             updateRestaurant.getDescription(),
             updateRestaurant.getRating(),
             updateRestaurant.getPrice(),
             updateRestaurant.getOwnerID(),
-            updateRestaurant.getPhoto(),
+            updateRestaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
             updateRestaurant.getLng(),
             updateRestaurant.getLat(),
             updateRestaurant.getReviewID());
@@ -149,13 +125,13 @@ public class RestaurantController {
         restaurant.getZipCode(),
         restaurant.getPhoneNumber(),
         restaurant.getEmail(),
-        restaurant.getCuisine(),
+        restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
         restaurant.getHours(),
         restaurant.getDescription(),
         restaurant.getRating(),
         restaurant.getPrice(),
         restaurant.getOwnerID(),
-        restaurant.getPhoto(),
+        restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
         restaurant.getLng(),
         restaurant.getLat(),
         restaurant.getReviewID())).collect(Collectors.toList());
