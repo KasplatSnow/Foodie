@@ -44,9 +44,9 @@ const Header = () => {
 
   // Redirect to profile page based on user role
   const handleProfileNavigation = () => {
-    if (userRole === 'customer') {
+    if (userRole === 'USER') {
       navigate('/profile') // Redirect to customer profile
-    } else if (userRole === 'owner') {
+    } else if (userRole === 'OWNER') {
       navigate('/profile/owner') // Redirect to owner profile
     }
     handleProfileMenuClose()

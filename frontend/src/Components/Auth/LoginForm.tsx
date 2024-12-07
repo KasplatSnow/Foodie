@@ -10,7 +10,6 @@ import {
   Tabs,
   Tab,
 } from '@mui/material'
-import uniqid from 'uniqid' // Import uniqid
 import { useAuth } from '../Auth/AuthContext' // Adjust path as needed
 
 interface FormData {

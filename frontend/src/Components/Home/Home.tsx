@@ -3,10 +3,10 @@ import { Grid } from '@mui/material'
 import Footer from './Footer'
 import LandingPage from './Content'
 import { useEffect } from 'react'
-import { LoginContext } from '../../context/login'
+import { useAuth } from '../Auth/AuthContext' // Adjust path as needed
 
 const Home = () => {
-  const loginContext = React.useContext(LoginContext);
+  const loginContext = useAuth();
 
     // Log the context values after they have been updated
     useEffect(() => {
