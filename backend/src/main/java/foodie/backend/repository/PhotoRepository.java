@@ -1,4 +1,4 @@
-package com.example;
+package foodie.backend.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
