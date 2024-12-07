@@ -63,7 +63,9 @@ public class RestaurantController {
         newRestaurant.setCuisine(registrationRequest.getCuisine());
         newRestaurant.setDescription(registrationRequest.getDescription());
         newRestaurant.setHours(registrationRequest.getHours());
-
+        newRestaurant.setPhoto(registrationRequest.getPhoto());
+        newRestaurant.setLng(registrationRequest.getLng());
+        newRestaurant.setLat(registrationRequest.getLat());
         //save the user to the database
         restaurantService.createRestaurant(newRestaurant);
 
@@ -87,6 +89,9 @@ public class RestaurantController {
             restaurant.getRating(),
             restaurant.getPrice(),
             restaurant.getOwnerID(),
+            restaurant.getPhoto(),
+            restaurant.getLng(),
+            restaurant.getLat(),
             restaurant.getReviewID())).collect(Collectors.toList());
 
     }
@@ -107,6 +112,9 @@ public class RestaurantController {
             restaurant.getRating(),
             restaurant.getPrice(),
             restaurant.getOwnerID(),
+            restaurant.getPhoto(),
+            restaurant.getLng(),
+            restaurant.getLat(),
             restaurant.getReviewID())).collect(Collectors.toList());
     }
 
@@ -127,6 +135,9 @@ public class RestaurantController {
             updateRestaurant.getRating(),
             updateRestaurant.getPrice(),
             updateRestaurant.getOwnerID(),
+            restaurant.getPhoto(),
+            restaurant.getLng(),
+            restaurant.getLat(),
             updateRestaurant.getReviewID());
         return ResponseEntity.ok(updatedRestaurant);
     }
@@ -147,6 +158,9 @@ public class RestaurantController {
         restaurant.getRating(),
         restaurant.getPrice(),
         restaurant.getOwnerID(),
+        restaurant.getPhoto(),
+        restaurant.getLng(),
+        restaurant.getLat(),
         restaurant.getReviewID())).collect(Collectors.toList());
     }
 }
