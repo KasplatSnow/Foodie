@@ -15,11 +15,14 @@ public class RestaurantDTO {
     private float rating;
     private int price;
     private long ownerID;
+    private String photo;
+    private double lng;
+    private double lat;
     private List<Long> reviewID;
     
     public RestaurantDTO(long restaurantID, String name, String address, String zipCode, 
                          String phoneNumber, String email, String cuisine, String hours, 
-                         String description, float rating, int price, long ownerID, List<Long> reviewID) {
+                         String description, float rating, int price, long ownerID, String photo, double lng, double lat, List<Long> reviewID) {
         this.restaurantID = restaurantID;
         this.name = name;
         this.address = address;
@@ -32,6 +35,9 @@ public class RestaurantDTO {
         this.cuisine = cuisine;
         this.email = email;
         this.ownerID = ownerID;
+        this.photo = photo;
+        this.lng = lng;
+        this.lat = lat;
         this.reviewID = reviewID;
     }
 
@@ -137,6 +143,29 @@ public class RestaurantDTO {
 
     public void setReviewID(List<Long> reviewID) {
         this.reviewID = reviewID;
+    }
+        public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
 
