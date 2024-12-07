@@ -22,6 +22,9 @@ CREATE TABLE restaurant (
   rating float DEFAULT NULL,
   price int DEFAULT NULL,
   email varchar(45) DEFAULT NULL,
+  photo varchar(255) DEFAULT NULL,
+  lng double DEFAULT NULL,
+  lat double DEFAULT NULL,
   PRIMARY KEY (restaurantID),
   KEY userID_idx (ownerID),
   CONSTRAINT userID FOREIGN KEY (ownerID) REFERENCES user (userID)
