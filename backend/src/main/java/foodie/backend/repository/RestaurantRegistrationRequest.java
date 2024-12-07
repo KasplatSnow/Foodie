@@ -10,8 +10,8 @@ public class RestaurantRegistrationRequest {
     private Long businessOwnerId;
     private String hours;
     private String description;
-    private String cuisine;
-    private String photo;
+    private List<String> cuisine;
+    private List<String> photo;
     private double lng;
     private double lat;
     
@@ -81,17 +81,17 @@ public class RestaurantRegistrationRequest {
         this.description = description;
     }
 
-    public String getCuisine() {
+    public List<String> getCuisine() {
         return cuisine;
     }
 
-    public void setCuisine(String cuisine) {
+    public void setCuisine(List<String> cuisine) {
         this.cuisine = cuisine;
     }
 
-    public String getPhoto() { return photo; }
+    public List<String> getPhoto() { return photo; }
 
-    public void setPhoto(String photo) { this.photo = photo; }
+    public void setPhoto(List<String> photo) { this.photo = photo; }
 
     public double getLng() { return lng; }
 
@@ -100,5 +100,20 @@ public class RestaurantRegistrationRequest {
     public double getLat() { return lat; }
 
     public void setLat(double lat) { this.lat = lat; }
+    
+    public float getRating() {
+        return rating;
+    }
 
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }
