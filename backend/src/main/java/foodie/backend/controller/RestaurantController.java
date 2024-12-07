@@ -130,4 +130,23 @@ public class RestaurantController {
             updateRestaurant.getReviewID());
         return ResponseEntity.ok(updatedRestaurant);
     }
+
+    @GetMapping("/allrestaurants")
+    public List<RestaurantDTO> getAllRestaurants(){
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+        restaurant.getRestaurantID(),
+        restaurant.getName(),
+        restaurant.getAddress(),
+        restaurant.getZipCode(),
+        restaurant.getPhoneNumber(),
+        restaurant.getEmail(),
+        restaurant.getCuisine(),
+        restaurant.getHours(),
+        restaurant.getDescription(),
+        restaurant.getRating(),
+        restaurant.getPrice(),
+        restaurant.getOwnerID(),
+        restaurant.getReviewID())).collect(Collectors.toList());
+    }
 }
