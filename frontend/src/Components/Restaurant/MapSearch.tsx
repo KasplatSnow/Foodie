@@ -167,7 +167,7 @@ const MapSearch: React.FC = () => {
         // description: '',
       }))
 
-      // Combine mock data and google map API data
+      // Combine mock data and google map API data .
       const combinedRestaurants: Restaurant[] = [
         ...mockRestaurants,
         ...RestaurantData,

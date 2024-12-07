@@ -36,7 +36,7 @@ export default function RestaurantPage() {
 
   const handleStarClick = (rating: number) => {
     console.log(`Star ${rating} clicked!`)
-    // Perform any action, e.g., set the rating state
+    // Not implemented yet so not doing this
   }
 
   return (
