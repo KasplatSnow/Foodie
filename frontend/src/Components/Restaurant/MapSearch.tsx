@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import {
   Box,
@@ -94,6 +94,30 @@ const mockRestaurants: Restaurant[] = [
   },
 ]
 
+interface FetchRestaurantParams {
+  setRestaurants: React.Dispatch<React.SetStateAction<any>>;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchRestaurants = ({ setRestaurants, setError }: FetchRestaurantParams) => {
+  fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurants(json[0]);
+      console.log(json[0]);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurants([]);
+    });
+};
+
 const MapSearch: React.FC = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: REACT_APP_GOOGLE_API_KEY || '',
@@ -109,6 +133,13 @@ const MapSearch: React.FC = () => {
     zipcode: '',
     categories: '',
   })
+
+  const [restaurants, setRestaurants] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchRestaurants({ setRestaurants, setError });
+  }, []);
 
   // const [
   //   selectedRestaurant,
@@ -126,7 +157,7 @@ const MapSearch: React.FC = () => {
   }
 
   const handleSearch = () => {
-    let results = mockRestaurants
+    let results = restaurants
 
     // Filter by search term
     if (filters.searchTerm) {
