@@ -1,11 +1,8 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
-import foodie.backend.model.BusinessOwner;
-import foodie.backend.model.Restaurant;
-import foodie.backend.model.RestaurantRegistrationRequest;
-import foodie.backend.service.RestaurantService;
-import foodie.backend.repository.RestaurantRepository;
-import foodie.backend.service.BusinessOwnerService;
+import foodie.backend.repository.BusinessOwner;
+import foodie.backend.repository.RestaurantRegistrationRequest;
+import foodie.backend.repository.BusinessOwnerService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -135,9 +132,9 @@ public class RestaurantController {
             updateRestaurant.getRating(),
             updateRestaurant.getPrice(),
             updateRestaurant.getOwnerID(),
-            restaurant.getPhoto(),
-            restaurant.getLng(),
-            restaurant.getLat(),
+            updateRestaurant.getPhoto(),
+            updateRestaurant.getLng(),
+            updateRestaurant.getLat(),
             updateRestaurant.getReviewID());
         return ResponseEntity.ok(updatedRestaurant);
     }
