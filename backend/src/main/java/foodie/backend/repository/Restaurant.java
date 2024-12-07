@@ -26,6 +26,12 @@ public class Restaurant {
     private int price;
     private float rating;
     private double lng, lat;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cuisine> cuisine;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Photo> photo;
     
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Review> reviews;
@@ -55,12 +61,10 @@ public class Restaurant {
         this.zip_code = zip_code;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.cuisine = cuisine;
         this.hours = hours;
         this.description = description;
         this.rating = rating;
         this.price = price;
-        this.photo = photo;
         this.lng = lng;
         this.lat = lat;
     }
@@ -97,7 +101,7 @@ public class Restaurant {
         this.email = email;
     }
     
-    public void setCuisine(String cuisine) {
+    public void setCuisine(List<Cuisine> cuisine) {
         this.cuisine = cuisine;
     }
     
@@ -149,7 +153,7 @@ public class Restaurant {
         return email;
     }
     
-    public String getCuisine() {
+    public List<Cuisine> getCuisine() {
         return cuisine;
     }
     
@@ -188,11 +192,11 @@ public class Restaurant {
         this.lat = lat;
     }
 
-    public String getPhoto() {
+    public List<Photo> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(List<Photo> photo) {
         this.photo = photo;
     }
 }
