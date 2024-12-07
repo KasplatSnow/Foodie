@@ -22,7 +22,7 @@ const Header = () => {
   ] = useState<null | HTMLElement>(null) // Profile dropdown
 
   const navigate = useNavigate()
-  const { isLoggedIn, userRole, logIn, logOut } = useAuth() // Access AuthContext
+  const { isLoggedIn, userRole, userId, logIn, logOut } = useAuth() // Access AuthContext
 
   // Handle tab change
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -131,7 +131,7 @@ const Header = () => {
               variant="contained"
               color="primary"
               onClick={() => {
-                logIn('customer')
+                logIn('customer', `${userId}`)
                 navigate('/login')
               }}
             >
