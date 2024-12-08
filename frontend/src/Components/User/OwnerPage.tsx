@@ -153,22 +153,22 @@ const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
   })
     .then((res) => {
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        throw new Error(`HTTP error! status: ${res.status}`)
       }
-      return res.json();
+      return res.json()
     })
     .then((json) => {
-      setError('');
+      setError('')
     })
     .catch((e) => {
-      setError(e.toString());
-    });
-};
+      setError(e.toString())
+    })
+}
 
 interface EditRestaurantParams {
-  newRestaurant: any;
-  restaurantID: any;
-  setError: React.Dispatch<React.SetStateAction<string>>;
+  newRestaurant: any
+  restaurantID: any
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
 /* EXAMPLE OF WHAT newRestaurant input SHOULD BE
@@ -191,14 +191,21 @@ interface EditRestaurantParams {
 
   restaurantID is the id of the restaurant being edited
 */
-const editRestaurant = ({ newRestaurant, restaurantID, setError }: EditRestaurantParams) => {
-  return fetch(`http://localhost:8080/api/restaurants/update/restaurantid/${restaurantID}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
+const editRestaurant = ({
+  newRestaurant,
+  restaurantID,
+  setError,
+}: EditRestaurantParams) => {
+  return fetch(
+    `http://localhost:8080/api/restaurants/update/restaurantid/${restaurantID}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newRestaurant),
     },
-    body: JSON.stringify(newRestaurant),
-  })
+  )
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`)
