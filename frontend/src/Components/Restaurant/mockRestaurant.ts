@@ -12,8 +12,8 @@ export interface Restaurant {
   description: string
   rating: number
   price: number
-  ownerID: string
-  reviewID: string[]
+  ownerID?: string
+  reviewID?: string[]
 }
 
 export const mockRestaurant: Restaurant[] = [

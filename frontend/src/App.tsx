@@ -12,7 +12,7 @@ import Logout from './Components/Auth/Logout'
 import ProfilePage from './pages/profile'
 // import { LoginProvider } from './context/login'
 import { AuthProvider } from './Components/Auth/AuthContext'
-import RestaurantList from './Components/Restaurant/RestaurantList'
+import AdminPage from './Components/Restaurant/AdminPage'
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
           <Route path="/review" element={<SubmitReviewPage />} />
           <Route path="/profile/owner" element={<OwnerPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/restaurants" element={<RestaurantList />} />
+          <Route path="/restaurants" element={<AdminPage />} />
         </Routes>
       </Router>
       {/* </LoginProvider> */}

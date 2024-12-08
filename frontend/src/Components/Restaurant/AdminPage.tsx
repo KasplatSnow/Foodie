@@ -62,7 +62,7 @@ const deleteRestaurant = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/admin/deleterestaurant/restaurantID/1`,
+      `http://localhost:8080/api/admin/deleterestaurant/restaurantID/${restaurantID}`,
       {
         method: 'DELETE', // Ensure this matches your backend implementation
         headers: { 'Content-Type': 'application/json' },
