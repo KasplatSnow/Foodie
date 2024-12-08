@@ -46,7 +46,7 @@ const Header = () => {
   const handleProfileNavigation = () => {
     if (userRole === 'USER') {
       navigate('/profile') // Redirect to customer profile
-    } else if (userRole === 'OWNER') {
+    } else if (userRole === 'BUSINESS') {
       navigate('/profile/owner') // Redirect to owner profile
     }
     handleProfileMenuClose()
