@@ -25,6 +25,7 @@ const fetchProfileData = ({ setUserData, userID, setError }: FetchProfileParams)
       .then((json) => {
         setError('');
         setUserData(json);
+        console.log(json);
       })
       .catch((e) => {
         setError(e.toString());

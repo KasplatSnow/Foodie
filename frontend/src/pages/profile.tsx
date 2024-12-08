@@ -143,7 +143,7 @@ export default function ProfilePage() {
                         <Card sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: { xs: '60%', md: '70%' }, marginTop: { xs: '3rem', md: '4rem' } }}>
                             <Avatar
                                 alt="Profile Picture"
-                                src={userData.profilePicture || "/path/to/your/image.jpg"}
+                                src={userData.pfp || "/path/to/your/image.jpg"}
                                 sx={{
                                     width: { xs: 100, md: 200 },
                                     height: { xs: 100, md: 200 },
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                             <List>
                                 {reviews && reviews.length > 0 ? reviews.map((item, index) => (
                                     <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
-                                        <ReviewItem user={item.user} rating={item.rating} content={item.review_text} />
+                                        <ReviewItem user={item.userID} rating={item.rating} content={item.review_text} />
                                     </ListItem>
                                 )) : ''}
                             </List>
