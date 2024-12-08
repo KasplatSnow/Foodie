@@ -52,6 +52,30 @@ const mockRestaurants = [
   },
 ]
 
+// used for backend api, comment out if you can't use it
+interface FetchRestaurantParams {
+  setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
+const fetchRestaurantsData = ({ setRestaurants, setError }: FetchRestaurantParams) => {
+  fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurants(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurants([]);
+    });
+};
+
 interface Restaurant {
   id: string
   name: string
@@ -169,7 +193,7 @@ const MapSearch: React.FC = () => {
 
       // Combine mock data and google map API data .
       const combinedRestaurants: Restaurant[] = [
-        ...mockRestaurants,
+        ...restaurants,
         ...RestaurantData,
       ]
 
@@ -232,6 +256,8 @@ const MapSearch: React.FC = () => {
 
   useEffect(() => {
     if (isLoaded) {
+      // comment out if you can't use backend api
+      fetchRestaurantsData({ setRestaurants, setError })
       fetchRestaurants()
     }
   }, [isLoaded])
