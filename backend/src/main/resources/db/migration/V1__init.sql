@@ -6,7 +6,7 @@ CREATE TABLE user (
   email varchar(45) DEFAULT NULL,
   address varchar(45) DEFAULT NULL,
   phone_number varchar(45) DEFAULT NULL,
-  pfp varchar(255) DEFAULT NULL,
+  pfp varchar(255) DEFAULT "https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg",
   PRIMARY KEY (userID)
 );
 

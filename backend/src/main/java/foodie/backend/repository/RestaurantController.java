@@ -61,6 +61,7 @@ public class RestaurantController {
         newRestaurant.setHours(registrationRequest.getHours());
         newRestaurant.setLng(registrationRequest.getLng());
         newRestaurant.setLat(registrationRequest.getLat());
+        newRestaurant.setPrice(registrationRequest.getPrice());
         
         //send newly created restaurant to be saved, so new photos and cuisines can be added to their own tables
         restaurantService.createRestaurant(newRestaurant, registrationRequest.getPhoto(), registrationRequest.getCuisine());
