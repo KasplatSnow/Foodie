@@ -20,7 +20,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
   boolean existsByAddress(String address);
   
-  @Query("DELETE r FROM Restaurant r WHERE r.restaurantID = :restauranID ")
+  @Query("DELETE r FROM Restaurant r WHERE r.restaurantID = :restaurantID ")
   void deleteById(@Param("restaurantID") Long restaurantID);
 
   @Query("SELECT r FROM Restaurant r WHERE r.zip_code = :zip_code")
