@@ -68,4 +68,16 @@ public class ReviewController {
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());
     }
+
+    @GetMapping("/userreviews/userID/{userID}")
+    public List<ReviewDTO> getReviewByUserID(@RequestParam Long userID) {
+        List<Review> reviews = reviewService.getReviewByUserID(userID);
+        return reviews.stream().map(review -> new ReviewDTO(
+            review.getReviewID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
+            review.getReviewText(),
+            review.getRating())).collect(Collectors.toList());    
+    }
+    
 }
