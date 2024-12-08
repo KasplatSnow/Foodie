@@ -29,7 +29,7 @@ public class UserService {
         return userRepository.findAll();
     }
     
-    public List<User> getUserByID(Long userId){
+    public User getUserByID(Long userId){
         return userRepository.findByID(userId);
     }
 
@@ -39,5 +39,9 @@ public class UserService {
 
     public List<User> checkUserEmail(String email){
         return userRepository.findEmails(email);
+    }
+    
+    public void setUserPfp(String pfp, Long userID){
+        userRepository.updatePfp(pfp, userID);
     }
 }

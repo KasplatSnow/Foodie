@@ -40,7 +40,7 @@ public class User {
 
     private String phoneNumber;
 
-    private String username, password, email, address;
+    private String username, password, email, address, pfp;
 
     public User(
     String username,
@@ -152,6 +152,14 @@ public class User {
  
   public List<Long> getReviewID(){
       return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
+  }
+   
+  public String getPfp() {
+        return pfp;
+  }
+
+  public void setPfp(String pfp) {
+        this.pfp = pfp;
   }
 }
 

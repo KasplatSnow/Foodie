@@ -18,10 +18,7 @@ import { useState } from 'react'
 import { useAuth } from "../Components/Auth/AuthContext";
 // Define types
 interface Review {
-  user: {
-    name: string
-    img: string
-  }
+  userID: number
   rating: number
   content: string
 }
@@ -34,7 +31,7 @@ interface FetchRestaurantData {
 }
 
 const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
-  fetch(`http://localhost:8080/api/restaurants/search/${restaurantId}`, {
+  fetch(`http://localhost:8080/api/restaurants/getrestaurant/restaurantbyid/${restaurantId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -52,22 +49,88 @@ const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: Fetc
     });
 };
 
+interface FetchReviewParams {
+  setReviews: React.Dispatch<React.SetStateAction<any>>;
+  restaurantId: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchReviews = ({ setReviews, restaurantId, setError }: FetchReviewParams) => {
+  fetch(`http://localhost:8080/api/review/allreviews/restaurantID/${restaurantId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setReviews(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setReviews([]);
+    });
+};
+
+interface PostReviewParams {
+  userID: any;
+  restaurantID: any;
+  rating: any;
+  reviewText: any;
+  setReviewPostedTrigger: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedTrigger, setError }: PostReviewParams) => {
+  return fetch(`http://localhost:8080/api/review/write`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({userID, restaurantID, rating, reviewText}),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchParams] = useSearchParams();
   const [error, setError] = useState('');
   const [rating, setRating] = useState(0); // Track the selected rating
+  const [reviews, setReviews] = useState([]);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false);
   const navigate = useNavigate()
   const loginContext = useAuth();
 
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
-  }, [searchParams.get('id')]);
+    fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
+  }, [searchParams.get('id'), reviewPostedTrigger]);
 
   const handleStarClick = (rating: number) => {
     setRating(rating); // Update the rating state when a star is clicked
     console.log(`Star ${rating} clicked!`);
+  };
+
+  const handleSubmit = () => {
+    postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
+      .then(() => {
+        setReviewPostedTrigger((prev) => !prev);
+      });
   };
 
   if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
@@ -145,17 +208,6 @@ export default function RestaurantPage() {
           paddingBottom: '3rem',
         }}
       >
-        <Button
-          variant="contained"
-          onClick={() =>
-            navigate('/review', {
-              state: { restaurantName: state.name },
-            })
-          }
-        >
-          Write a Review
-        </Button>
-
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
@@ -199,6 +251,8 @@ export default function RestaurantPage() {
               font: 'inherit',
               resize: 'none',
             }}
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
           />
           <Box
             sx={{
@@ -225,7 +279,7 @@ export default function RestaurantPage() {
                   </Button>
                 ))}
             </Box>
-            <Button variant="contained">Submit Review</Button>
+            <Button variant="contained" onClick={handleSubmit}>Submit Review</Button>
           </Box>
 
           {/* Mobile view */}
@@ -244,7 +298,7 @@ export default function RestaurantPage() {
                   </Button>
                 ))}
             </Box>
-            <Button variant="contained">Submit Review</Button>
+            <Button variant="contained" onClick={handleSubmit}>Submit Review</Button>
           </Box>
           </Box>
 }
@@ -254,13 +308,13 @@ export default function RestaurantPage() {
 
         {/* List of Reviews */}
         <List>
-          {restaurantData.reviews && restaurantData.reviews.length > 0 ? (
-            restaurantData.reviews.map((item: Review, index: number) => (
+          {reviews && reviews.length > 0 ? (
+            reviews.map((item: Review, index: number) => (
               <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
                 <ReviewItem
-                  user={item.user}
+                  user={item.userID}
                   rating={item.rating}
-                  content={item.content}
+                  content={item.review_text}
                 />
               </ListItem>
             ))

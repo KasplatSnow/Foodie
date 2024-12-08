@@ -6,6 +6,7 @@ CREATE TABLE user (
   email varchar(45) DEFAULT NULL,
   address varchar(45) DEFAULT NULL,
   phone_number varchar(45) DEFAULT NULL,
+  pfp varchar(255) DEFAULT NULL,
   PRIMARY KEY (userID)
 );
 

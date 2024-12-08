@@ -11,25 +11,24 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "review")
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewID;
 
     @ManyToOne
     @JoinColumn(name = "userID")
-    private Long userID;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "restaurantID")
-    private Long restaurantID;
+    private Restaurant restaurant;
 
     private String review_text;
     private float rating; // 1-5 stars
 
-    public Review(Long userID, Long restaurantID, String review_text, float rating){
-        this.userID = userID;
-        this.restaurantID = restaurantID;
+    public Review(User user, Restaurant restaurant, String review_text, float rating){
+        this.user = user;
+        this.restaurant = restaurant;
         this.review_text = review_text;
         this.rating = rating;
     }
@@ -53,12 +52,12 @@ public class Review {
         return rating;
     }
 
-    public Long getRestaurantID(){
-        return restaurantID;
+    public Restaurant getRestaurant(){
+        return restaurant;
     }
     
-    public Long getUserID(){
-        return userID;
+    public User getUser(){
+        return user;
     }
 
     public Long getReviewID(){

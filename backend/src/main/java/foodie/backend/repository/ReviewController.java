@@ -17,7 +17,13 @@ public class ReviewController {
 
     @Autowired
     private final ReviewService reviewService;
+    
+    @Autowired
+    private UserService userService;
 
+    @Autowired
+    private RestaurantService restaurantService;
+    
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
@@ -25,7 +31,7 @@ public class ReviewController {
   @PostMapping("/write")/*UPDATED BAD REQUEST RESPONSES */
   public ResponseEntity<?> writeReview(@RequestBody ReviewWriteRequest writeRequest) {
             //check if restaurant already exists via
-        if (reviewService.getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
+        if (!reviewService.getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
             return ResponseEntity.badRequest().body("User wrote review already");
         }
     
@@ -43,7 +49,9 @@ public class ReviewController {
             return ResponseEntity.badRequest().body("UserID is required");
         }
 
-        Review newReview= new Review(writeRequest.getUserID(), writeRequest.getRestaurantID(), writeRequest.getReviewText(), writeRequest.getRating());
+        Review newReview= new Review(userService.getUserByID(writeRequest.getUserID()),
+        restaurantService.getByRestaurantID(writeRequest.getRestaurantID()),
+        writeRequest.getReviewText(), writeRequest.getRating());
         
         //save the user to the database
         reviewService.createReview(newReview);
@@ -58,19 +66,19 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewByRestaurantID(restaurantID);
         return reviews.stream().map(review -> new ReviewDTO(
             review.getReviewID(),
-            review.getRestaurantID(),
-            review.getUserID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());
     }
 
     @GetMapping("/userreviews/userID/{userID}")
-    public List<ReviewDTO> getMethodName(@RequestParam Long userID) {
+    public List<ReviewDTO> getUserReviews(@PathVariable Long userID) {
         List<Review> reviews = reviewService.getReviewByUserID(userID);
         return reviews.stream().map(review -> new ReviewDTO(
             review.getReviewID(),
-            review.getRestaurantID(),
-            review.getUserID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());    
     }
