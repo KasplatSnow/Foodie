@@ -48,7 +48,7 @@ export default function ReviewItem({ user, rating, content }: ReviewItemProps) {
         <Card sx = {{width: '100%', height: '100%', padding: '1rem' }}>
             <Box sx = {{display: 'flex'}}>
                 <img
-                    src=""
+                    src={userData.pfp}
                     alt={`${userData.username} image`}
                     style={{
                         width: '100px',

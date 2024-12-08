@@ -113,8 +113,7 @@ const fetchProfileData = ({
     .then((res) => res.json())
     .then((json) => {
       setError('')
-      setUserData(json[0])
-      console.log(json[0])
+      setUserData(json)
     })
     .catch((e) => {
       setError(e.toString())
