@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   Typography,
@@ -17,6 +17,52 @@ import Header from '../Home/Header'
 import { useAuth } from '../Auth/AuthContext'
 import { mockRestaurant, Restaurant } from './mockRestaurant'
 
+interface FetchRestaurantParams {
+  setRestaurants: any;
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
+const fetchRestaurantsDataFromDB = ({setRestaurants, setError}: FetchRestaurantParams) => {
+  fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurants(json);
+      console.log(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurants([]);
+    });
+};
+
+interface DeleteRestaurantParam {
+  restaurantID: any;
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
+const deleteRestaurant = ({restaurantID, setError}: DeleteRestaurantParam) => {
+  fetch(`http://localhost:8080/api/admin/deleterestaurant/restaurantID/${restaurantID}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      console.log(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
 const RestaurantTable: React.FC = () => {
   const { userRole, isLoggedIn } = useAuth()
 
@@ -30,6 +76,7 @@ const RestaurantTable: React.FC = () => {
     restaurantToDelete,
     setRestaurantToDelete,
   ] = useState<Restaurant | null>(null)
+  const [error, setError] = useState('');
 
   const handleOpenDialog = (restaurant: Restaurant) => {
     setRestaurantToDelete(restaurant)
@@ -59,6 +106,10 @@ const RestaurantTable: React.FC = () => {
       setOpen(false)
     }
   }
+
+  useEffect(() => {
+    fetchRestaurantsDataFromDB({setRestaurants, setError});
+  }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const param = e.target.value.toLowerCase()

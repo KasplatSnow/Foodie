@@ -235,7 +235,7 @@ export default function RestaurantPage() {
         <Typography variant="h2">Reviews</Typography>
         {/* Review section */}
         <Card sx={{ padding: '2rem', marginTop: '2rem' }}>
-          {loginContext.userId &&
+          {loginContext.userId ?
           <Box>
           <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
             Write Your Review
@@ -301,7 +301,7 @@ export default function RestaurantPage() {
             <Button variant="contained" onClick={handleSubmit}>Submit Review</Button>
           </Box>
           </Box>
-}
+          : <Typography sx = {{fontWeight: 'bold'}}>Must be signed in to write a review!</Typography>}
         </Card>
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />

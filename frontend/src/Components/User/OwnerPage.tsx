@@ -121,6 +121,33 @@ const fetchProfileData = ({
     })
 }
 
+interface PostRestaurantParams {
+  newRestaurant: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
+  return fetch(`http://localhost:8080/api/restaurants/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newRestaurant),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
 const OwnerPage: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantData[]>(
     mockRestaurants,
