@@ -1,5 +1,5 @@
 // RestaurantPage2.tsx
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Email, Phone, Person } from '@mui/icons-material'
 import {
   Avatar,
@@ -22,6 +22,7 @@ import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { RestaurantData } from '../types/restaurant.type'
 import Header from '../Home/Header'
+import { useAuth } from '../Auth/AuthContext'
 
 const mockRestaurants: RestaurantData[] = [
   {
@@ -56,6 +57,56 @@ const mockRestaurants: RestaurantData[] = [
   },
 ]
 
+interface FetchOwnerRestaurantsParams {
+  setRestaurants: React.Dispatch<React.SetStateAction<any>>;
+  userID: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchRestaurants = ({ setRestaurants, userID, setError }: FetchOwnerRestaurantsParams) => {
+  fetch(`http://localhost:8080/api/business-owner/getrestaurants/userID/${userID}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurants(json);
+      console.log(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurants(mockRestaurants);
+    });
+};
+
+interface FetchProfileParams {
+  setUserData: React.Dispatch<React.SetStateAction<any>>;
+  userID: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchProfileData = ({ setUserData, userID, setError }: FetchProfileParams) => {
+  fetch(`http://localhost:8080/api/users/getuserbyid/userID/${userID}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setUserData(json[0]);
+      console.log(json[0]);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setUserData([]);
+    });
+};
+
 const OwnerPage: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantData[]>(
     mockRestaurants,
@@ -66,6 +117,14 @@ const OwnerPage: React.FC = () => {
   ] = useState<RestaurantData | null>(null)
   const [isFormVisible, setIsFormVisible] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [error, setError] = useState("");
+  const [userData, setUserData] = useState(null);
+  const loginContext = useAuth();
+
+  useEffect(() => {
+    fetchRestaurants({ setRestaurants, userID: loginContext.userId, setError });
+    fetchProfileData({ setUserData, userID: loginContext.userId, setError });
+  }, [loginContext.userId]);
 
   const handleAddNewRestaurant = () => {
     setSelectedRestaurant({
@@ -187,7 +246,7 @@ const OwnerPage: React.FC = () => {
 
           {/* Customer Info Heading */}
           <Typography variant="h6" gutterBottom>
-            Customer Info
+            Owner Info
           </Typography>
 
           {/* Info with Icons */}
@@ -204,21 +263,21 @@ const OwnerPage: React.FC = () => {
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <Person fontSize="small" color="primary" />
-              <strong>Name:</strong> John Doe
+              <strong>Name:</strong> {userData ? userData.username : ""}
             </Typography>
             <Typography
               variant="body1"
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <Email fontSize="small" color="primary" />
-              <strong>Email:</strong> johndoe@example.com
+              <strong>Email:</strong> {userData ? userData.email : ""}
             </Typography>
             <Typography
               variant="body1"
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <Phone fontSize="small" color="primary" />
-              <strong>Phone:</strong> 123-456-7890
+              <strong>Phone:</strong> {userData ? userData.phoneNumber : ""}
             </Typography>
           </Box>
         </Box>
