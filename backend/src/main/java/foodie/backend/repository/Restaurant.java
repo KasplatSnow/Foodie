@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long restaurantID;
 
-    private String name, address, phoneNumber, email, cuisine, hours, description, photo;
+    private String name, address, phoneNumber, email, hours, description;
     private String zip_code;
     private int price;
     private float rating;
@@ -46,13 +46,11 @@ public class Restaurant {
         String address, 
         String zip_code, 
         String phoneNumber, 
-        String email, 
-        String cuisine, 
+        String email,
         String hours, 
         String description, 
-        float rating, 
-        int price
-        String photo,
+        float rating,
+        int price,
         double lng,
         double lat){
         this.name = name;

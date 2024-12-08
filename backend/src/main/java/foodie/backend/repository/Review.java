@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

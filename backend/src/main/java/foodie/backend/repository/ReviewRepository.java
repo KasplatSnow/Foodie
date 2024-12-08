@@ -1,6 +1,6 @@
 package foodie.backend.repository;
 
-import foodie.backend.model.Review;
+import foodie.backend.repository.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

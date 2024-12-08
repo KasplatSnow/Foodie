@@ -2,7 +2,7 @@ package foodie.backend.repository;
 
 import java.util.List;
 
-import foodie.backend.model.User;
+import foodie.backend.repository.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

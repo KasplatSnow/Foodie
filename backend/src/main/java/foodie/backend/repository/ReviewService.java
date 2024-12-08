@@ -2,7 +2,7 @@ package foodie.backend.repository;
 
 import java.util.List;
 
-import foodie.backend.model.Review;
+import foodie.backend.repository.Review;
 import foodie.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 /*
  * Defines the ENUM roles for the Users so the databse column 'role' is only filled with 3 types

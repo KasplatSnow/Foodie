@@ -1,4 +1,4 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 import java.util.List;
 
 public class RestaurantDTO {
@@ -158,14 +158,6 @@ public class RestaurantDTO {
 
     public void setLat(double lat) {
         this.lat = lat;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
     
     public List<String> getPhoto() {

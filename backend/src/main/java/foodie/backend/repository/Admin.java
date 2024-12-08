@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
