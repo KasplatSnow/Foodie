@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 public class UserRegistrationRequest {
 

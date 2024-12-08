@@ -1,5 +1,5 @@
-package foodie.backend.service;
-import foodie.backend.model.User;
+package foodie.backend.repository;
+import foodie.backend.repository.User;
 import foodie.backend.repository.UserRepository;
 import java.util.List;
 

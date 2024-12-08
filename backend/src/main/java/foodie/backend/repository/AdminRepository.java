@@ -1,6 +1,6 @@
 package foodie.backend.repository;
 
-import foodie.backend.model.Admin;
+import foodie.backend.repository.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

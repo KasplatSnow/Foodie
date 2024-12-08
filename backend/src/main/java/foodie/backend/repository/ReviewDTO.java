@@ -1,4 +1,4 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
 public class ReviewDTO {
     private Long reviewID, restaurantID, userID;

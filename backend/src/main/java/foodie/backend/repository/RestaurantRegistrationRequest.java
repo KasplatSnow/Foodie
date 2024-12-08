@@ -1,5 +1,7 @@
 package foodie.backend.repository;
 
+import java.util.List;
+
 public class RestaurantRegistrationRequest {
 
     private String email;
@@ -12,6 +14,8 @@ public class RestaurantRegistrationRequest {
     private String description;
     private List<String> cuisine;
     private List<String> photo;
+    private float rating;
+    private int price;
     private double lng;
     private double lat;
     
@@ -102,7 +106,7 @@ public class RestaurantRegistrationRequest {
     public void setLat(double lat) { this.lat = lat; }
     
     public float getRating() {
-        return rating;
+        return this.rating;
     }
 
     public void setRating(float rating) {

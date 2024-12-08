@@ -1,9 +1,9 @@
-package foodie.backend.service;
+package foodie.backend.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import foodie.backend.model.Admin;
+import foodie.backend.repository.Admin;
 import foodie.backend.repository.AdminRepository;
 
 @Service

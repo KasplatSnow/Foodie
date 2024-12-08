@@ -1,8 +1,8 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
 import java.util.List;
 
-import foodie.backend.service.AdminService;
+import foodie.backend.repository.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import foodie.backend.model.Restaurant;
-import foodie.backend.model.User;
-import foodie.backend.service.RestaurantService;
-import foodie.backend.service.UserService;
+import foodie.backend.repository.Restaurant;
+import foodie.backend.repository.User;
+import foodie.backend.repository.RestaurantService;
+import foodie.backend.repository.UserService;
  
 @RestController
 @RequestMapping("/admin")

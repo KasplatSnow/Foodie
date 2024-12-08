@@ -1,4 +1,4 @@
-package foodie.backend.model;
+package foodie.backend.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;

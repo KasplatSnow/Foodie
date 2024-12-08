@@ -1,4 +1,4 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,11 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import foodie.backend.model.BusinessOwner;
-import foodie.backend.model.Restaurant;
+import foodie.backend.repository.BusinessOwner;
+import foodie.backend.repository.Restaurant;
 import foodie.backend.repository.BusinessOwnerRepository;
-import foodie.backend.service.BusinessOwnerService;
-import foodie.backend.service.RestaurantService;
+import foodie.backend.repository.BusinessOwnerService;
+import foodie.backend.repository.RestaurantService;
 
 @RestController
 @RequestMapping("/business-owner")

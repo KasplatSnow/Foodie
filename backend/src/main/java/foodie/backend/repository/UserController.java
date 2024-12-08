@@ -1,10 +1,10 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
-import foodie.backend.model.BusinessOwner;
-import foodie.backend.model.User;
-import foodie.backend.model.UserRegistrationRequest;
+import foodie.backend.repository.BusinessOwner;
+import foodie.backend.repository.User;
+import foodie.backend.repository.UserRegistrationRequest;
 import foodie.backend.repository.UserRepository;
-import foodie.backend.service.UserService;
+import foodie.backend.repository.UserService;
 
 import java.util.stream.Collectors;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import foodie.backend.model.Admin;
+import foodie.backend.repository.Admin;
 
 @RestController
 @RequestMapping("/api/users")

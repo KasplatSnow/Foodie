@@ -1,3 +1,5 @@
+package foodie.backend.repository;
+
 public class ReviewWriteRequest {
     private Long userID;
     private Long restaurantID;

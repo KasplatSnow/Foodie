@@ -1,4 +1,4 @@
-package foodie.backend.controller;
+package foodie.backend.repository;
 
 import java.util.List;
 
