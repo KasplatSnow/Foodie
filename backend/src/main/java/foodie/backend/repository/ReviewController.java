@@ -43,7 +43,9 @@ public class ReviewController {
             return ResponseEntity.badRequest().body("UserID is required");
         }
 
-        Review newReview= new Review(writeRequest.getUserID(), writeRequest.getRestaurantID(), writeRequest.getReviewText(), writeRequest.getRating());
+        Review newReview= new Review(userService.getUserByID(writeRequest.getUserID()),
+        restaurantService.getByRestaurantID(writeRequest.getRestaurantID()),
+        writeRequest.getReviewText(), writeRequest.getRating());
         
         //save the user to the database
         reviewService.createReview(newReview);
@@ -58,8 +60,8 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewByRestaurantID(restaurantID);
         return reviews.stream().map(review -> new ReviewDTO(
             review.getReviewID(),
-            review.getRestaurantID(),
-            review.getUserID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());
     }
@@ -69,8 +71,8 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewByUserID(userID);
         return reviews.stream().map(review -> new ReviewDTO(
             review.getReviewID(),
-            review.getRestaurantID(),
-            review.getUserID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());    
     }
