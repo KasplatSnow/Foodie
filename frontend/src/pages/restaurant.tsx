@@ -211,16 +211,7 @@ export default function RestaurantPage() {
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
-        {restaurantData.address &&
-          (() => {
-            const [street, cityState] = restaurantData.address.split(/,(.+)/) // Split on first comma
-            return (
-              <>
-                <Typography>{street.trim()}</Typography>
-                <Typography>{cityState.trim()}</Typography>
-              </>
-            )
-          })()}
+        <Typography>{restaurantData.address}</Typography>
         <Typography>{restaurantData.zipCode}</Typography>
 
         <Typography sx = {{fontWeight: 'bold'}}>{restaurantData.hours}</Typography>
