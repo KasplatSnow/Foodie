@@ -46,13 +46,11 @@ public class Restaurant {
         String address, 
         String zip_code, 
         String phoneNumber, 
-        String email, 
-        String cuisine, 
+        String email,
         String hours, 
         String description, 
-        float rating, 
-        int price
-        String photo,
+        float rating,
+        int price,
         double lng,
         double lat){
         this.name = name;
