@@ -1,7 +1,7 @@
 import { Restaurant } from '@mui/icons-material'
 
 export interface Restaurant {
-  restaurantID: string
+  restaurantID: string | number
   name: string
   address: string
   zipCode: string
