@@ -27,18 +27,54 @@ const defaultCenter = {
   lng: -121.86,
 }
 
+// const mockRestaurants = [
+//   {
+//     id: 'mock1',
+//     name: 'Mock Restaurant 1',
+//     address: '123 Street st, San Jose, CA',
+//     photo: ['https://via.placeholder.com/400'],
+//     lat: 37.3284,
+//     lng: -121.861,
+//     rating: 4.5,
+//     price: 2,
+//     categories: ['Mock Category 1'],
+//   },
+//   {
+//     id: 'mock2',
+//     name: 'Mock Restaurant 2',
+//     address: '338 Story Rd, San Jose, CA',
+//     photo: ['https://via.placeholder.com/400'],
+//     lat: 37.3314,
+//     lng: -121.8625,
+//     rating: 4.0,
+//     price: 3,
+//     categories: ['Mock Category 2'],
+//   },
+// ]
+
+interface Review {
+  review_text: string
+  rating: number
+  userID: string
+  restaurantID: string
+}
+
 interface Restaurant {
-  id: string
+  restaurantID: string
   name: string
   address: string
+  zipCode?: string
+  phoneNumber?: string
+  email?: string
+  cuisine?: string[]
+  hours?: string
   description?: string
-  photos?: string[]
-  zipcode?: string
-  price?: number
   rating?: number
-  categories?: string[]
+  price?: number
+  photo?: string[]
   lat?: number
   lng?: number
+  reviewID?: Review[]
 }
 
 // interface FetchRestaurantParams {
@@ -82,19 +118,25 @@ const fetchRestaurantsFromGoogleAPI = async (
       (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && results) {
           const restaurants = results.map((place) => ({
-            id: place.place_id || 'Unknown',
+            restaurantID: place.place_id || 'Unknown',
             name: place.name || 'Unknown',
             address: place.vicinity || 'Unknown',
-            photos: place.photos
-              ? place.photos.map((photo) =>
-                  photo.getUrl({ maxWidth: 400, maxHeight: 300 }),
+            photo: place.photos
+              ? place.photos.map((photos) =>
+                  photos.getUrl({ maxWidth: 400, maxHeight: 300 }),
                 )
               : [],
             lat: place.geometry?.location?.lat(),
             lng: place.geometry?.location?.lng(),
             rating: place.rating || undefined,
             price: place.price_level || undefined,
-            categories: place.types || [],
+            cusine: place.types || [],
+            zipCode: '',
+            phoneNumber: '',
+            hours: '',
+            description: '',
+            ownerID: '',
+            reviewID: [],
           }))
           console.log('Google API Restaurants:', restaurants)
           resolve(restaurants)
@@ -131,12 +173,12 @@ const MapSearch: React.FC = () => {
   const handleRestaurantClick = (
     id: string,
     name: string,
-    photos?: string,
+    photo?: string,
     price?: number,
     rating?: number,
   ) => {
     navigate(`/restaurant?id=${id}`, {
-      state: { name, price, rating, photos },
+      state: { name, price, rating, photo },
     })
   }
 
@@ -158,7 +200,7 @@ const MapSearch: React.FC = () => {
       //   id: restaurant.id,
       //   name: restaurant.name,
       //   address: restaurant.address,
-      //   photos: restaurant.photos,
+      //   photo: restaurant.photo,
       //   rating: restaurant.rating,
       //   price: restaurant.price,
       //   lat: restaurant.lat,
@@ -172,6 +214,14 @@ const MapSearch: React.FC = () => {
       const combinedRestaurants: Restaurant[] = [
         ...dbRestaurants,
         ...googleAPIRestaurants,
+        // ...googleAPIRestaurants.filter(
+        //   (googleRestaurant) =>
+        //     !dbRestaurants.some(
+        //       (dbRestaurant) =>
+        //         dbRestaurant.lat === googleRestaurant.lat &&
+        //         dbRestaurant.lng === googleRestaurant.lng,
+        //     ),
+        // ),
       ]
 
       setRestaurants(combinedRestaurants)
@@ -201,16 +251,14 @@ const MapSearch: React.FC = () => {
 
       results = results.filter((restaurant) =>
         categoriesArray.some((cat) =>
-          (restaurant.categories ?? [])
-            .map((c) => c.toLowerCase())
-            .includes(cat),
+          (restaurant.cuisine ?? []).map((c) => c.toLowerCase()).includes(cat),
         ),
       )
     }
 
     if (filters.zipcode) {
       results = results.filter((restaurant) =>
-        restaurant.zipcode?.includes(filters.zipcode),
+        restaurant.zipCode?.includes(filters.zipcode),
       )
     }
 
@@ -280,10 +328,10 @@ const MapSearch: React.FC = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: '300px', mr: 2 }}
+          sx={{ width: '580px', mr: 2 }}
         />
         <TextField
-          placeholder="Categories (e.g. Coffee, Thai)"
+          placeholder="Categories (e.g. Vietnamese, Thai)"
           variant="outlined"
           value={filters.categories}
           onChange={(e) =>
@@ -295,7 +343,7 @@ const MapSearch: React.FC = () => {
           value={filters.price}
           onChange={(e) => setFilters({ ...filters, price: e.target.value })}
           displayEmpty
-          sx={{ width: 110, mr: 2 }}
+          sx={{ width: 150, mr: 2 }}
         >
           <MenuItem value="">Price</MenuItem>
           <MenuItem value="1">Low</MenuItem>
@@ -306,7 +354,7 @@ const MapSearch: React.FC = () => {
           value={filters.rating}
           onChange={(e) => setFilters({ ...filters, rating: e.target.value })}
           displayEmpty
-          sx={{ width: 110, mr: 2 }}
+          sx={{ width: 150, mr: 2 }}
         >
           <MenuItem value="">Rating</MenuItem>
           <MenuItem value="3">3 Stars & Up</MenuItem>
@@ -342,14 +390,14 @@ const MapSearch: React.FC = () => {
         >
           {filteredRestaurants.map((restaurant) => (
             <Card
-              key={restaurant.id}
+              key={restaurant.restaurantID}
               sx={{ mb: 2, cursor: 'pointer' }}
               onClick={() =>
                 handleRestaurantClick(
-                  restaurant.id,
+                  restaurant.restaurantID,
                   restaurant.name,
-                  restaurant.photos && restaurant.photos[0]
-                    ? restaurant.photos[0]
+                  restaurant.photo && restaurant.photo[0]
+                    ? restaurant.photo[0]
                     : '',
                 )
               }
@@ -381,7 +429,7 @@ const MapSearch: React.FC = () => {
                       </Typography>
                     )}
                   </Box>
-                  {restaurant.photos && restaurant.photos.length > 0 && (
+                  {restaurant.photo && restaurant.photo.length > 0 && (
                     <Box
                       sx={{
                         width: 120,
@@ -395,7 +443,7 @@ const MapSearch: React.FC = () => {
                       }}
                     >
                       <img
-                        src={restaurant.photos[0]}
+                        src={restaurant.photo[0]}
                         alt={`${restaurant.name}`}
                         style={{
                           width: '100%',
@@ -422,7 +470,7 @@ const MapSearch: React.FC = () => {
                 restaurant.lat &&
                 restaurant.lng && (
                   <Marker
-                    key={restaurant.id}
+                    key={restaurant.restaurantID}
                     position={{ lat: restaurant.lat, lng: restaurant.lng }}
                     title={`${restaurant.name} - ${restaurant.address}`}
                   />

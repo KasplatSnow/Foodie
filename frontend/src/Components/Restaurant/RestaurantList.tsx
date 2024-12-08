@@ -12,7 +12,7 @@ import {
   Button,
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import { Delete, Edit } from '@mui/icons-material'
+import { Delete } from '@mui/icons-material'
 import Header from '../Home/Header'
 import { useAuth } from '../Auth/AuthContext'
 import { mockRestaurant, Restaurant } from './mockRestaurant'
@@ -82,19 +82,19 @@ const RestaurantTable: React.FC = () => {
     { field: 'phoneNumber', headerName: 'Phone', width: 150 },
     { field: 'rating', headerName: 'Rating', width: 100 },
     { field: 'cuisine', headerName: 'Cuisine', width: 170 },
-    {
-      field: 'edit',
-      headerName: 'Edit',
-      width: 80,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton
-          color="primary"
-          onClick={() => alert(`Edit Restaurant: ${params.row.name}`)}
-        >
-          <Edit />
-        </IconButton>
-      ),
-    },
+    // {
+    //   field: 'edit',
+    //   headerName: 'Edit',
+    //   width: 80,
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton
+    //       color="primary"
+    //       onClick={() => alert(`Edit Restaurant: ${params.row.name}`)}
+    //     >
+    //       <Edit />
+    //     </IconButton>
+    //   ),
+    // },
     {
       field: 'delete',
       headerName: 'Delete',
@@ -115,6 +115,7 @@ const RestaurantTable: React.FC = () => {
         </IconButton>
       ),
     },
+    { field: 'closed', headerName: 'Closed', width: 170 },
   ]
 
   const rows = filteredRestaurants.map((restaurant) => ({

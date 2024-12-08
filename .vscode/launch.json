@@ -4,6 +4,13 @@
       "type": "java",
       "name": "FoodieApplication",
       "request": "launch",
+      "mainClass": "foodie.backend.repository.FoodieApplication",
+      "projectName": "backend"
+    },
+    {
+      "type": "java",
+      "name": "FoodieApplication",
+      "request": "launch",
       "mainClass": "main.java.foodie.backend.FoodieApplication",
       "projectName": ""
     },
