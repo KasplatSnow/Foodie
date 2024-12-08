@@ -145,7 +145,7 @@ interface PostRestaurantParams {
 */
 const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
   return fetch(`http://localhost:8080/api/restaurants/register`, {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -245,7 +245,7 @@ const OwnerPage: React.FC = () => {
   // add new restaurant
   const handleAddNewRestaurant = () => {
     setSelectedRestaurant({
-      businessOwnerId: 0,
+      businessOwnerId: loginContext.userId,
       name: '',
       email: '',
       address: '',
@@ -270,7 +270,6 @@ const OwnerPage: React.FC = () => {
   //NOTE
   //save restaurant and convert address to long and latitude
   const handleSaveRestaurant = async (data: RestaurantData) => {
-    console.log('save changes')
     const { lat, lng } = await convertAddress(data.address)
     const newData = {
       ...data,
@@ -278,19 +277,21 @@ const OwnerPage: React.FC = () => {
       lng,
     }
     console.log('new data', newData)
-    if (newData.businessOwnerId) {
+    if (newData.restaurantID) {
       // Update existing restaurant
       setRestaurants((prevRestaurants) =>
         prevRestaurants.map((rest) =>
           rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
         ),
       )
+      editRestaurant({newRestaurant: newData, restaurantID: data.restaurantID, setError})
     } else {
       // Add new restaurant
       setRestaurants((prevRestaurants) => [
         ...prevRestaurants,
         { ...newData, id: (prevRestaurants.length + 1).toString() },
-      ])
+      ]);
+      postRestaurant({newRestaurant: newData, setError});
     }
 
     setIsFormVisible(false)
