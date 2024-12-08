@@ -64,7 +64,7 @@ const deleteRestaurant = async (
     const response = await fetch(
       `http://localhost:8080/api/admin/deleterestaurant/restaurantID/${restaurantID}`,
       {
-        method: 'DELETE', // Ensure this matches your backend implementation
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       },
     )
@@ -73,7 +73,7 @@ const deleteRestaurant = async (
       throw new Error(`Failed to delete restaurant: ${response.statusText}`)
     }
 
-    onSuccess() // Trigger the callback to update UI
+    onSuccess()
     setError('')
   } catch (error) {
     console.error('Error deleting restaurant:', error)
