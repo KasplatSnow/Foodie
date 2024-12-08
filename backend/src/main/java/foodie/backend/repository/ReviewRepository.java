@@ -22,4 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
     //find all reviews of restaurant
     @Query("SELECT r FROM Review r WHERE r.restaurant.restaurantID = :restaurantID")
     List<Review> findAllRestaurantReviews(@Param("restaurantID") Long restaurantID);
+
+    @Query("SELECT r FROM Review r WHERE r.user.userID = :userID")
+    List<Review> findReviewByUserID(@Param("userID") Long userID);
 }
