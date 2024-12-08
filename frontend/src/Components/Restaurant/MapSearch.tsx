@@ -29,7 +29,7 @@ const defaultCenter = {
 // Mock restaurant data
 const mockRestaurants = [
   {
-    id: 'mock1',
+    id: '1',
     name: 'Mock Restaurant 1',
     address: '123 Street st, San Jose, CA',
     photos: ['https://via.placeholder.com/400'],
@@ -40,7 +40,7 @@ const mockRestaurants = [
     categories: ['Mock Category 1'],
   },
   {
-    id: 'mock2',
+    id: '2',
     name: 'Mock Restaurant 2',
     address: '338 Story Rd, San Jose, CA',
     photos: ['https://via.placeholder.com/400'],

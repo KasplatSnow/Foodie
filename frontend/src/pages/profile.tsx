@@ -117,7 +117,7 @@ export default function ProfilePage() {
                         <Card sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: { xs: '60%', md: '70%' }, marginTop: { xs: '3rem', md: '4rem' } }}>
                             <Avatar
                                 alt="Profile Picture"
-                                src={userData.profilePicture || "/path/to/your/image.jpg"}  // Assuming profilePicture exists in the user data
+                                src={userData.photo || "/path/to/your/image.jpg"}  // Assuming profilePicture exists in the user data
                                 sx={{
                                     width: { xs: 100, md: 200 },
                                     height: { xs: 100, md: 200 },
@@ -156,7 +156,7 @@ export default function ProfilePage() {
                         </Card>
                     </Grid>
                     <Grid size={8}>
-                        {/* List of Reviews */}
+                        {/* List of Reviews
                         <Box sx={{ maxHeight: { xs: '400px', md: '750px' }, overflowY: 'auto', padding: 1, marginTop: { xs: '2rem', md: '5rem' } }}>
                             <List>
                                 {userData.reviewID.map((item, index) => (
@@ -166,6 +166,7 @@ export default function ProfilePage() {
                                 ))}
                             </List>
                         </Box>
+                        */}
                     </Grid>
                 </Grid>
             </Box>

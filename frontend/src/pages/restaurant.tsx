@@ -8,6 +8,7 @@ import {
   Typography,
   List,
   ListItem,
+  CircularProgress,
 } from '@mui/material'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import StarIcon from '@mui/icons-material/Star'
@@ -28,6 +29,7 @@ interface FetchRestaurantData {
   setRestaurantData: React.Dispatch<React.SetStateAction<any>>;
   restaurantId: any;
   setError: React.Dispatch<React.SetStateAction<string>>;
+  state: any;
 }
 
 const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
@@ -45,25 +47,34 @@ const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: Fetc
     })
     .catch((e) => {
       setError(e.toString());
-      setRestaurantData([]);
+      setRestaurantData([state]);
     });
 };
 
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
-  const [restaurantData, setRestaurantData] = useState(state || {});
+  const [restaurantData, setRestaurantData] = useState(null);
   const [searchParams] = useSearchParams();
   const [error, setError] = useState('');
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError });
+    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
   }, [searchParams.get('id')]);
 
   const handleStarClick = (rating: number) => {
     console.log(`Star ${rating} clicked!`)
     // Not implemented yet so not doing this
   }
+
+  if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
+    return (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress />
+            <Typography>Must be logged in</Typography>
+        </Box>
+    );
+}
 
   return (
     <Box sx={{ height: '100%' }}>
@@ -75,7 +86,9 @@ export default function RestaurantPage() {
             position: 'relative',
             width: '100%',
             height: '40vh',
-            backgroundImage: `url("${restaurantData?.photo[0]}")`,
+            backgroundImage: restaurantData?.photo?.[0]
+            ? `url("${restaurantData.photo[0]}")`
+            : `url("${state?.photos}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
@@ -104,7 +117,7 @@ export default function RestaurantPage() {
             }}
           >
             <Typography variant="h1" sx={{ fontSize: '3rem' }}>
-              {restaurantData.name || 'Restaurant Name'}
+              {restaurantData.name || state.name }
             </Typography>
             <Box>
               {restaurantData.rating
@@ -114,7 +127,7 @@ export default function RestaurantPage() {
                 : ''}
             </Box>
             <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-              {restaurantData.price ? '$'.repeat(restaurantData.price) : ''}
+              {restaurantData.price ? '$'.repeat(restaurantData.price) : '$'.repeat(state.price)}
               {restaurantData.cuisine ? ` ${restaurantData.cuisine.join(', ')}` : ''}
             </Typography>
           </Box>
