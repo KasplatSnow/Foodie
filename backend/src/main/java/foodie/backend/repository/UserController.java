@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -87,10 +88,11 @@ public class UserController {
             user.getEmail(),
             user.getAddress(),
             user.getPhoneNumber(),
-            user.getReviewID());
+            user.getReviewID(),
+            user.getPfp());
     }
     
-    @GetMapping("getuserbyusername/username/{username}")
+    @GetMapping("/getuserbyusername/username/{username}")
     public List<UserDTO> getUserByUsername(@PathVariable String username) {
         List<User> users = userService.getUserByUsername(username);
         return users.stream().map(user -> new UserDTO(
@@ -101,12 +103,19 @@ public class UserController {
             user.getEmail(),
             user.getAddress(),
             user.getPhoneNumber(),
-            user.getReviewID())).collect(Collectors.toList());
+            user.getReviewID(),
+            user.getPfp())).collect(Collectors.toList());
     }
   
   @GetMapping("/allusers")
   List<User> getAllUsers() {
     return userService.getAllUsers();
   }
+
+    @PutMapping("/setpfp/pfp/{pfp}/userID/{userID}")
+    public ResponseEntity<?> setUserPfp(@PathVariable String pfp, @PathVariable Long userID){
+        userService.setUserPfp(pfp, userID);
+        return ResponseEntity.ok("Pfp set");
+    }
 }
 
