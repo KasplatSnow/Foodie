@@ -9,10 +9,11 @@ import {
   List,
   ListItem,
 } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import StarIcon from '@mui/icons-material/Star'
 import Header from '../Components/Home/Header'
 import ReviewItem from '../Components/Restaurant/ReviewItem'
+import { useState } from 'react'
 // Define types
 interface Review {
   user: {
@@ -22,17 +23,42 @@ interface Review {
   rating: number
   content: string
 }
+
+interface FetchRestaurantData {
+  setRestaurantData: React.Dispatch<React.SetStateAction<any>>;
+  restaurantId: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
+  fetch(`http://localhost:8080/api/restaurants/search/${restaurantId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setRestaurantData(json);
+      console.log(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setRestaurantData([]);
+    });
+};
+
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
-  // const [restaurantData, setRestaurantData] = useState(state || {});
-  // const [error, setError] = useState('');
+  const [restaurantData, setRestaurantData] = useState(state || {});
+  const [searchParams] = useSearchParams();
+  const [error, setError] = useState('');
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!state) {
-      console.error('No restaurant found')
-    }
-  }, [state])
+    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError });
+  }, [searchParams.get('id')]);
 
   const handleStarClick = (rating: number) => {
     console.log(`Star ${rating} clicked!`)
@@ -49,7 +75,7 @@ export default function RestaurantPage() {
             position: 'relative',
             width: '100%',
             height: '40vh',
-            backgroundImage: `url("${state?.photos}")`,
+            backgroundImage: `url("${restaurantData?.photo[0]}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
@@ -78,17 +104,18 @@ export default function RestaurantPage() {
             }}
           >
             <Typography variant="h1" sx={{ fontSize: '3rem' }}>
-              {state.name || 'Restaurant Name'}
+              {restaurantData.name || 'Restaurant Name'}
             </Typography>
             <Box>
-              {state.rating
+              {restaurantData.rating
                 ? Array.from({
-                    length: Math.floor(state.rating),
+                    length: Math.floor(restaurantData.rating),
                   }).map((_, index) => <StarIcon key={index} />)
                 : ''}
             </Box>
             <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
-              {state.price ? '$'.repeat(state.price) : ''}
+              {restaurantData.price ? '$'.repeat(restaurantData.price) : ''}
+              {restaurantData.cuisine ? ` ${restaurantData.cuisine.join(', ')}` : ''}
             </Typography>
           </Box>
         </Box>
@@ -115,10 +142,10 @@ export default function RestaurantPage() {
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
-        {/* <Typography variant="h2">Location and Hours</Typography>
-        {state.address &&
+        <Typography variant="h2">Location and Hours</Typography>
+        {restaurantData.address &&
           (() => {
-            const [street, cityState] = state.address.split(/,(.+)/) // Split on first comma
+            const [street, cityState] = restaurantData.address.split(/,(.+)/) // Split on first comma
             return (
               <>
                 <Typography>{street.trim()}</Typography>
@@ -126,14 +153,16 @@ export default function RestaurantPage() {
               </>
             )
           })()}
-        <Typography>{state.zipcode}</Typography> */}
+        <Typography>{restaurantData.zipCode}</Typography>
 
-        {/* <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} /> */}
+        <Typography sx = {{fontWeight: 'bold'}}>{restaurantData.hours}</Typography>
 
-        {/* <Typography variant="h2">About the Business</Typography>
-        <Typography>{state.description}</Typography> */}
+        <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
-        {/* <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} /> */}
+        <Typography variant="h2">About the Business</Typography>
+        <Typography>{restaurantData.description}</Typography>
+
+        <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Reviews</Typography>
         {/* Review section */}
@@ -201,8 +230,8 @@ export default function RestaurantPage() {
 
         {/* List of Reviews */}
         <List>
-          {state.reviews && state.reviews.length > 0 ? (
-            state.reviews.map((item: Review, index: number) => (
+          {restaurantData.reviews && restaurantData.reviews.length > 0 ? (
+            restaurantData.reviews.map((item: Review, index: number) => (
               <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
                 <ReviewItem
                   user={item.user}
