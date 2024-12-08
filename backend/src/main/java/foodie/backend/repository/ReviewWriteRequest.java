@@ -1,25 +1,23 @@
-package foodie.backend.model;
-
 public class ReviewWriteRequest {
-    private User user;
-    private Restaurant Restaurant;
+    private Long userID;
+    private Long restaurantID;
     private Float rating;
     private String reviewText;
 
-    public User getUser() {
-        return user;
+    public Long getUserID() {
+        return userID;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userID) {
+        this.userID = userID;
     }
 
-    public Restaurant getRestaurant() {
-        return Restaurant;
+    public Long getRestaurantID() {
+        return restaurantID;
     }
 
-    public void setRestaurant(Restaurant Restaurant) {
-        this.Restaurant = Restaurant;
+    public void setRestaurantID(Long restaurantID) {
+        this.restaurantID = restaurantID;
     }
 
     public Float getRating() {
@@ -37,6 +35,4 @@ public class ReviewWriteRequest {
     public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
     }
-
-
 }
