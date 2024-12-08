@@ -15,6 +15,7 @@ import StarIcon from '@mui/icons-material/Star'
 import Header from '../Components/Home/Header'
 import ReviewItem from '../Components/Restaurant/ReviewItem'
 import { useState } from 'react'
+import { useAuth } from "../Components/Auth/AuthContext";
 // Define types
 interface Review {
   user: {
@@ -58,6 +59,7 @@ export default function RestaurantPage() {
   const [error, setError] = useState('');
   const [rating, setRating] = useState(0); // Track the selected rating
   const navigate = useNavigate()
+  const loginContext = useAuth();
 
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
@@ -181,6 +183,8 @@ export default function RestaurantPage() {
         <Typography variant="h2">Reviews</Typography>
         {/* Review section */}
         <Card sx={{ padding: '2rem', marginTop: '2rem' }}>
+          {loginContext.userId &&
+          <Box>
           <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
             Write Your Review
           </Typography>
@@ -242,6 +246,8 @@ export default function RestaurantPage() {
             </Box>
             <Button variant="contained">Submit Review</Button>
           </Box>
+          </Box>
+}
         </Card>
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
