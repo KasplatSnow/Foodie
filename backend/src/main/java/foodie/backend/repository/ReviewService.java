@@ -37,4 +37,8 @@ public class ReviewService {
     public boolean getReviewExist(Long restaurantID, Long userID){
         return reviewRepository.findReviewExist(restaurantID, userID) == null;
     }
+        
+    public List<Review> getReviewByUserID(Long userID){
+        return reviewRepository.findReviewByUserID(userID);
+    }
 }
