@@ -17,7 +17,13 @@ public class ReviewController {
 
     @Autowired
     private final ReviewService reviewService;
+    
+    @Autowired
+    private UserService userService;
 
+    @Autowired
+    private RestaurantService restaurantService;
+    
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
