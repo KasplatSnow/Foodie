@@ -17,7 +17,7 @@ CREATE TABLE restaurant (
   zip_code varchar(45) DEFAULT NULL,
   phone_number varchar(45) DEFAULT NULL,
   hours varchar(45) DEFAULT NULL,
-  description varchar(45) DEFAULT NULL,
+  description text DEFAULT NULL,
   rating float DEFAULT NULL,
   price int DEFAULT NULL,
   email varchar(45) DEFAULT NULL,
