@@ -62,7 +62,7 @@ export default function ReviewItem({ user, rating, content }: ReviewItemProps) {
                     <Box>
                         {/*Review Rating Here*/}
                         {Array.from({ length: rating }, (_, i) => (
-                            <StarIcon key={i} />
+                            <StarIcon key={i} sx = {{color: 'gold'}}/>
                         ))}
                     </Box>
                 </Box>
