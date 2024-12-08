@@ -4,10 +4,11 @@ import java.util.List;
 public class UserDTO {
 
     private Long userID;
-    private String username, address, phoneNumber, email, password, role;
+    private String username, address, phoneNumber, email, password, role, pfp;
     private List<Long> reviewID;
 
-    public UserDTO(Long userID, String username, String role, String password, String email, String address, String phoneNumber, List<Long> reviewID) {
+    public UserDTO(Long userID, String username, String role, String password, 
+                   String email, String address, String phoneNumber, List<Long> reviewID, String pfp) {
         this.userID = userID;
         this.username = username;
         this.role = role;
@@ -16,6 +17,7 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.reviewID = reviewID;
+        this.pfp = pfp;
     }
 
     public UserDTO() {
@@ -84,5 +86,12 @@ public class UserDTO {
     public void setRole(String role) {
         this.role = role;
     }
+    
+    public String getPfp() {
+        return pfp;
+    }
 
+    public void setPfp(String pfp) {
+        this.pfp = pfp;
+    }
 }
