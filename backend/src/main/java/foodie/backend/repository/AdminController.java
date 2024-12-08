@@ -18,7 +18,7 @@ import foodie.backend.repository.RestaurantService;
 import foodie.backend.repository.UserService;
  
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
