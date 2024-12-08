@@ -15,7 +15,7 @@ import foodie.backend.repository.BusinessOwnerService;
 import foodie.backend.repository.RestaurantService;
 
 @RestController
-@RequestMapping("/business-owner")
+@RequestMapping("/api/business-owner")
 public class BusinessOwnerController {
   
     @Autowired

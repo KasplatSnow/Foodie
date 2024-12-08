@@ -11,6 +11,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "review")
 public class Review {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long reviewID;
 
     @ManyToOne
     @JoinColumn(name = "userID")

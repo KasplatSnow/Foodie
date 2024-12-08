@@ -73,7 +73,7 @@ public class ReviewController {
     }
 
     @GetMapping("/userreviews/userID/{userID}")
-    public List<ReviewDTO> getMethodName(@RequestParam Long userID) {
+    public List<ReviewDTO> getUserReviews(@PathVariable Long userID) {
         List<Review> reviews = reviewService.getReviewByUserID(userID);
         return reviews.stream().map(review -> new ReviewDTO(
             review.getReviewID(),
