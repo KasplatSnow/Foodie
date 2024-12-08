@@ -26,55 +26,6 @@ const defaultCenter = {
   lat: 37.3294,
   lng: -121.86,
 }
-// Mock restaurant data
-const mockRestaurants = [
-  {
-    id: '1',
-    name: 'Mock Restaurant 1',
-    address: '123 Street st, San Jose, CA',
-    photos: ['https://via.placeholder.com/400'],
-    lat: 37.3284,
-    lng: -121.861,
-    rating: 4.5,
-    price: 2,
-    categories: ['Mock Category 1'],
-  },
-  {
-    id: '2',
-    name: 'Mock Restaurant 2',
-    address: '338 Story Rd, San Jose, CA',
-    photos: ['https://via.placeholder.com/400'],
-    lat: 37.3314,
-    lng: -121.8625,
-    rating: 4.0,
-    price: 3,
-    categories: ['Mock Category 2'],
-  },
-]
-
-// used for backend api, comment out if you can't use it
-interface FetchRestaurantParams {
-  setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>
-  setError: React.Dispatch<React.SetStateAction<string>>
-}
-
-const fetchRestaurantsData = ({ setRestaurants, setError }: FetchRestaurantParams) => {
-  fetch(`http://localhost:8080/api/restaurants/allrestaurants`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      setError('');
-      setRestaurants(json);
-    })
-    .catch((e) => {
-      setError(e.toString());
-      setRestaurants([]);
-    });
-};
 
 interface Restaurant {
   id: string
@@ -88,6 +39,72 @@ interface Restaurant {
   categories?: string[]
   lat?: number
   lng?: number
+}
+
+// interface FetchRestaurantParams {
+//   setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>
+//   setError: React.Dispatch<React.SetStateAction<string>>
+// }
+
+const fetchRestaurantsDataFromDB = async (): Promise<Restaurant[]> => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/restaurants/allrestaurants`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const json = await response.json()
+    return json // Return the fetched restaurants
+  } catch (error) {
+    console.error('Error fetching restaurants:', error)
+    throw new Error('Unable to fetch restaurants from the database')
+  }
+}
+
+const fetchRestaurantsFromGoogleAPI = async (
+  location: google.maps.LatLngLiteral,
+): Promise<Restaurant[]> => {
+  const service = new google.maps.places.PlacesService(
+    document.createElement('div'),
+  )
+
+  return new Promise<Restaurant[]>((resolve, reject) => {
+    service.nearbySearch(
+      {
+        location: new google.maps.LatLng(location.lat, location.lng),
+        radius: 15000, // 15km
+        type: 'restaurant',
+      },
+      (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+          const restaurants = results.map((place) => ({
+            id: place.place_id || 'Unknown',
+            name: place.name || 'Unknown',
+            address: place.vicinity || 'Unknown',
+            photos: place.photos
+              ? place.photos.map((photo) =>
+                  photo.getUrl({ maxWidth: 400, maxHeight: 300 }),
+                )
+              : [],
+            lat: place.geometry?.location?.lat(),
+            lng: place.geometry?.location?.lng(),
+            rating: place.rating || undefined,
+            price: place.price_level || undefined,
+            categories: place.types || [],
+          }))
+          console.log('Google API Restaurants:', restaurants)
+          resolve(restaurants)
+        } else {
+          console.error('Google Places API error:', status)
+          reject('Failed to fetch restaurants from Google Places.')
+        }
+      },
+    )
+  })
 }
 
 const MapSearch: React.FC = () => {
@@ -123,78 +140,38 @@ const MapSearch: React.FC = () => {
     })
   }
 
-  const fetchRestaurantsFromGoogleAPI = async (
-    location: google.maps.LatLngLiteral,
-  ): Promise<Restaurant[]> => {
-    const service = new google.maps.places.PlacesService(
-      document.createElement('div'),
-    )
-
-    return new Promise<Restaurant[]>((resolve, reject) => {
-      service.nearbySearch(
-        {
-          location: new google.maps.LatLng(location.lat, location.lng),
-          radius: 15000, // 15km
-          type: 'restaurant',
-        },
-        (results, status) => {
-          // searching for nearby locations
-          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            console.log('result from google map api ', results)
-
-            // const filteredResults = results.filter((place) =>
-            //   place.types?.includes('restaurant'),
-            // )
-
-            const restaurants = results.map((place) => ({
-              id: place.place_id || 'Unknown',
-              name: place.name || 'Unknown',
-              address: place.vicinity || 'Unknown',
-              photos: place.photos
-                ? place.photos.map((photo) =>
-                    photo.getUrl({ maxWidth: 400, maxHeight: 300 }),
-                  )
-                : [],
-              lat: place.geometry?.location?.lat(),
-              lng: place.geometry?.location?.lng(),
-              rating: place.rating || undefined,
-              price: place.price_level || 0,
-              categories: place.types || [],
-              zipcode: '',
-            }))
-            resolve(restaurants)
-          } else {
-            console.error('Service error:', status)
-            reject('Unable to fetch restaurants from Google Places.')
-          }
-        },
-      )
-    })
-  }
-  // Fetch all restaurants
   const fetchRestaurants = async () => {
     try {
-      const apiRestaurants = await fetchRestaurantsFromGoogleAPI(defaultCenter)
+      // const dbRestaurants: Restaurant[] = await fetchRestaurantsDataFromDB({
+      //   setRestaurants: () => {},
+      //   setError,
+      // })
+      const dbRestaurants: Restaurant[] = await fetchRestaurantsDataFromDB()
+
+      // Fetch Google API restaurants
+      const googleAPIRestaurants = await fetchRestaurantsFromGoogleAPI(
+        defaultCenter,
+      )
 
       // Ensure API data matches the Restaurant type
-      const RestaurantData: Restaurant[] = apiRestaurants.map((restaurant) => ({
-        id: restaurant.id,
-        name: restaurant.name,
-        address: restaurant.address,
-        photos: restaurant.photos,
-        rating: restaurant.rating,
-        price: restaurant.price,
-        lat: restaurant.lat,
-        lng: restaurant.lng,
-        categories: restaurant.categories,
-        zipcode: '',
-        // description: '',
-      }))
+      // const RestaurantData: Restaurant[] = googleAPIRestaurants.map((restaurant) => ({
+      //   id: restaurant.id,
+      //   name: restaurant.name,
+      //   address: restaurant.address,
+      //   photos: restaurant.photos,
+      //   rating: restaurant.rating,
+      //   price: restaurant.price,
+      //   lat: restaurant.lat,
+      //   lng: restaurant.lng,
+      //   categories: restaurant.categories,
+      //   zipcode: '',
+      //   // description: '',
+      // }))
 
-      // Combine mock data and google map API data .
+      // Combine data
       const combinedRestaurants: Restaurant[] = [
-        ...restaurants,
-        ...RestaurantData,
+        ...dbRestaurants,
+        ...googleAPIRestaurants,
       ]
 
       setRestaurants(combinedRestaurants)
@@ -256,8 +233,6 @@ const MapSearch: React.FC = () => {
 
   useEffect(() => {
     if (isLoaded) {
-      // comment out if you can't use backend api
-      fetchRestaurantsData({ setRestaurants, setError })
       fetchRestaurants()
     }
   }, [isLoaded])
