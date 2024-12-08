@@ -18,18 +18,18 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "userID")
-    private User user;
+    private Long userID;
 
     @ManyToOne
     @JoinColumn(name = "restaurantID")
-    private Restaurant restaurant;
+    private Long restaurantID;
 
     private String review_text;
     private float rating; // 1-5 stars
 
-    public Review(User user, Restaurant restaurant, String review_text, float rating){
-        this.user = user;
-        this.restaurant = restaurant;
+    public Review(Long userID, Long restaurantID, String review_text, float rating){
+        this.userID = userID;
+        this.restaurantID = restaurantID;
         this.review_text = review_text;
         this.rating = rating;
     }
@@ -53,14 +53,14 @@ public class Review {
         return rating;
     }
 
-    public Restaurant getRestaurant(){
-        return restaurant;
-    }
-
-    public User getUser(){
-        return user;
+    public Long getRestaurantID(){
+        return restaurantID;
     }
     
+    public Long getUserID(){
+        return userID;
+    }
+
     public Long getReviewID(){
         return reviewID;
     }
