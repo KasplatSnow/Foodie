@@ -1,4 +1,3 @@
-// RestaurantPage2.tsx
 import React, { useState, useEffect } from 'react'
 import { Email, Phone, Person } from '@mui/icons-material'
 import {
@@ -30,100 +29,100 @@ import { REACT_APP_GOOGLE_API_KEY } from '../../constants'
 // Set your Google Maps API key
 const mockRestaurants: RestaurantData[] = [
   {
-    id: 1,
+    businessOwnerId: 1,
+    email: 'test@gmail.com',
     name: 'Pho Ha Noi',
     address: '123 Main St, San Jose, CA',
-    contactInfo: '123-456-7890',
+    phoneNumber: '123-456-7890',
     hours: '9:00 AM - 9:00 PM',
     description: 'A cozy place for delicious Vietnamese food.',
-    photos: ['https://cdn.example.com/photo1.jpg', ''],
-    zipcode: '95122',
+    photo: ['https://cdn.example.com/photo1.jpg', ''],
+    zipCode: '95122',
     price: 2,
     rating: 4.5,
-    categories: ['Vietnamese', 'Noodles'],
+    cuisine: ['Vietnamese', 'Noodles'],
     lat: 37.3382,
     lng: -121.889,
   },
-  {
-    id: 2,
-    name: 'Coffee and Co.',
-    address: '789 Coffee Ln, San Jose, CA',
-    contactInfo: '987-654-3210',
-    hours: '10:00 AM - 10:00 PM',
-    description: 'Famous for the best coffee in town.',
-    photos: ['https://cdn.example.com/photo2.jpg', ''],
-    zipcode: '95113',
-    price: 1,
-    rating: 4.8,
-    categories: ['Coffee', 'Cafe'],
-    lat: 37.336,
-    lng: -121.8905,
-  },
 ]
 
-interface FetchOwnerRestaurantsParams {
-  setRestaurants: React.Dispatch<React.SetStateAction<any>>
-  userID: any
-  setError: React.Dispatch<React.SetStateAction<string>>
-}
+// interface FetchOwnerRestaurantsParams {
+//   setRestaurants: React.Dispatch<React.SetStateAction<any>>
+//   userID: any
+//   setError: React.Dispatch<React.SetStateAction<string>>
+// }
 
-const fetchRestaurants = ({
+// Fetch restaurants from backend
+const fetchRestaurants = async ({
   setRestaurants,
   userID,
   setError,
-}: FetchOwnerRestaurantsParams) => {
-  fetch(
-    `http://localhost:8080/api/business-owner/getrestaurants/userID/${userID}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  )
-    .then((res) => res.json())
-    .then((json) => {
-      setError('')
-      setRestaurants(json)
-      console.log(json)
-    })
-    .catch((e) => {
-      setError(e.toString())
-      setRestaurants(mockRestaurants)
-    })
-}
-
-interface FetchProfileParams {
-  setUserData: React.Dispatch<React.SetStateAction<any>>
-  userID: any
+}: {
+  setRestaurants: React.Dispatch<React.SetStateAction<RestaurantData[]>>
+  userID: number
   setError: React.Dispatch<React.SetStateAction<string>>
+}) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/business-owner/getrestaurants/userID/1`,
+      // `http://localhost:8080/api/business-owner/getrestaurants/userID/${userID}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    const json = await response.json()
+    console.log('Fetched Restaurants:', json)
+    setRestaurants(json)
+    setError('')
+  } catch (e) {
+    console.error('Fetch Error:', e)
+    setError('Failed to fetch restaurants.')
+    setRestaurants(mockRestaurants) // Fallback to mock data
+  }
 }
 
-const fetchProfileData = ({
+// interface FetchProfileParams {
+//   setUserData: React.Dispatch<React.SetStateAction<any>>
+//   userID: any
+//   setError: React.Dispatch<React.SetStateAction<string>>
+// }
+
+const fetchProfileData = async ({
   setUserData,
   userID,
   setError,
-}: FetchProfileParams) => {
-  fetch(`http://localhost:8080/api/users/getuserbyid/userID/${userID}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      setError('')
-      setUserData(json)
-    })
-    .catch((e) => {
-      setError(e.toString())
-      setUserData([])
-    })
+}: {
+  setUserData: React.Dispatch<React.SetStateAction<any>>
+  userID: number
+  setError: React.Dispatch<React.SetStateAction<string>>
+}) => {
+  try {
+    const response = await fetch(
+      // `http://localhost:8080/api/users/getuserbyid/userID/${userID}`,
+      `http://localhost:8080/api/users/getuserbyid/userID/1`,
+
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
+    const json = await response.json()
+    console.log('Fetched User Profile:', json)
+    setUserData(json)
+    setError('')
+  } catch (e) {
+    console.error('Fetch User Error:', e)
+    setError('Failed to fetch user data.')
+    setUserData(null)
+  }
 }
 
 interface PostRestaurantParams {
-  newRestaurant: any;
-  setError: React.Dispatch<React.SetStateAction<string>>;
+  newRestaurant: any
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
 const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
@@ -136,17 +135,17 @@ const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
   })
     .then((res) => {
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        throw new Error(`HTTP error! status: ${res.status}`)
       }
-      return res.json();
+      return res.json()
     })
     .then((json) => {
-      setError('');
+      setError('')
     })
     .catch((e) => {
-      setError(e.toString());
-    });
-};
+      setError(e.toString())
+    })
+}
 
 const OwnerPage: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantData[]>(
@@ -159,10 +158,10 @@ const OwnerPage: React.FC = () => {
   const [isFormVisible, setIsFormVisible] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [error, setError] = useState('')
-  const [userData, setUserData] = useState(null)
+  const [userData, setUserData] = useState<any>(null)
   const loginContext = useAuth()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [restaurantToDelete, setRestaurantToDelete] = useState<string | null>(
+  const [restaurantToDelete, setRestaurantToDelete] = useState<number | null>(
     null,
   )
   useEffect(() => {
@@ -173,17 +172,18 @@ const OwnerPage: React.FC = () => {
   // add new restaurant
   const handleAddNewRestaurant = () => {
     setSelectedRestaurant({
-      id: 0,
+      businessOwnerId: 0,
       name: '',
+      email: '',
       address: '',
-      contactInfo: '',
+      phoneNumber: '',
       hours: '',
       description: '',
-      photos: [],
-      zipcode: '',
+      photo: [],
+      zipCode: '',
       price: undefined,
       rating: undefined,
-      categories: [],
+      cuisine: [],
       lat: undefined,
       lng: undefined,
     })
@@ -205,11 +205,11 @@ const OwnerPage: React.FC = () => {
       lng,
     }
     console.log('new data', newData)
-    if (newData.id) {
+    if (newData.businessOwnerId) {
       // Update existing restaurant
       setRestaurants((prevRestaurants) =>
         prevRestaurants.map((rest) =>
-          rest.id === newData.id ? newData : rest,
+          rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
         ),
       )
     } else {
@@ -223,10 +223,16 @@ const OwnerPage: React.FC = () => {
     setIsFormVisible(false)
     setSnackbarOpen(true)
   }
+  console.log(
+    'saved data',
+    restaurants.map((t) => t.description),
+  )
+
   // console.log(
-  //   'saved data',
-  //   restaurants.map((t) => t.name),
+  //   'user data',
+  //   userData.map((t) => t.email),
   // )
+
   const convertAddress = async (address: string) => {
     try {
       const apiKey = REACT_APP_GOOGLE_API_KEY || ''
@@ -251,8 +257,8 @@ const OwnerPage: React.FC = () => {
   }
 
   // Delete dialog
-  const openDeleteDialog = (restaurantId: string) => {
-    setRestaurantToDelete(restaurantId)
+  const openDeleteDialog = (businessOwnerId: number) => {
+    setRestaurantToDelete(businessOwnerId)
     setDeleteDialogOpen(true)
   }
 
@@ -264,7 +270,7 @@ const OwnerPage: React.FC = () => {
   const handleDeleteRestaurant = () => {
     if (restaurantToDelete) {
       setRestaurants((prevRestaurants) =>
-        prevRestaurants.filter((r) => r.id !== restaurantToDelete),
+        prevRestaurants.filter((r) => r.businessOwnerId !== restaurantToDelete),
       )
       setSnackbarOpen(true)
     }
@@ -317,11 +323,11 @@ const OwnerPage: React.FC = () => {
           />
 
           {/* Customer Info Heading */}
-          <Typography variant="h6" gutterBottom>
+          {/* <Typography variant="h6" gutterBottom>
             Owner Info
-          </Typography>
+          </Typography> */}
 
-          {/* Info with Icons */}
+          {/* Business Owner info */}
           <Box
             sx={{
               textAlign: 'center',
@@ -335,7 +341,7 @@ const OwnerPage: React.FC = () => {
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <Person fontSize="small" color="primary" />
-              <strong>Name:</strong> {userData ? userData.username : ''}
+              <strong>Username:</strong> {userData ? userData.username : ''}
             </Typography>
             <Typography
               variant="body1"
@@ -374,40 +380,52 @@ const OwnerPage: React.FC = () => {
               Add New Restaurant
             </Button>
           </Box>
-          <List>
-            {restaurants.map((restaurant) => (
-              <Card key={restaurant.id} sx={{ mb: 2 }}>
-                <CardContent>
-                  <Typography variant="h6">{restaurant.name}</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Address: {restaurant.address}
-                  </Typography>
-                  <Typography variant="body2">
-                    {restaurant.description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleEditRestaurant(restaurant)}
-                    startIcon={<EditIcon />}
-                  >
-                    Edit
-                  </Button>
 
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => openDeleteDialog(restaurant.id)}
-                    startIcon={<DeleteIcon />}
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            ))}
+          <List>
+            {restaurants.length > 0 ? (
+              restaurants.map((restaurant) => (
+                <Card key={restaurant.businessOwnerId} sx={{ mb: 2 }}>
+                  <CardContent>
+                    <Typography variant="h6">{restaurant.name}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Address: {restaurant.address}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Phone: {restaurant.phoneNumber}
+                    </Typography>
+                    <Typography variant="body2">
+                      {restaurant.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => handleEditRestaurant(restaurant)}
+                      startIcon={<EditIcon />}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() =>
+                        openDeleteDialog(restaurant.businessOwnerId)
+                      }
+                      startIcon={<DeleteIcon />}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))
+            ) : (
+              <Typography variant="body2" color="textSecondary">
+                No restaurants available.
+              </Typography>
+            )}
           </List>
+
           {/* Delete Dialog */}
           <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
             <DialogTitle>Confirm Deletion</DialogTitle>
@@ -433,7 +451,7 @@ const OwnerPage: React.FC = () => {
             fullWidth
           >
             <DialogTitle>
-              {selectedRestaurant?.id
+              {selectedRestaurant?.businessOwnerId
                 ? 'Edit Restaurant'
                 : 'Add New Restaurant'}
             </DialogTitle>
@@ -450,6 +468,16 @@ const OwnerPage: React.FC = () => {
                   fullWidth
                 />
                 <TextField
+                  label="Email"
+                  value={selectedRestaurant?.email || ''}
+                  onChange={(e) =>
+                    setSelectedRestaurant(
+                      (prev) => prev && { ...prev, email: e.target.value },
+                    )
+                  }
+                  fullWidth
+                />
+                <TextField
                   label="Address"
                   value={selectedRestaurant?.address || ''}
                   onChange={(e) =>
@@ -460,8 +488,19 @@ const OwnerPage: React.FC = () => {
                   fullWidth
                 />
                 <TextField
+                  label="Zip Code"
+                  value={selectedRestaurant?.zipCode || ''}
+                  onChange={(e) =>
+                    setSelectedRestaurant(
+                      (prev) => prev && { ...prev, zipCode: e.target.value },
+                    )
+                  }
+                  fullWidth
+                />
+
+                <TextField
                   label="Contact Info"
-                  value={selectedRestaurant?.contactInfo || ''}
+                  value={selectedRestaurant?.phoneNumber || ''}
                   onChange={(e) =>
                     setSelectedRestaurant(
                       (prev) =>
@@ -491,12 +530,28 @@ const OwnerPage: React.FC = () => {
                   }
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={2}
+                />
+                <TextField
+                  label="Cuisine"
+                  value={selectedRestaurant?.cuisine?.join(', ') || ''}
+                  onChange={(e) =>
+                    setSelectedRestaurant((prev) => {
+                      if (!prev) return null
+                      return {
+                        ...prev,
+                        cuisine: e.target.value.split(',').map((c) => c.trim()),
+                      }
+                    })
+                  }
+                  fullWidth
+                  multiline
+                  rows={1}
                 />
 
                 <TextField
                   label="Photos"
-                  value={selectedRestaurant?.photos?.join(', ') || ''}
+                  value={selectedRestaurant?.photo?.join(', ') || ''}
                   onChange={(e) =>
                     setSelectedRestaurant((prev) => {
                       if (!prev) return null
@@ -510,7 +565,7 @@ const OwnerPage: React.FC = () => {
                   }
                   fullWidth
                   multiline
-                  rows={4}
+                  rows={2}
                 />
               </Box>
             </DialogContent>

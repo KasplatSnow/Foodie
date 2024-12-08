@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 interface AuthContextType {
   isLoggedIn: boolean
   userRole: string
-  userId: string | null
-  logIn: (role: string, userId: string) => void
+  userId: number
+  logIn: (role: string, userId: number) => void
   logOut: () => void
 }
 
@@ -20,9 +20,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // const [userRole, setUserRole] = useState('')
   const [userRole, setUserRole] = useState<string>('admin')
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true)
-  const [userId, setUserId] = useState<string | null>(null)
+  const [userId, setUserId] = useState<number>(0)
 
-  const logIn = (role: string, userId: string) => {
+  const logIn = (role: string, userId: number) => {
     setIsLoggedIn(true)
     setUserRole(role)
     setUserId(userId)
@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logOut = () => {
     setIsLoggedIn(false)
     setUserRole('')
-    setUserId(null)
+    setUserId(0)
     console.log('User logged out')
   }
 
