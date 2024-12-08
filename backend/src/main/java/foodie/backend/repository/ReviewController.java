@@ -31,7 +31,7 @@ public class ReviewController {
   @PostMapping("/write")/*UPDATED BAD REQUEST RESPONSES */
   public ResponseEntity<?> writeReview(@RequestBody ReviewWriteRequest writeRequest) {
             //check if restaurant already exists via
-        if (reviewService.getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
+        if (!reviewService.getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
             return ResponseEntity.badRequest().body("User wrote review already");
         }
     
