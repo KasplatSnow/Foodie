@@ -56,5 +56,5 @@ CREATE TABLE photo (
   photo varchar(255) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY restaurantID (restaurantID),
-  CONSTRAINT photo_ibfk_1 FOREIGN KEY (restaurantID) REFERENCES restaurant (restaurantID) ON CASCADE DELETE
+  CONSTRAINT photo_ibfk_1 FOREIGN KEY (restaurantID) REFERENCES restaurant (restaurantID) ON DELETE CASCADE
 );
