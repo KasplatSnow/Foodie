@@ -77,9 +77,9 @@ public class UserController {
     }
   
     @GetMapping("/getuserbyid/userID/{userID}")
-    public List<UserDTO> getUserById(@PathVariable Long userID) {
-        List<User> users = userService.getUserByID(userID);
-        return users.stream().map(user -> new UserDTO(
+    public UserDTO getUserById(@PathVariable Long userID) {
+        User users = userService.getUserByID(userID);
+        return new UserDTO(
             user.getUserID(),
             user.getUsername(),
             user.getRole().toString(),
@@ -87,7 +87,7 @@ public class UserController {
             user.getEmail(),
             user.getAddress(),
             user.getPhoneNumber(),
-            user.getReviewID())).collect(Collectors.toList());
+            user.getReviewID());
     }
     
     @GetMapping("getuserbyusername/username/{username}")
