@@ -18,10 +18,7 @@ import { useState } from 'react'
 import { useAuth } from "../Components/Auth/AuthContext";
 // Define types
 interface Review {
-  user: {
-    name: string
-    img: string
-  }
+  userID: number
   rating: number
   content: string
 }
@@ -34,7 +31,7 @@ interface FetchRestaurantData {
 }
 
 const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
-  fetch(`http://localhost:8080/api/restaurants/search/${restaurantId}`, {
+  fetch(`http://localhost:8080/api/restaurants/getrestaurant/restaurantbyid/${restaurantId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -52,17 +49,43 @@ const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: Fetc
     });
 };
 
+interface FetchReviewParams {
+  setReviews: React.Dispatch<React.SetStateAction<any>>;
+  restaurantId: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const fetchReviews = ({ setReviews, restaurantId, setError }: FetchReviewParams) => {
+  fetch(`http://localhost:8080/api/review/allreviews/restaurantID/${restaurantId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      setError('');
+      setReviews(json);
+    })
+    .catch((e) => {
+      setError(e.toString());
+      setReviews([]);
+    });
+};
+
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchParams] = useSearchParams();
   const [error, setError] = useState('');
   const [rating, setRating] = useState(0); // Track the selected rating
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate()
   const loginContext = useAuth();
 
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
+    fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
   }, [searchParams.get('id')]);
 
   const handleStarClick = (rating: number) => {
@@ -145,17 +168,6 @@ export default function RestaurantPage() {
           paddingBottom: '3rem',
         }}
       >
-        <Button
-          variant="contained"
-          onClick={() =>
-            navigate('/review', {
-              state: { restaurantName: state.name },
-            })
-          }
-        >
-          Write a Review
-        </Button>
-
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
@@ -254,13 +266,13 @@ export default function RestaurantPage() {
 
         {/* List of Reviews */}
         <List>
-          {restaurantData.reviews && restaurantData.reviews.length > 0 ? (
-            restaurantData.reviews.map((item: Review, index: number) => (
+          {reviews && reviews.length > 0 ? (
+            reviews.map((item: Review, index: number) => (
               <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
                 <ReviewItem
-                  user={item.user}
+                  user={item.userID}
                   rating={item.rating}
-                  content={item.content}
+                  content={item.review_text}
                 />
               </ListItem>
             ))

@@ -20,8 +20,7 @@ const fetchProfileData = ({ setUserData, userID, setError }: FetchProfileParams)
       .then((res) => res.json())
       .then((json) => {
         setError('');
-        setUserData(json[0]);
-        console.log(json[0]);
+        setUserData(json);
       })
       .catch((e) => {
         setError(e.toString());
@@ -39,7 +38,7 @@ export default function ProfilePage() {
         fetchProfileData({ setUserData, userID: loginContext.userId, setError });
     }, [loginContext.userId]);  // Run only when userId changes
 
-    if (userData === null) {  // If userData is still null, show a loading indicator
+    if (userData == null) {  // If userData is still null, show a loading indicator
         return (
             <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <CircularProgress />
@@ -117,7 +116,7 @@ export default function ProfilePage() {
                         <Card sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: { xs: '60%', md: '70%' }, marginTop: { xs: '3rem', md: '4rem' } }}>
                             <Avatar
                                 alt="Profile Picture"
-                                src={userData.photo || "/path/to/your/image.jpg"}  // Assuming profilePicture exists in the user data
+                                src={userData.profilePicture || "/path/to/your/image.jpg"}
                                 sx={{
                                     width: { xs: 100, md: 200 },
                                     height: { xs: 100, md: 200 },
