@@ -73,6 +73,37 @@ const fetchReviews = ({ setReviews, restaurantId, setError }: FetchReviewParams)
     });
 };
 
+interface PostReviewParams {
+  userID: any;
+  restaurantID: any;
+  rating: any;
+  reviewText: any;
+  setReviewPostedTrigger: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedTrigger, setError }: PostReviewParams) => {
+  return fetch(`http://localhost:8080/api/review/write`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({userID, restaurantID, rating, reviewText}),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
   const [restaurantData, setRestaurantData] = useState(null);
@@ -80,17 +111,26 @@ export default function RestaurantPage() {
   const [error, setError] = useState('');
   const [rating, setRating] = useState(0); // Track the selected rating
   const [reviews, setReviews] = useState([]);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false);
   const navigate = useNavigate()
   const loginContext = useAuth();
 
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
     fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
-  }, [searchParams.get('id')]);
+  }, [searchParams.get('id'), reviewPostedTrigger]);
 
   const handleStarClick = (rating: number) => {
     setRating(rating); // Update the rating state when a star is clicked
     console.log(`Star ${rating} clicked!`);
+  };
+
+  const handleSubmit = () => {
+    postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
+      .then(() => {
+        setReviewPostedTrigger((prev) => !prev);
+      });
   };
 
   if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
@@ -211,6 +251,8 @@ export default function RestaurantPage() {
               font: 'inherit',
               resize: 'none',
             }}
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
           />
           <Box
             sx={{
@@ -237,7 +279,7 @@ export default function RestaurantPage() {
                   </Button>
                 ))}
             </Box>
-            <Button variant="contained">Submit Review</Button>
+            <Button variant="contained" onClick={handleSubmit}>Submit Review</Button>
           </Box>
 
           {/* Mobile view */}
@@ -256,7 +298,7 @@ export default function RestaurantPage() {
                   </Button>
                 ))}
             </Box>
-            <Button variant="contained">Submit Review</Button>
+            <Button variant="contained" onClick={handleSubmit}>Submit Review</Button>
           </Box>
           </Box>
 }
