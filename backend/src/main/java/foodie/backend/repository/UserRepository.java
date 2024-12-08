@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Modifying;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -30,4 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   
   // Check if a email already exists
   boolean existsByEmail(String email);
+
+  @Modifying
+  @Query("UPDATE User u SET u.pfp = :pfp WHERE u.userID = :userID")
+  void updatePfp(@Param("pfp") String pfp, @Param("userID") Long userID);
 }
