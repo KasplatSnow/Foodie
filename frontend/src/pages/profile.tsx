@@ -3,6 +3,7 @@ import Header from "../Components/Home/Header";
 import ReviewItem from "../Components/Restaurant/ReviewItem";
 import { useAuth } from "../Components/Auth/AuthContext";
 import { useState, useEffect } from "react";
+import { Email, Phone, Person } from '@mui/icons-material'
 
 interface FetchProfileParams {
     setUserData: React.Dispatch<React.SetStateAction<any>>;
@@ -137,64 +138,99 @@ export default function ProfilePage() {
         <Box sx={{ height: '100%' }}>
             <Header />
 
-            <Box sx={{ marginTop: '0', background: `url('https://foodie.sysco.com/wp-content/uploads/2024/08/Sysco_Panchetta-64.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100%' }}>
-                <Grid container spacing={2}>
-                    <Grid size={4} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Card sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "70%", height: { xs: '60%', md: '70%' }, marginTop: { xs: '3rem', md: '4rem' } }}>
-                            <Avatar
-                                alt="Profile Picture"
-                                src={userData.pfp || "/path/to/your/image.jpg"}
-                                sx={{
-                                    width: { xs: 100, md: 200 },
-                                    height: { xs: 100, md: 200 },
-                                    marginBottom: { xs: '2rem', md: '5rem' },
-                                    borderRadius: 0, // Make it square
-                                }}
-                            />
-                            <Typography
-                                variant="h5"
-                                fontWeight={"bold"}
-                                sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
-                            >
-                                {userData.username}
-                            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+            {/* Header */}
+            <Box
+                sx={{
+                backgroundColor: '#f5f5f5',
+                padding: 2,
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                }}
+            >
+                <Header />
+            </Box>
+            {/* Main Content */}
+            <Box
+                sx={{
+                display: 'flex',
+                flexGrow: 1,
+                overflow: 'hidden',
+                }}
+            >
+                {/* Left Column: Customer Info */}
+                <Box
+                sx={{
+                    width: '25%',
+                    backgroundColor: '#e3f2fd', // Light blue background
+                    padding: 3,
+                    borderRight: '1px solid #ddd',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+                >
+                {/* Avatar */}
+                <Avatar
+                    alt="John Doe"
+                    src="/path/to/avatar.jpg" // Replace with a real image path
+                    sx={{
+                    width: 100,
+                    height: 100,
+                    marginBottom: 2,
+                    backgroundColor: '#64b5f6', // Fallback background color
+                    }}
+                />
 
-                            <Typography
-                                variant="h6"
-                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
-                            >
-                                {userData.email}
-                            </Typography>
+                {/* Customer Info Heading */}
+                {/* <Typography variant="h6" gutterBottom>
+                    Owner Info
+                </Typography> */}
 
-                            <Typography
-                                variant="h6"
-                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
-                            >
-                                {userData.address || 'No address available'}
-                            </Typography>
-
-                            <Typography
-                                variant="h6"
-                                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
-                            >
-                                {userData.phoneNumber || 'No phone number available'}
-                            </Typography>
-                        </Card>
-                    </Grid>
-                    <Grid size={8}>
-                        {/* List of Reviews */}
-                        <Box sx={{ maxHeight: { xs: '400px', md: '750px' }, overflowY: 'auto', padding: 1, marginTop: { xs: '2rem', md: '5rem' } }}>
-                            <List>
-                                {reviews && reviews.length > 0 ? reviews.map((item, index) => (
-                                    <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
-                                        <ReviewItem user={item.userID} rating={item.rating} content={item.review_text} />
-                                    </ListItem>
-                                )) : ''}
-                            </List>
-                        </Box>
-                    </Grid>
-                </Grid>
+                {/* Business Owner info */}
+                <Box
+                    sx={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                    }}
+                >
+                    <Typography
+                    variant="body1"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                    <Person fontSize="small" color="primary" />
+                    <strong>Username:</strong> {userData ? userData.username : ''}
+                    </Typography>
+                    <Typography
+                    variant="body1"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                    <Email fontSize="small" color="primary" />
+                    <strong>Email:</strong> {userData ? userData.email : ''}
+                    </Typography>
+                    <Typography
+                    variant="body1"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                    <Phone fontSize="small" color="primary" />
+                    <strong>Phone:</strong> {userData ? userData.phoneNumber : ''}
+                    </Typography>
+                </Box>
+            </Box>
+                {/* List of Reviews */}
+                <Box sx={{overflowY: 'auto', padding: 1 }}>
+                    <List>
+                        {reviews && reviews.length > 0 ? reviews.map((item, index) => (
+                            <ListItem sx={{ padding: 0, marginTop: '1rem' }} key={index}>
+                                <ReviewItem user={item.userID} rating={item.rating} content={item.review_text} />
+                            </ListItem>
+                        )) : ''}
+                    </List>
+                </Box>
             </Box>
         </Box>
-    );
+    </Box>
+);
 }
