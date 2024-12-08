@@ -91,7 +91,29 @@ public class RestaurantController {
             restaurant.getReviewID())).collect(Collectors.toList());
 
     }
-
+    
+    @GetMapping("/getrestaurant/restaurantbyname/{name}")/*ADDED */
+    public List<RestaurantDTO> getRestaurantByName(@PathVariable String name) {
+        List<Restaurant> restaurants = restaurantService.getByName(name);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+            restaurant.getLng(),
+            restaurant.getLat(),
+            restaurant.getReviewID())).collect(Collectors.toList());
+    }
+    
     @PutMapping("update/restaurantid/{restaurantID}")
     public ResponseEntity<RestaurantDTO> putUpdateRestaurant(@PathVariable Long restaurantID, @RequestBody RestaurantRegistrationRequest updates) {
         Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurantID,updates);
