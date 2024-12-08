@@ -234,7 +234,7 @@ export default function RestaurantPage() {
                   <Button
                     key={index}
                     onClick={() => handleStarClick(index + 1)}
-                    sx={{ minWidth: '2rem', width: '2rem' }}
+                    sx={{ minWidth: '2rem', width: '2rem',  color: index < rating ? 'gold' : 'gray' }}
                   >
                     <StarIcon />
                   </Button>
