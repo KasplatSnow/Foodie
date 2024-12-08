@@ -125,9 +125,75 @@ interface PostRestaurantParams {
   setError: React.Dispatch<React.SetStateAction<string>>
 }
 
+/* EXAMPLE OF WHAT newRestaurant input SHOULD BE
+  {
+    "email": "aroma@gmail.com",
+    "name": "Aroma",
+    "zipCode": "95121",
+    "address": "3005 Silver Creek Rd Ste 150, San Jose, CA",
+    "phoneNumber": "(408)622-8633",
+    "businessOwnerId": 1,
+    "hours": "10:00 AM - 9:00 PM",
+    "description": "An Aroma you can taste! Enjoy our Vietnamese-inspired desserts, coffees, and teas! Every cup is made to order and includes the freshest ingredients to satisfy any of your cravings!",
+    "cuisine": ["tea", "desserts", "coffee"],
+    "photo": ["https://s3-media0.fl.yelpcdn.com/bphoto/wj_vEiq8AlhosfLJkIc1mQ/o.jpg"],
+    "rating": 4.5,
+    "price": 2,
+    "lng": -121.813356,
+    "lat": 37.309213
+  }
+*/
 const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
   return fetch(`http://localhost:8080/api/restaurants/register`, {
-    method: 'POST',
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newRestaurant),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
+interface EditRestaurantParams {
+  newRestaurant: any;
+  restaurantID: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+/* EXAMPLE OF WHAT newRestaurant input SHOULD BE
+  {
+    "email": "aroma@gmail.com",
+    "name": "Aroma",
+    "zipCode": "95121",
+    "address": "3005 Silver Creek Rd Ste 150, San Jose, CA",
+    "phoneNumber": "(408)622-8633",
+    "businessOwnerId": 1,
+    "hours": "10:00 AM - 9:00 PM",
+    "description": "An Aroma you can taste! Enjoy our Vietnamese-inspired desserts, coffees, and teas! Every cup is made to order and includes the freshest ingredients to satisfy any of your cravings!",
+    "cuisine": ["tea", "desserts", "coffee"],
+    "photo": ["https://s3-media0.fl.yelpcdn.com/bphoto/wj_vEiq8AlhosfLJkIc1mQ/o.jpg"],
+    "rating": 4.5,
+    "price": 2,
+    "lng": -121.813356,
+    "lat": 37.309213
+  }
+
+  restaurantID is the id of the restaurant being edited
+*/
+const editRestaurant = ({ newRestaurant, restaurantID, setError }: EditRestaurantParams) => {
+  return fetch(`http://localhost:8080/api/restaurants/update/restaurantid/${restaurantID}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
