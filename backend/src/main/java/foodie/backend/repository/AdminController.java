@@ -43,7 +43,7 @@ If the array is greater than 1 , compares the ID's and deletes a restaurant usin
     }
     
       // Remove a restaurant if it closes down
-    @GetMapping("deleterestaurant/restaurantID/{restaurantID}")
+    @DeleteMapping("deleterestaurant/restaurantID/{restaurantID}")
     public ResponseEntity<?> removeClosedRestaurant(@PathVariable Long restaurantID) {
         restaurantService.deleteById(restaurantID);
         return ResponseEntity.ok("Restaurant Deleted successfully");
