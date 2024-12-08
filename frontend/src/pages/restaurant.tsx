@@ -115,11 +115,23 @@ export default function RestaurantPage() {
   const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false);
   const navigate = useNavigate()
   const loginContext = useAuth();
+  const [imageIndex, setImageIndex] = useState(0);
 
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
     fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
   }, [searchParams.get('id'), reviewPostedTrigger]);
+
+  // for image swapping
+  useEffect(() => {
+    if (restaurantData?.photo && restaurantData.photo.length > 1) {
+      const interval = setInterval(() => {
+        setImageIndex((prevIndex) => (prevIndex + 1) % restaurantData.photo.length);
+      }, 10000); // Change image every 10 seconds
+
+      return () => clearInterval(interval); // Cleanup interval on component unmount
+    }
+  }, [restaurantData]);
 
   const handleStarClick = (rating: number) => {
     setRating(rating); // Update the rating state when a star is clicked
@@ -152,9 +164,10 @@ export default function RestaurantPage() {
             position: 'relative',
             width: '100%',
             height: '40vh',
-            backgroundImage: restaurantData?.photo?.[0]
-            ? `url("${restaurantData.photo[0]}")`
-            : `url("${state?.photos}")`,
+            backgroundImage:
+              restaurantData?.photo && restaurantData.photo.length > 0
+                ? `url("${restaurantData.photo[imageIndex]}")`
+                : `url("${state?.photos}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
