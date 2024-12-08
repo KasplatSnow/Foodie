@@ -78,10 +78,6 @@ const Header = () => {
           >
             <Tab label="Home" sx={{ color: '#6D6D6D', fontWeight: 'bold' }} />
             <Tab label="Search" sx={{ color: '#6D6D6D', fontWeight: 'bold' }} />
-            <Tab
-              label="Write a Review"
-              sx={{ color: '#6D6D6D', fontWeight: 'bold' }}
-            />
 
             {/* Conditionally render "Your Business" tab for owners */}
             {userRole === 'owner' && (
