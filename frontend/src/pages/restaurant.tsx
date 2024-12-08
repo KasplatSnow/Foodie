@@ -56,6 +56,7 @@ export default function RestaurantPage() {
   const [restaurantData, setRestaurantData] = useState(null);
   const [searchParams] = useSearchParams();
   const [error, setError] = useState('');
+  const [rating, setRating] = useState(0); // Track the selected rating
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -63,9 +64,9 @@ export default function RestaurantPage() {
   }, [searchParams.get('id')]);
 
   const handleStarClick = (rating: number) => {
-    console.log(`Star ${rating} clicked!`)
-    // Not implemented yet so not doing this
-  }
+    setRating(rating); // Update the rating state when a star is clicked
+    console.log(`Star ${rating} clicked!`);
+  };
 
   if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
     return (
@@ -209,8 +210,12 @@ export default function RestaurantPage() {
                 .map((_, index) => (
                   <Button
                     key={index}
-                    onClick={() => handleStarClick(index + 1)}
-                    sx={{ minWidth: '3rem', width: '3rem' }}
+                    onClick={() => handleStarClick(index + 1)} // Set the rating on click
+                    sx={{
+                      minWidth: '3rem',
+                      width: '3rem',
+                      color: index < rating ? 'gold' : 'gray', // Gold for selected, gray for unselected
+                    }}
                   >
                     <StarIcon />
                   </Button>
