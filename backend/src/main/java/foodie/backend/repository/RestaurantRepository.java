@@ -36,6 +36,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   List<Restaurant> existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(@Param("name") String name, @Param("address") String address);
 
   @Modifying
-  @Query("UPDATE Restaurant r SET r.OwnerID = :businessOwnerID WHERE r.restaurantID = :restaurantID")
+  @Query("UPDATE Restaurant r SET r.ownerID = :businessOwnerID WHERE r.restaurantID = :restaurantID")
   void updateOwner(@Param("businessOwnerID") Long businessOwnerID, @Param("restaurantId") Long restaurantID);
 }
