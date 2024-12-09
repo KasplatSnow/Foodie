@@ -27,25 +27,32 @@ interface FetchRestaurantData {
   setRestaurantData: React.Dispatch<React.SetStateAction<any>>;
   restaurantId: any;
   setError: React.Dispatch<React.SetStateAction<string>>;
-  state: any;
+  setExists: any;
 }
 
-const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError }: FetchRestaurantData) => {
+const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError, setExists }) => {
   fetch(`http://localhost:8080/api/restaurants/getrestaurant/restaurantbyid/${restaurantId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      setRestaurantData(res.json);
+      if (!res.ok) {
+        // If the response status is not 2xx, throw an error
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    })
     .then((json) => {
       setError('');
-      setRestaurantData(json);
+      setExists(true);
       console.log(json);
     })
     .catch((e) => {
       setError(e.toString());
-      setRestaurantData([state]);
+      setExists(false);
     });
 };
 
@@ -98,6 +105,38 @@ const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedT
     })
     .then((json) => {
       setError('');
+      setReviewPostedTrigger((prev) => {!prev});
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
+interface PostShellReviewParams {
+  userID: any;
+  rating: any;
+  reviewText: any;
+  setReviewPostedTrigger: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const postShellReview = ({ userID, rating, reviewText, setReviewPostedTrigger, setError }: PostShellReviewParams) => {
+  return fetch(`http://localhost:8080/api/review/createshellrestaurant`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({userID, restaurantID, rating, reviewText}),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+      setReviewPostedTrigger((prev) => {!prev});
     })
     .catch((e) => {
       setError(e.toString());
@@ -113,12 +152,12 @@ export default function RestaurantPage() {
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
   const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false);
-  const navigate = useNavigate()
   const loginContext = useAuth();
   const [imageIndex, setImageIndex] = useState(0);
+  const [exists, setExists] = useState(false);
 
   useEffect(() => {
-    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, state });
+    fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, setExists });
     fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
   }, [searchParams.get('id'), reviewPostedTrigger]);
 
@@ -138,11 +177,42 @@ export default function RestaurantPage() {
     console.log(`Star ${rating} clicked!`);
   };
 
+  console.log("EXISTING?", exists);
+
   const handleSubmit = () => {
-    postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
+    if (exists) {
+      postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
       .then(() => {
         setReviewPostedTrigger((prev) => !prev);
       });
+    } else {
+      // case create shell restaurant then post a review
+      const shellRestaurant = {
+        "name": state.name,
+        "address": state.address,
+        "rating": state.rating,
+        "lat": state.lat,
+        "lng": state.lng
+      };
+      
+      console.log("SHELL", shellRestaurant);
+
+      const review = {
+        "userID": loginContext.userId,
+        rating,
+        reviewText,
+        setReviewPostedTrigger,
+        setError
+      };
+
+      console.log("REVIEW", review);
+      /*
+      postShellReview({userID: loginContext.userId, rating, reviewText, setReviewPostedTrigger, setError})
+      .then(() => {
+        setReviewPostedTrigger((prev) => !prev);
+      });
+      */
+    }
   };
 
   if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
@@ -167,7 +237,7 @@ export default function RestaurantPage() {
             backgroundImage:
               restaurantData?.photo && restaurantData.photo.length > 0
                 ? `url("${restaurantData.photo[imageIndex]}")`
-                : `url("${state?.photos}")`,
+                : `url("${state?.photo}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
@@ -203,7 +273,9 @@ export default function RestaurantPage() {
                 ? Array.from({
                     length: Math.floor(restaurantData.rating),
                   }).map((_, index) => <StarIcon key={index} />)
-                : ''}
+                : Array.from({
+                  length: Math.floor(state.rating),
+                }).map((_, index) => <StarIcon key={index} />)}
             </Box>
             <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
               {restaurantData.price ? '$'.repeat(restaurantData.price) : '$'.repeat(state.price)}
@@ -224,7 +296,7 @@ export default function RestaurantPage() {
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
-        <Typography>{restaurantData.address}</Typography>
+        <Typography>{restaurantData.address || state.address}</Typography>
         <Typography>{restaurantData.zipCode}</Typography>
 
         <Typography sx = {{fontWeight: 'bold'}}>{restaurantData.hours}</Typography>
