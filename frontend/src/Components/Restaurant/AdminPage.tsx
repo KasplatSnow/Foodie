@@ -12,7 +12,7 @@ import {
   Button,
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import { Delete } from '@mui/icons-material'
+import { CheckCircle, Error, Delete } from '@mui/icons-material'
 import Header from '../Home/Header'
 import { useAuth } from '../Auth/AuthContext'
 import { Restaurant } from './mockRestaurant'
@@ -56,7 +56,7 @@ const fetchRestaurantsDataFromDB = async ({
 // }
 
 const deleteRestaurant = async (
-  restaurantID: string,
+  restaurantID: number,
   setError: React.Dispatch<React.SetStateAction<string>>,
   onSuccess: () => void,
 ) => {
@@ -148,6 +148,18 @@ const AdminPage: React.FC = () => {
     setFilteredRestaurants(filtered)
   }
 
+  // const checkDuplicate = (restaurantID: number) => {
+  //   const restaurant = restaurants.find((r) => r.restaurantID === restaurantID)
+  //   if (!restaurant) return false
+  //   return (
+  //     restaurants.filter(
+  //       (r) =>
+  //         r.name.toLowerCase() === restaurant.name.toLowerCase() &&
+  //         r.address.toLowerCase() === restaurant.address.toLowerCase(),
+  //     ).length > 1
+  //   )
+  // }
+
   const columns: GridColDef[] = [
     { field: 'restaurantID', headerName: 'ID', width: 100 },
     { field: 'name', headerName: 'Name', width: 200 },
@@ -157,23 +169,10 @@ const AdminPage: React.FC = () => {
     { field: 'phoneNumber', headerName: 'Phone', width: 150 },
     { field: 'rating', headerName: 'Rating', width: 100 },
     { field: 'cuisine', headerName: 'Cuisine', width: 170 },
-    // {
-    //   field: 'edit',
-    //   headerName: 'Edit',
-    //   width: 80,
-    //   renderCell: (params: GridRenderCellParams) => (
-    //     <IconButton
-    //       color="primary"
-    //       onClick={() => alert(`Edit Restaurant: ${params.row.name}`)}
-    //     >
-    //       <Edit />
-    //     </IconButton>
-    //   ),
-    // },
     {
       field: 'delete',
       headerName: 'Delete',
-      width: 80,
+      width: 100,
       renderCell: (params: GridRenderCellParams) => (
         <IconButton
           color="error"
@@ -190,7 +189,19 @@ const AdminPage: React.FC = () => {
         </IconButton>
       ),
     },
-    // { field: 'closed', headerName: 'Closed', width: 170 },
+    // {
+    //   field: 'duplicate',
+    //   headerName: 'Duplicate',
+    //   width: 100,
+    //   renderCell: (params: GridRenderCellParams) => {
+    //     const isRowDuplicate = checkDuplicate(params.row)
+    //     return isRowDuplicate ? (
+    //       <CheckCircle color="success" />
+    //     ) : (
+    //       <Error color="error" />
+    //     )
+    //   },
+    // },
   ]
 
   const rows = filteredRestaurants.map((restaurant) => ({

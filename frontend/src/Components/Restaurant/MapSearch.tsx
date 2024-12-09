@@ -399,7 +399,7 @@ const MapSearch: React.FC = () => {
             <Card
               key={restaurant.restaurantID}
               sx={{ mb: 2, cursor: 'pointer' }}
-              onClick={() => 
+              onClick={() =>
                 handleRestaurantClick(
                   restaurant.restaurantID,
                   restaurant.name,
@@ -410,7 +410,7 @@ const MapSearch: React.FC = () => {
                     ? restaurant.photo[0]
                     : '',
                   restaurant.price,
-                  restaurant.rating
+                  restaurant.rating,
                 )
               }
             >
