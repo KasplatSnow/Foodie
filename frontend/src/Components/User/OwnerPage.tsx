@@ -284,14 +284,18 @@ const OwnerPage: React.FC = () => {
           rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
         ),
       )
-      editRestaurant({newRestaurant: newData, restaurantID: data.restaurantID, setError})
+      editRestaurant({
+        newRestaurant: newData,
+        restaurantID: data.restaurantID,
+        setError,
+      })
     } else {
       // Add new restaurant
       setRestaurants((prevRestaurants) => [
         ...prevRestaurants,
         { ...newData, id: (prevRestaurants.length + 1).toString() },
-      ]);
-      postRestaurant({newRestaurant: newData, setError});
+      ])
+      postRestaurant({ newRestaurant: newData, setError })
     }
 
     setIsFormVisible(false)
@@ -578,7 +582,7 @@ const OwnerPage: React.FC = () => {
                   onChange={(e) =>
                     setSelectedRestaurant(
                       (prev) =>
-                        prev && { ...prev, contactInfo: e.target.value },
+                        prev && { ...prev, phoneNumber: e.target.value },
                     )
                   }
                   fullWidth
@@ -622,8 +626,23 @@ const OwnerPage: React.FC = () => {
                   multiline
                   rows={1}
                 />
-
                 <TextField
+                  label="Photos"
+                  value={selectedRestaurant?.photo?.join(', ') || ''}
+                  onChange={(e) => {
+                    const photoArray = e.target.value
+                      .split(',')
+                      .map((photo) => photo.trim())
+                    setSelectedRestaurant((prev) =>
+                      prev ? { ...prev, photo: photoArray } : null,
+                    )
+                  }}
+                  fullWidth
+                  multiline
+                  rows={2}
+                />
+
+                {/* <TextField
                   label="Photos"
                   value={selectedRestaurant?.photo?.join(', ') || ''}
                   onChange={(e) =>
@@ -631,7 +650,7 @@ const OwnerPage: React.FC = () => {
                       if (!prev) return null
                       return {
                         ...prev,
-                        photos: e.target.value
+                        photo: e.target.value
                           .split(',')
                           .map((photo) => photo.trim()),
                       }
@@ -640,7 +659,7 @@ const OwnerPage: React.FC = () => {
                   fullWidth
                   multiline
                   rows={2}
-                />
+                /> */}
               </Box>
             </DialogContent>
             <Box
