@@ -124,7 +124,10 @@ const EditRestaurantForm: React.FC<{
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  console.log("RESTAURANT", restaurant)
+
   const handleSave = () => {
+    console.log("EDIT", formData);
     const data = {
       ...formData,
       cuisine: formData.cuisine.split(',').map((c: string) => c.trim()),
