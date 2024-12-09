@@ -48,6 +48,7 @@ const fetchRestaurantData = ({ setRestaurantData, restaurantId, setError, setExi
     .then((json) => {
       setError('');
       setExists(true);
+      setRestaurantData(json);
       console.log(json);
     })
     .catch((e) => {
@@ -113,20 +114,22 @@ const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedT
 };
 
 interface PostShellReviewParams {
-  userID: any;
-  rating: any;
-  reviewText: any;
-  setReviewPostedTrigger: any;
+  shellRestaurant: any;
+  review: any;
   setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const postShellReview = ({ userID, rating, reviewText, setReviewPostedTrigger, setError }: PostShellReviewParams) => {
+const postShellReview = ({ shellRestaurant, review, setError }: PostShellReviewParams) => {
+  const newBody = {
+    "restaurant": shellRestaurant,
+    "review": review
+  };
   return fetch(`http://localhost:8080/api/review/createshellrestaurant`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({userID, restaurantID, rating, reviewText}),
+    body: JSON.stringify(newBody),
   })
     .then((res) => {
       if (!res.ok) {
@@ -136,7 +139,6 @@ const postShellReview = ({ userID, rating, reviewText, setReviewPostedTrigger, s
     })
     .then((json) => {
       setError('');
-      setReviewPostedTrigger((prev) => {!prev});
     })
     .catch((e) => {
       setError(e.toString());
@@ -177,8 +179,6 @@ export default function RestaurantPage() {
     console.log(`Star ${rating} clicked!`);
   };
 
-  console.log("EXISTING?", exists);
-
   const handleSubmit = () => {
     if (exists) {
       postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
@@ -206,12 +206,10 @@ export default function RestaurantPage() {
       };
 
       console.log("REVIEW", review);
-      /*
-      postShellReview({userID: loginContext.userId, rating, reviewText, setReviewPostedTrigger, setError})
+      postShellReview({shellRestaurant, review, setError})
       .then(() => {
         setReviewPostedTrigger((prev) => !prev);
       });
-      */
     }
   };
 
@@ -293,6 +291,8 @@ export default function RestaurantPage() {
           paddingBottom: '3rem',
         }}
       >
+        {restaurantData.ownerID !== 1 ? '' : <Button>Claim Restaurant</Button>}
+
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
