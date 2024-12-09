@@ -181,4 +181,10 @@ public class RestaurantController {
         restaurant.getLat(),
         restaurant.getReviewID())).collect(Collectors.toList());
     }
+    
+    @PutMapping("setOwner/businessOwnerId/{businessOwnerID}/restaunantID/{restaurantID}")
+    public ResponseEntity<?> setOwnerForRestaurant(@PathVariable Long businessOwnerID, @PathVariable Long restaurantID) {
+        restaurantService.setRestaurantOwner(businessOwnerID, restaurantID);        
+        return ResponseEntity.ok("Set BusinessOwner");
+    }
 }
