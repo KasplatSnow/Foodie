@@ -14,8 +14,8 @@ public class RestaurantRegistrationRequest {
     private String description;
     private List<String> cuisine;
     private List<String> photo;
-    private float rating;
-    private int price;
+    private Float rating;
+    private Integer price;
     private double lng;
     private double lat;
     
@@ -105,19 +105,19 @@ public class RestaurantRegistrationRequest {
 
     public void setLat(double lat) { this.lat = lat; }
     
-    public float getRating() {
+    public Float getRating() {
         return this.rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }
