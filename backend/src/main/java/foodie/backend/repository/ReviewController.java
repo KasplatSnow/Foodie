@@ -84,7 +84,9 @@ public class ReviewController {
     }
 
     @PostMapping("/createshellrestaurant")
-    public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody RestaurantRegistrationRequest shellRestaurant, @RequestBody ReviewWriteRequest writeRequest) {
+    public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody ShellRequest shellRequest ) {
+        RestaurantRegistrationRequest shellRestaurant = shellRequest.getRestaurant();
+        ReviewWriteRequest writeRequest = shellRequest.getReview();
         restaurantService.createShellRestaurant(shellRestaurant);
 
         Restaurant newRestaurant = restaurantService.getRestaurantByNameAndAddress(shellRestaurant.getName(), shellRestaurant.getAddress());
