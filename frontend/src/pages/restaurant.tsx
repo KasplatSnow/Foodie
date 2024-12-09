@@ -86,11 +86,11 @@ interface PostReviewParams {
   restaurantID: any;
   rating: any;
   reviewText: any;
-  setReviewPostedTrigger: any;
+  setTriggerRefresh: any;
   setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedTrigger, setError }: PostReviewParams) => {
+const postReview = ({ userID, restaurantID, rating, reviewText, setTriggerRefresh, setError }: PostReviewParams) => {
   return fetch(`http://localhost:8080/api/review/write`, {
     method: 'POST',
     headers: {
@@ -106,7 +106,7 @@ const postReview = ({ userID, restaurantID, rating, reviewText, setReviewPostedT
     })
     .then((json) => {
       setError('');
-      setReviewPostedTrigger((prev) => {!prev});
+      setTriggerRefresh((prev) => {!prev});
     })
     .catch((e) => {
       setError(e.toString());
@@ -145,6 +145,33 @@ const postShellReview = ({ shellRestaurant, review, setError }: PostShellReviewP
     });
 };
 
+interface claimRestaurantParams {
+  restaurantID: any;
+  businessOwnerID: any;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const claimRestaurant = ({ restaurantID, businessOwnerID, setError }: claimRestaurantParams) => {
+  return fetch(`http://localhost:8080/api/restaurants/setOwner/businessOwnerId/${businessOwnerID}/restaurantID/${restaurantID}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((json) => {
+      setError('');
+    })
+    .catch((e) => {
+      setError(e.toString());
+    });
+};
+
 export default function RestaurantPage() {
   const { state } = useLocation() // Access passed state
   const [restaurantData, setRestaurantData] = useState(null);
@@ -153,7 +180,7 @@ export default function RestaurantPage() {
   const [rating, setRating] = useState(0); // Track the selected rating
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
-  const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false);
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
   const loginContext = useAuth();
   const [imageIndex, setImageIndex] = useState(0);
   const [exists, setExists] = useState(false);
@@ -161,7 +188,7 @@ export default function RestaurantPage() {
   useEffect(() => {
     fetchRestaurantData({ setRestaurantData, restaurantId: searchParams.get('id'), setError, setExists });
     fetchReviews({setReviews, restaurantId: searchParams.get('id'), setError });
-  }, [searchParams.get('id'), reviewPostedTrigger]);
+  }, [searchParams.get('id'), triggerRefresh]);
 
   // for image swapping
   useEffect(() => {
@@ -183,7 +210,7 @@ export default function RestaurantPage() {
     if (exists) {
       postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
       .then(() => {
-        setReviewPostedTrigger((prev) => !prev);
+        setTriggerRefresh((prev) => !prev);
       });
     } else {
       // case create shell restaurant then post a review
@@ -201,17 +228,24 @@ export default function RestaurantPage() {
         "userID": loginContext.userId,
         rating,
         reviewText,
-        setReviewPostedTrigger,
+        setTriggerRefresh,
         setError
       };
 
       console.log("REVIEW", review);
       postShellReview({shellRestaurant, review, setError})
       .then(() => {
-        setReviewPostedTrigger((prev) => !prev);
+        setTriggerRefresh((prev) => !prev);
       });
     }
   };
+
+  const handleClaim = () => {
+    claimRestaurant({restaurantID: searchParams.get('id'), businessOwnerID: loginContext.userId, setError})
+    .then(() => {
+      setTriggerRefresh((prev) => !prev);
+    });
+  }
 
   if (restaurantData === null) {  // If restaurantData is still null, show a loading indicator
     return (
@@ -291,7 +325,7 @@ export default function RestaurantPage() {
           paddingBottom: '3rem',
         }}
       >
-        { loginContext.userRole !== 'BUSINESS' || restaurantData.ownerID !== 1 ? '' : <Button variant = 'contained'>Claim Restaurant</Button>}
+        { loginContext.userRole !== 'BUSINESS' || restaurantData.ownerID !== 1 ? '' : <Button variant = 'contained' onClick={handleClaim}>Claim Restaurant</Button>}
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
