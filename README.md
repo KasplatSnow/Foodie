@@ -88,3 +88,7 @@ Meeting every MWF
    We prioritized providing feedback during our sprint meetings. By addressing issues early, we minimized recurring mistakes and improved overall productivity. Additionally, we conducted thorough code reviews at the end of each sprint. This practice helped ensure that all changes were well-documented, error-free, and ready to merge into the master branch without risking production stability.
 
 ### Diagrams
+
+<img src="/Documents/user diagram.png" alt="User Diagram"/>
+<img src="/Documents/owner diagram.png" alt="Owner Diagram"/>
+<img src="/Documents/admin diagram.png" alt="Admin Diagram"/>
