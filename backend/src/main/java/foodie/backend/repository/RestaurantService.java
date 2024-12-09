@@ -91,4 +91,8 @@ public class RestaurantService {
         }
         return false;    
     }
+        
+    public void setRestaurantOwner(Long businessOwnerID, Long restaurantID){
+        restaurantRepository.updateOwner(businessOwnerID, restaurantID);
+    }
 }
