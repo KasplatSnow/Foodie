@@ -86,3 +86,5 @@ Meeting every MWF
 
 2. Feedback
    We prioritized providing feedback during our sprint meetings. By addressing issues early, we minimized recurring mistakes and improved overall productivity. Additionally, we conducted thorough code reviews at the end of each sprint. This practice helped ensure that all changes were well-documented, error-free, and ready to merge into the master branch without risking production stability.
+
+### Diagrams
