@@ -64,8 +64,8 @@ const fetchRestaurants = async ({
 }) => {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/business-owner/getrestaurants/userID/1`,
-      // `http://localhost:8080/api/business-owner/getrestaurants/userID/${userID}`,
+      // `http://localhost:8080/api/business-owner/getrestaurants/userID/1`,
+      `http://localhost:8080/api/business-owner/getrestaurants/userID/${userID}`,
       {
         method: 'GET',
         headers: {
@@ -101,8 +101,8 @@ const fetchProfileData = async ({
 }) => {
   try {
     const response = await fetch(
-      // `http://localhost:8080/api/users/getuserbyid/userID/${userID}`,
-      `http://localhost:8080/api/users/getuserbyid/userID/1`,
+      `http://localhost:8080/api/users/getuserbyid/userID/${userID}`,
+      // `http://localhost:8080/api/users/getuserbyid/userID/1`,
 
       {
         method: 'GET',
