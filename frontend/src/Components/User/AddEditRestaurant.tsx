@@ -122,20 +122,32 @@ const EditRestaurantForm: React.FC<{
   onClose: () => void
   onSave: (data: any) => void
 }> = ({ restaurant, onClose, onSave }) => {
-  const [formData, setFormData] = useState(restaurant)
+  const [formData, setFormData] = useState({
+    ...restaurant,
+    cuisine: Array.isArray(restaurant.cuisine)
+      ? restaurant.cuisine.join(', ')
+      : restaurant.cuisine || '',
+    photo: Array.isArray(restaurant.photo)
+      ? restaurant.photo.join(', ')
+      : restaurant.photo || '',
+  })
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-
-  console.log('RESTAURANT', restaurant)
+  console.log('EDIT', formData)
 
   const handleSave = () => {
-    console.log('EDIT', formData)
     const data = {
       ...formData,
-      cuisine: formData.cuisine.split(',').map((c: string) => c.trim()),
-      photo: formData.photo.split(',').map((p: string) => p.trim()),
+      cuisine:
+        typeof formData.cuisine === 'string'
+          ? formData.cuisine.split(',').map((c) => c.trim())
+          : [],
+      photo:
+        typeof formData.photo === 'string'
+          ? formData.photo.split(',').map((p) => p.trim())
+          : [],
     }
     onSave(data)
     onClose()
