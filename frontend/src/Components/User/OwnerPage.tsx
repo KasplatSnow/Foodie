@@ -14,7 +14,6 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
-  TextField,
   Snackbar,
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
@@ -23,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { RestaurantData } from '../types/restaurant.type'
 import Header from '../Home/Header'
 import { useAuth } from '../Auth/AuthContext'
+import { AddRestaurantForm, EditRestaurantForm } from './AddEditRestaurant'
+
 // import Geocode from "react-geocode";
 import { REACT_APP_GOOGLE_API_KEY } from '../../constants'
 
@@ -224,11 +225,13 @@ const OwnerPage: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantData[]>(
     mockRestaurants,
   )
+  const [addFormVisible, setAddFormVisible] = useState(false)
+  const [editFormVisible, setEditFormVisible] = useState(false)
   const [
     selectedRestaurant,
     setSelectedRestaurant,
   ] = useState<RestaurantData | null>(null)
-  const [isFormVisible, setIsFormVisible] = useState(false)
+  // const [isFormVisible, setIsFormVisible] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [error, setError] = useState('')
   const [userData, setUserData] = useState<any>(null)
@@ -260,56 +263,15 @@ const OwnerPage: React.FC = () => {
       lat: undefined,
       lng: undefined,
     })
-    setIsFormVisible(true)
+    setAddFormVisible(true)
   }
+
   // edit restaurant
   const handleEditRestaurant = (restaurant: RestaurantData) => {
     setSelectedRestaurant(restaurant)
-    setIsFormVisible(true)
+    setEditFormVisible(true)
   }
-  //NOTE
-  //save restaurant and convert address to long and latitude
-  const handleSaveRestaurant = async (data: RestaurantData) => {
-    const { lat, lng } = await convertAddress(data.address)
-    const newData = {
-      ...data,
-      lat,
-      lng,
-    }
-    if (newData.businessOwnerId !== 1) {
-      // Update existing restaurant
-      setRestaurants((prevRestaurants) =>
-        prevRestaurants.map((rest) =>
-          rest.restaurantID === newData.restaurantID ? newData : rest,
-        ),
-      )
-      editRestaurant({
-        newRestaurant: newData,
-        restaurantID: data.restaurantID,
-        setError,
-      })
-    } else {
-      // Add new restaurant
-      setRestaurants((prevRestaurants) => [
-        ...prevRestaurants,
-        { ...newData, id: (prevRestaurants.length + 1).toString() },
-      ])
-      postRestaurant({ newRestaurant: newData, setError })
-    }
-
-    setIsFormVisible(false)
-    setSnackbarOpen(true)
-  }
-  console.log(
-    'saved data',
-    restaurants.map((t) => t.description),
-  )
-
-  // console.log(
-  //   'user data',
-  //   userData.map((t) => t.email),
-  // )
-
+  //convert address into lng, lat
   const convertAddress = async (address: string) => {
     try {
       const apiKey = REACT_APP_GOOGLE_API_KEY || ''
@@ -332,6 +294,90 @@ const OwnerPage: React.FC = () => {
       return { lat: 0, lng: 0 }
     }
   }
+
+  //handle button add new restaurant
+  const handleSaveAddRestaurant = async (data: RestaurantData) => {
+    const { lat, lng } = await convertAddress(data.address)
+    const newData = {
+      ...data,
+      lat,
+      lng,
+    }
+    // Add new restaurant
+    setRestaurants((prevRestaurants) => [
+      ...prevRestaurants,
+      { ...newData, id: (prevRestaurants.length + 1).toString() },
+    ])
+    postRestaurant({ newRestaurant: newData, setError })
+    setAddFormVisible(false)
+  }
+  //handle button edit restaurant
+
+  const handleSaveEditRestaurant = async (data: RestaurantData) => {
+    const { lat, lng } = await convertAddress(data.address)
+    const newData = {
+      ...data,
+      lat,
+      lng,
+    }
+
+    if (newData.businessOwnerId !== 1) {
+      // Update existing restaurant
+      setRestaurants((prevRestaurants) =>
+        prevRestaurants.map((rest) =>
+          rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
+        ),
+      )
+      editRestaurant({
+        newRestaurant: newData,
+        restaurantID: data.businessOwnerId,
+        setError,
+      })
+      setEditFormVisible(false)
+    }
+  }
+  // //save restaurant and convert address to long and latitude
+  // const handleSaveRestaurant = async (data: RestaurantData) => {
+  //   const { lat, lng } = await convertAddress(data.address)
+  //   const newData = {
+  //     ...data,
+  //     lat,
+  //     lng,
+  //   }
+  //   console.log('new data', newData)
+  //   if (newData.businessOwnerId !== 1) {
+  //     // Update existing restaurant
+  //     setRestaurants((prevRestaurants) =>
+  //       prevRestaurants.map((rest) =>
+  //         rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
+  //       ),
+  //     )
+  //     editRestaurant({
+  //       newRestaurant: newData,
+  //       restaurantID: data.businessOwnerId,
+  //       setError,
+  //     })
+  //   } else {
+  //     // Add new restaurant
+  //     setRestaurants((prevRestaurants) => [
+  //       ...prevRestaurants,
+  //       { ...newData, id: (prevRestaurants.length + 1).toString() },
+  //     ])
+  //     postRestaurant({ newRestaurant: newData, setError })
+  //   }
+
+  //   setIsFormVisible(false)
+  //   setSnackbarOpen(true)
+  // }
+  // console.log(
+  //   'saved data',
+  //   restaurants.map((t) => t.description),
+  // )
+
+  // console.log(
+  //   'user data',
+  //   userData.map((t) => t.email),
+  // )
 
   // Delete dialog
   const openDeleteDialog = (businessOwnerId: number) => {
@@ -404,7 +450,7 @@ const OwnerPage: React.FC = () => {
             Owner Info
           </Typography> */}
 
-          {/* Business Owner info */}
+          {/* Business Owner info Left column */}
           <Box
             sx={{
               textAlign: 'center',
@@ -438,247 +484,91 @@ const OwnerPage: React.FC = () => {
         </Box>
 
         {/* Add New Restaurant Button */}
-        {/* Right Column: Restaurant Management */}
-        <Box sx={{ flex: 1, padding: 2, overflowY: 'auto', marginTop: '50px' }}>
-          <Box
-            sx={{
-              paddingBottom: 2,
-              borderBottom: '1px solid #ddd',
-              marginBottom: 2,
-            }}
+        {/* Right Column */}
+        <Box sx={{ flex: 1, padding: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleAddNewRestaurant}
+            sx={{ marginBottom: 2 }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleAddNewRestaurant}
-              sx={{ mb: 3 }}
-            >
-              Add New Restaurant
-            </Button>
-          </Box>
+            Add New Restaurant
+          </Button>
 
           <List>
-            {restaurants.length > 0 ? (
-              restaurants.map((restaurant) => (
-                <Card key={restaurant.businessOwnerId} sx={{ mb: 2 }}>
-                  <CardContent>
-                    <Typography variant="h6">{restaurant.name}</Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Address: {restaurant.address}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Phone: {restaurant.phoneNumber}
-                    </Typography>
-                    <Typography variant="body2">
-                      {restaurant.description}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => handleEditRestaurant(restaurant)}
-                      startIcon={<EditIcon />}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() =>
-                        openDeleteDialog(restaurant.businessOwnerId)
-                      }
-                      startIcon={<DeleteIcon />}
-                    >
-                      Delete
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))
-            ) : (
-              <Typography variant="body2" color="textSecondary">
-                No restaurants available.
-              </Typography>
-            )}
+            {restaurants.map((restaurant) => (
+              <Card key={restaurant.businessOwnerId} sx={{ marginBottom: 2 }}>
+                <CardContent>
+                  <Typography variant="h6">{restaurant.name}</Typography>
+                  <Typography variant="body2">
+                    Address: {restaurant.address}
+                  </Typography>
+                  <Typography variant="body2">
+                    Phone: {restaurant.phoneNumber}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon />}
+                    onClick={() => handleEditRestaurant(restaurant)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => openDeleteDialog(restaurant.businessOwnerId)}
+                  >
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            ))}
           </List>
-
-          {/* Delete Dialog */}
-          <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
-            <DialogTitle>Confirm Deletion</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Are you sure you want to delete this restaurant? This action
-                cannot be undone.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeDeleteDialog}>Cancel</Button>
-              <Button onClick={handleDeleteRestaurant} color="error">
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          {/* Add/Edit Restaurant Form Dialog */}
-          <Dialog
-            open={isFormVisible}
-            onClose={() => setIsFormVisible(false)}
-            maxWidth="sm"
-            fullWidth
-          >
-            <DialogTitle>
-              {selectedRestaurant?.businessOwnerId
-                ? 'Edit Restaurant'
-                : 'Add New Restaurant'}
-            </DialogTitle>
-            <DialogContent>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <TextField
-                  label="Restaurant Name"
-                  value={selectedRestaurant?.name || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) => prev && { ...prev, name: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Email"
-                  value={selectedRestaurant?.email || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) => prev && { ...prev, email: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Address"
-                  value={selectedRestaurant?.address || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) => prev && { ...prev, address: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Zip Code"
-                  value={selectedRestaurant?.zipCode || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) => prev && { ...prev, zipCode: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-
-                <TextField
-                  label="Contact Info"
-                  value={selectedRestaurant?.phoneNumber || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) =>
-                        prev && { ...prev, phoneNumber: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Hours"
-                  value={selectedRestaurant?.hours || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) => prev && { ...prev, hours: e.target.value },
-                    )
-                  }
-                  fullWidth
-                />
-                <TextField
-                  label="Description"
-                  value={selectedRestaurant?.description || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant(
-                      (prev) =>
-                        prev && { ...prev, description: e.target.value },
-                    )
-                  }
-                  fullWidth
-                  multiline
-                  rows={2}
-                />
-                <TextField
-                  label="Cuisine"
-                  value={selectedRestaurant?.cuisine?.join(', ') || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant((prev) => {
-                      if (!prev) return null
-                      return {
-                        ...prev,
-                        cuisine: e.target.value.split(',').map((c) => c.trim()),
-                      }
-                    })
-                  }
-                  fullWidth
-                  multiline
-                  rows={1}
-                />
-                <TextField
-                  label="Photos"
-                  value={selectedRestaurant?.photo?.join(', ') || ''}
-                  onChange={(e) => {
-                    const photoArray = e.target.value
-                      .split(',')
-                      .map((photo) => photo.trim())
-                    setSelectedRestaurant((prev) =>
-                      prev ? { ...prev, photo: photoArray } : null,
-                    )
-                  }}
-                  fullWidth
-                  multiline
-                  rows={2}
-                />
-
-                {/* <TextField
-                  label="Photos"
-                  value={selectedRestaurant?.photo?.join(', ') || ''}
-                  onChange={(e) =>
-                    setSelectedRestaurant((prev) => {
-                      if (!prev) return null
-                      return {
-                        ...prev,
-                        photo: e.target.value
-                          .split(',')
-                          .map((photo) => photo.trim()),
-                      }
-                    })
-                  }
-                  fullWidth
-                  multiline
-                  rows={2}
-                /> */}
-              </Box>
-            </DialogContent>
-            <Box
-              sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}
-            >
-              <Button onClick={() => setIsFormVisible(false)}>Cancel</Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() =>
-                  selectedRestaurant && handleSaveRestaurant(selectedRestaurant)
-                }
-              >
-                Save Changes
-              </Button>
-            </Box>
-          </Dialog>
         </Box>
       </Box>
-      {/* Snackbar for confirmation */}
+
+      {/* Add Form */}
+      {addFormVisible && (
+        <AddRestaurantForm
+          onClose={() => setAddFormVisible(false)}
+          onSave={handleSaveAddRestaurant}
+        />
+      )}
+
+      {/* Edit Form */}
+      {editFormVisible && selectedRestaurant && (
+        <EditRestaurantForm
+          restaurant={selectedRestaurant}
+          onClose={() => setEditFormVisible(false)}
+          onSave={handleSaveEditRestaurant}
+        />
+      )}
+
+      {/* Delete Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this restaurant? This action cannot
+            be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleDeleteRestaurant} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
