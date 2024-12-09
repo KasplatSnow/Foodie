@@ -276,17 +276,16 @@ const OwnerPage: React.FC = () => {
       lat,
       lng,
     }
-    console.log('new data', newData)
     if (newData.businessOwnerId !== 1) {
       // Update existing restaurant
       setRestaurants((prevRestaurants) =>
         prevRestaurants.map((rest) =>
-          rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
+          rest.restaurantID === newData.restaurantID ? newData : rest,
         ),
       )
       editRestaurant({
         newRestaurant: newData,
-        restaurantID: data.businessOwnerId,
+        restaurantID: data.restaurantID,
         setError,
       })
     } else {

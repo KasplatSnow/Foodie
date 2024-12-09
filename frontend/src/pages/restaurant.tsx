@@ -208,7 +208,7 @@ export default function RestaurantPage() {
 
   const handleSubmit = () => {
     if (exists) {
-      postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setReviewPostedTrigger, setError})
+      postReview({userID: loginContext.userId, restaurantID: searchParams.get('id'), rating, reviewText, setTriggerRefresh, setError})
       .then(() => {
         setTriggerRefresh((prev) => !prev);
       });
