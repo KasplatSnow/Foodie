@@ -1,7 +1,7 @@
 import { Restaurant } from '@mui/icons-material'
 
 export interface Restaurant {
-  restaurantID: string | number
+  restaurantID: number
   name: string
   address: string
   zipCode: string
@@ -18,7 +18,7 @@ export interface Restaurant {
 
 export const mockRestaurant: Restaurant[] = [
   {
-    restaurantID: '111111',
+    restaurantID: 22,
     name: 'Cheese Cake Factory',
     address: '123 Street St',
     zipCode: '12345',
@@ -33,7 +33,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['1', '2', '3'],
   },
   {
-    restaurantID: '2333-333',
+    restaurantID: 33333,
     name: 'Pho Ha Noi',
     address: '969 Story Rd',
     zipCode: '95122',
@@ -48,7 +48,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['4', '5'],
   },
   {
-    restaurantID: '23rerwrree',
+    restaurantID: 334,
     name: 'Starbucks',
     address: '456 Elm St',
     zipCode: '67890',
@@ -63,7 +63,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['4', '5'],
   },
   {
-    restaurantID: 'sdfsdf23',
+    restaurantID: 233,
     name: 'Starbucks',
     address: '123 Street St',
     zipCode: '67890',
@@ -78,7 +78,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['4', '5'],
   },
   {
-    restaurantID: 'sdfsdf23',
+    restaurantID: 899,
     name: 'Starbucks',
     address: '123 Street St',
     zipCode: '67890',
@@ -93,7 +93,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['4', '5'],
   },
   {
-    restaurantID: '13r3 efs',
+    restaurantID: 32334,
     name: 'Starbucks',
     address: '456 Street St',
     zipCode: '67890',
@@ -108,7 +108,7 @@ export const mockRestaurant: Restaurant[] = [
     reviewID: ['4', '5'],
   },
   {
-    restaurantID: 'dfds',
+    restaurantID: 909,
     name: 'Starbucks',
     address: '123 Street St',
     zipCode: '67890',

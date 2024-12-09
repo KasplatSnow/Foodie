@@ -173,12 +173,15 @@ const MapSearch: React.FC = () => {
   const handleRestaurantClick = (
     id: string,
     name: string,
+    address: string,
+    lat: any,
+    lng: any,
     photo?: string,
     price?: number,
     rating?: number,
   ) => {
     navigate(`/restaurant?id=${id}`, {
-      state: { name, price, rating, photo },
+      state: { name, address, lat, lng, price, rating, photo },
     })
   }
 
@@ -396,9 +399,14 @@ const MapSearch: React.FC = () => {
                 handleRestaurantClick(
                   restaurant.restaurantID,
                   restaurant.name,
+                  restaurant.address,
+                  restaurant.lat,
+                  restaurant.lng,
                   restaurant.photo && restaurant.photo[0]
                     ? restaurant.photo[0]
                     : '',
+                  restaurant.price,
+                  restaurant.rating,
                 )
               }
             >
