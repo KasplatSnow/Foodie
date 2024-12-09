@@ -214,9 +214,14 @@ const MapSearch: React.FC = () => {
       // }))
 
       // Combine data
-      const combinedRestaurants: Restaurant[] = [
+      const uniqueAddresses = new Set(dbRestaurants.map((restaurant) => restaurant.address));
+
+      const combinedRestaurants = [
         ...dbRestaurants,
-        ...googleAPIRestaurants,
+        ...googleAPIRestaurants.filter(
+          (restaurant) => !uniqueAddresses.has(restaurant.address) && uniqueAddresses.add(restaurant.address)
+        ),
+      ];
         // ...googleAPIRestaurants.filter(
         //   (googleRestaurant) =>
         //     !dbRestaurants.some(
@@ -225,7 +230,6 @@ const MapSearch: React.FC = () => {
         //         dbRestaurant.lng === googleRestaurant.lng,
         //     ),
         // ),
-      ]
 
       setRestaurants(combinedRestaurants)
       setFilteredRestaurants(combinedRestaurants)

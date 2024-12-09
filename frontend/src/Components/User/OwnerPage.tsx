@@ -277,7 +277,7 @@ const OwnerPage: React.FC = () => {
       lng,
     }
     console.log('new data', newData)
-    if (newData.businessOwnerId) {
+    if (newData.businessOwnerId !== 1) {
       // Update existing restaurant
       setRestaurants((prevRestaurants) =>
         prevRestaurants.map((rest) =>

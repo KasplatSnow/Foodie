@@ -46,13 +46,59 @@ public class RestaurantService {
     }
     
     public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
-        Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
-        currentRestaurant.setName(updates.getName());
-        currentRestaurant.setAddress(updates.getAddress());
-        currentRestaurant.setPhoneNumber(updates.getPhoneNumber());
-        currentRestaurant.setHours(updates.getHours());
-        currentRestaurant.setDescription(updates.getDescription());
+        Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID);
+        if(updates.getName() != null){
+            currentRestaurant.setName(updates.getName());
+        }
 
+        if(updates.getAddress() != null){
+            currentRestaurant.setAddress(updates.getAddress());
+        }
+
+        if(updates.getPhoneNumber() != null){
+            currentRestaurant.setPhoneNumber(updates.getPhoneNumber());
+        }
+
+        if(updates.getHours() != null){
+            currentRestaurant.setHours(updates.getHours());
+        }
+
+        if(updates.getDescription() != null){
+            currentRestaurant.setDescription(updates.getDescription());
+        }
+
+        if(!updates.getPhoto().isEmpty()){
+            List<String> currentPhotos = photoRepository.findByRestaurantID(restaurantID);
+            Set<String> currentPhotosSet = new HashSet<>(currentPhotos);
+            Set<String> updatedPhotosSet = new HashSet<>(updates.getPhoto());
+
+            //photos to Keep
+            Set<String> photosToKeep = new HashSet<>(currentPhotosSet);
+            photosToKeep.retainAll(updatedPhotosSet);
+
+            //photos to remove
+            Set<String> photosToRemove = new HashSet<>(currentPhotosSet);
+            photosToRemove.removeAll(updatedPhotosSet);
+
+            //photos to add
+            Set<String> photosToAdd = new HashSet<>(updatedPhotosSet);
+            photosToAdd.removeAll(currentPhotosSet);
+
+            // Perform the database update
+            if (!photosToRemove.isEmpty()) {
+                for(String photo: photosToRemove){
+                    photoRepository.deleteByRestaurantID(restaurantID, photo);
+                }
+            }
+            if (!photosToAdd.isEmpty()) {
+                for(String photo: photosToAdd){
+                    Photo photoList = new Photo();
+                    photoList.setPhoto(photo);
+                    photoList.setRestaurant(restaurantRepository.findByRestaurantID(restaurantID));
+                    photoRepository.save(photoList);
+                }
+            }
+        }
         return restaurantRepository.save(currentRestaurant);
     }
 
