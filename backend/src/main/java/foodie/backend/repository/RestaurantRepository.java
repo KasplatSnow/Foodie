@@ -21,7 +21,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   List<Restaurant> findAll();
 
   boolean existsByAddress(String address);
-  
+
+  @Modifying
+  @Transactional  
   @Query("DELETE FROM Restaurant WHERE restaurantID = :restaurantID ")
   void deleteById(@Param("restaurantID") Long restaurantID);
 
@@ -36,8 +38,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   @Query("SELECT r FROM Restaurant r WHERE r.name = :name AND r.address = :address")
   List<Restaurant> existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(@Param("name") String name, @Param("address") String address);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Restaurant r SET r.owner = (SELECT u FROM User u WHERE u.userID = :businessOwnerID) WHERE r.restaurantID = :restaurantID")
+  @Modifying
+  @Transactional
+  @Query("UPDATE Restaurant r SET r.owner = (SELECT u FROM User u WHERE u.userID = :businessOwnerID) WHERE r.restaurantID = :restaurantID")
   void updateOwner(@Param("businessOwnerID") Long businessOwnerID, @Param("restaurantId") Long restaurantID);
 }
