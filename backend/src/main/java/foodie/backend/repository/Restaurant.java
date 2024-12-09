@@ -71,7 +71,7 @@ public class Restaurant {
 
     }
 
-    public void setRestaurantID(int restaurantID) {
+    public void setRestaurantID(long restaurantID) {
         this.restaurantID = restaurantID;
     }
     
