@@ -327,12 +327,12 @@ const OwnerPage: React.FC = () => {
       // Update existing restaurant
       setRestaurants((prevRestaurants) =>
         prevRestaurants.map((rest) =>
-          rest.businessOwnerId === newData.businessOwnerId ? newData : rest,
+          rest.restaurantID === newData.restaurantID ? newData : rest,
         ),
       )
       editRestaurant({
         newRestaurant: newData,
-        restaurantID: data.businessOwnerId,
+        restaurantID: newData.restaurantID,
         setError,
       })
       setEditFormVisible(false)
