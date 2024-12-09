@@ -13,6 +13,7 @@ import {
   Paper,
   Box,
 } from '@mui/material'
+import { REACT_APP_GOOGLE_API_KEY } from '../../constants'
 
 import { useNavigate } from 'react-router-dom' // Update to useNavigate
 
@@ -26,6 +27,8 @@ interface FormData {
   role: string
   businessName?: string
   businessAddress?: string
+  lat?: number
+  lng?: number
 }
 
 // Environment variables to configure API URL
@@ -54,32 +57,62 @@ const RegisterForm: React.FC = () => {
   const navigate = useNavigate()
 
   const [role, setRole] = useState('')
-  // const onSubmit = (data: FormData) => {
-  //   console.log('Form submitted:', data)
-  //   // Handle form submission (e.g., send data to the server)
-  // }
-  // Function to handle form submission
+  // Handle register submit
   const onSubmit = async (data: FormData) => {
-    console.log(JSON.stringify(data));
+    let coordinate = { lat: undefined, lng: undefined }
+
+    if (data.role === 'owner' && data.businessAddress) {
+      coordinate = await convertAddress(data.businessAddress)
+    }
+
+    const newData = {
+      ...data,
+      lat: coordinate.lat,
+      lng: coordinate.lng,
+    }
+
+    console.log(JSON.stringify(data))
     try {
       const response = await fetch(`http://localhost:8080/api/users/register`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
-      });
+        body: JSON.stringify(newData),
+      })
 
       if (response.ok) {
-        console.log("Registration successful:", data);
-        reset(); // Reset the form on successful submission
+        console.log('Registration successful:', newData)
+        reset() // Reset the form on successful submission
       } else {
-        console.error("Registration failed");
+        console.error('Registration failed')
       }
     } catch (error) {
-      console.error("Error during registration:", error);
+      console.error('Error during registration:', error)
     }
-  };
+  }
+  const convertAddress = async (address: string) => {
+    try {
+      const apiKey = REACT_APP_GOOGLE_API_KEY || ''
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          address,
+        )}&key=${apiKey}`,
+      )
+      const data = await response.json()
+      // console.log('convert', data)
+      if (data.status === 'OK') {
+        const location = data.results[0].geometry.location
+        return { lat: location.lat, lng: location.lng }
+      } else {
+        // console.error('Error fetching coordinates:', data.status)
+        return { lat: 0, lng: 0 }
+      }
+    } catch (err) {
+      console.error('Error fetching coordinates:', err)
+      return { lat: 0, lng: 0 }
+    }
+  }
 
   const handleRoleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value)
