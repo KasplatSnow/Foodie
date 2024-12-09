@@ -291,7 +291,7 @@ export default function RestaurantPage() {
           paddingBottom: '3rem',
         }}
       >
-        {restaurantData.ownerID !== 1 ? '' : <Button>Claim Restaurant</Button>}
+        { loginContext.userRole !== 'BUSINESS' || restaurantData.ownerID !== 1 ? '' : <Button variant = 'contained'>Claim Restaurant</Button>}
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
