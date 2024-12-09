@@ -1,4 +1,4 @@
-package com.example;
+package foodie.backend.repository;
 
 public class ShellRequest {
     private RestaurantRegistrationRequest restaurant;
