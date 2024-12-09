@@ -26,6 +26,8 @@ Backend:
     13. View restaurant chains list owned as owner
     14. Delete restaurant
 
+## WireFrame:
+
 ## Notes:
 
 Frontend 1. Install Node.js 2. Go into frontend directory 3. Install npm dependencies: npm install 4. Start frontend server: npm run dev
@@ -76,3 +78,11 @@ Meeting every MWF
 - Backlog
 - Burndown Chart
 - Weekly report
+
+### XP Core Value
+
+1. Communication
+   Communication was one of the key strengths of our team. We held meetings every Monday, Wednesday, and Friday, ensuring regular touchpoints to stay aligned. During these meetings, we discussed challenges, reviewed our progress, and planned the next steps. This structure ensured that everyone was on track and had a clear understanding of their tasks. If team members encountered any issues or needed assistance, we encouraged them to reach out through Discord for quick chats or calls.
+
+2. Feedback
+   We prioritized providing feedback during our sprint meetings. By addressing issues early, we minimized recurring mistakes and improved overall productivity. Additionally, we conducted thorough code reviews at the end of each sprint. This practice helped ensure that all changes were well-documented, error-free, and ready to merge into the master branch without risking production stability.
