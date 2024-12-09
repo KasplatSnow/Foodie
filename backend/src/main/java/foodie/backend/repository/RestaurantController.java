@@ -182,7 +182,7 @@ public class RestaurantController {
         restaurant.getReviewID())).collect(Collectors.toList());
     }
     
-    @PutMapping("setOwner/businessOwnerId/{businessOwnerID}/restaunantID/{restaurantID}")
+    @PutMapping("setOwner/businessOwnerId/{businessOwnerID}/restaurantID/{restaurantID}")
     public ResponseEntity<?> setOwnerForRestaurant(@PathVariable Long businessOwnerID, @PathVariable Long restaurantID) {
         restaurantService.setRestaurantOwner(businessOwnerID, restaurantID);        
         return ResponseEntity.ok("Set BusinessOwner");
