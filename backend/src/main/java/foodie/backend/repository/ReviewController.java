@@ -82,4 +82,21 @@ public class ReviewController {
             review.getReviewText(),
             review.getRating())).collect(Collectors.toList());    
     }
+
+    @PostMapping("/createshellrestaurant")
+    public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody ShellRequest shellRequest ) {
+        RestaurantRegistrationRequest shellRestaurant = shellRequest.getRestaurant();
+        ReviewWriteRequest writeRequest = shellRequest.getReview();
+        restaurantService.createShellRestaurant(shellRestaurant);
+
+        Restaurant newRestaurant = restaurantService.getRestaurantByNameAndAddress(shellRestaurant.getName(), shellRestaurant.getAddress());
+
+        Review newReview= new Review(userService.getUserByID(writeRequest.getUserID()),
+        restaurantService.getByRestaurantID(newRestaurant.getRestaurantID()),
+        writeRequest.getReviewText(), writeRequest.getRating());
+
+        reviewService.createReview(newReview);
+
+        return ResponseEntity.ok("Created Shell of a Restaurant and Wrote Review");
+    }
 }

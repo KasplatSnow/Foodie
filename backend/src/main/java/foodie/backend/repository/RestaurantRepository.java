@@ -17,6 +17,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   List<Restaurant> findByPrice(Integer price);
   
   List<Restaurant> findByName(String name);
+    
+  Restaurant findByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(String name, String Address);
 
   List<Restaurant> findAll();
 
@@ -42,4 +44,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   @Transactional
   @Query("UPDATE Restaurant r SET r.owner = (SELECT u FROM User u WHERE u.userID = :businessOwnerID) WHERE r.restaurantID = :restaurantID")
   void updateOwner(@Param("businessOwnerID") Long businessOwnerID, @Param("restaurantId") Long restaurantID);
+
+  @Modifying
+  @Transactional
+  @Query("INSERT INTO Restaurant(name, address, lng, lat) VALUES(:name, :address, :lng, :lat)")
+  void saveShellRestaurant(@Param("name") String name, @Param("address") String address, @Param("lng") double lng, @Param("lat") double lat);
 }

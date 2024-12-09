@@ -40,6 +40,11 @@ public class RestaurantService {
             photoRepository.save(photoList);
         }
     }
+    
+    public void createShellRestaurant(RestaurantRegistrationRequest shellRestaurant){
+        restaurantRepository.saveShellRestaurant(shellRestaurant.getName(), shellRestaurant.getAddress(), shellRestaurant.getLng(), shellRestaurant.getLat());
+    }
+    
     public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
         Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
         currentRestaurant.setName(updates.getName());
@@ -94,5 +99,9 @@ public class RestaurantService {
         
     public void setRestaurantOwner(Long businessOwnerID, Long restaurantID){
         restaurantRepository.updateOwner(businessOwnerID, restaurantID);
+    }
+
+    public Restaurant getRestaurantByNameAndAddress(String name, String address){
+        return restaurantRepository.findByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(name, address);
     }
 }

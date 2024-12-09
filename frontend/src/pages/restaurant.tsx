@@ -27,14 +27,15 @@ interface FetchRestaurantData {
   setRestaurantData: React.Dispatch<React.SetStateAction<any>>
   restaurantId: any
   setError: React.Dispatch<React.SetStateAction<string>>
-  state: any
+  setExists: any
 }
 
 const fetchRestaurantData = ({
   setRestaurantData,
   restaurantId,
   setError,
-}: FetchRestaurantData) => {
+  setExists,
+}) => {
   fetch(
     `http://localhost:8080/api/restaurants/getrestaurant/restaurantbyid/${restaurantId}`,
     {
@@ -44,15 +45,22 @@ const fetchRestaurantData = ({
       },
     },
   )
-    .then((res) => res.json())
+    .then((res) => {
+      setRestaurantData(res.json)
+      if (!res.ok) {
+        // If the response status is not 2xx, throw an error
+        throw new Error(`HTTP error! Status: ${res.status}`)
+      }
+      return res.json()
+    })
     .then((json) => {
       setError('')
-      setRestaurantData(json)
+      setExists(true)
       console.log(json)
     })
     .catch((e) => {
       setError(e.toString())
-      setRestaurantData([state])
+      setExists(false)
     })
 }
 
@@ -119,6 +127,46 @@ const postReview = ({
     })
     .then((json) => {
       setError('')
+      setReviewPostedTrigger((prev) => !prev)
+    })
+    .catch((e) => {
+      setError(e.toString())
+    })
+}
+
+interface PostShellReviewParams {
+  userID: any
+  rating: any
+  reviewText: any
+  setReviewPostedTrigger: any
+  setError: React.Dispatch<React.SetStateAction<string>>
+}
+
+const postShellReview = ({
+  userID,
+  rating,
+  reviewText,
+  setReviewPostedTrigger,
+  setError,
+}: PostShellReviewParams) => {
+  return fetch(`http://localhost:8080/api/review/createshellrestaurant`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userID, restaurantID, rating, reviewText }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
+      return res.json()
+    })
+    .then((json) => {
+      setError('')
+      setReviewPostedTrigger((prev) => {
+        !prev
+      })
     })
     .catch((e) => {
       setError(e.toString())
@@ -134,16 +182,16 @@ export default function RestaurantPage() {
   const [reviews, setReviews] = useState([])
   const [reviewText, setReviewText] = useState('')
   const [reviewPostedTrigger, setReviewPostedTrigger] = useState(false)
-  const navigate = useNavigate()
   const loginContext = useAuth()
   const [imageIndex, setImageIndex] = useState(0)
+  const [exists, setExists] = useState(false)
 
   useEffect(() => {
     fetchRestaurantData({
       setRestaurantData,
       restaurantId: searchParams.get('id'),
       setError,
-      state,
+      setExists,
     })
     fetchReviews({ setReviews, restaurantId: searchParams.get('id'), setError })
   }, [searchParams.get('id'), reviewPostedTrigger])
@@ -166,17 +214,46 @@ export default function RestaurantPage() {
     console.log(`Star ${rating} clicked!`)
   }
 
+  console.log('EXISTING?', exists)
+
   const handleSubmit = () => {
-    postReview({
-      userID: loginContext.userId,
-      restaurantID: searchParams.get('id'),
-      rating,
-      reviewText,
-      setReviewPostedTrigger,
-      setError,
-    }).then(() => {
-      setReviewPostedTrigger((prev) => !prev)
-    })
+    if (exists) {
+      postReview({
+        userID: loginContext.userId,
+        restaurantID: searchParams.get('id'),
+        rating,
+        reviewText,
+        setReviewPostedTrigger,
+        setError,
+      })
+    } else {
+      // case create shell restaurant then post a review
+      const shellRestaurant = {
+        name: state.name,
+        address: state.address,
+        rating: state.rating,
+        lat: state.lat,
+        lng: state.lng,
+      }
+
+      console.log('SHELL', shellRestaurant)
+
+      const review = {
+        userID: loginContext.userId,
+        rating,
+        reviewText,
+        setReviewPostedTrigger,
+        setError,
+      }
+
+      console.log('REVIEW', review)
+      /*
+      postShellReview({userID: loginContext.userId, rating, reviewText, setReviewPostedTrigger, setError})
+      .then(() => {
+        setReviewPostedTrigger((prev) => !prev);
+      });
+      */
+    }
   }
 
   if (restaurantData === null) {
@@ -210,13 +287,6 @@ export default function RestaurantPage() {
               restaurantData?.photo && restaurantData.photo.length > 0
                 ? `url("${restaurantData.photo[imageIndex]}")`
                 : `url("${state?.photo}")`,
-            // backgroundImage:
-            //   restaurantData?.photo && restaurantData.photo.length > 0
-            //     ? `url('${restaurantData.photo[0]}')`
-            //     : state?.photo && state.photo.length > 0
-            //     ? `url('${state.photo[0]}')`
-            //     : 'none',
-
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: 'white',
@@ -256,7 +326,9 @@ export default function RestaurantPage() {
                 ? Array.from({
                     length: Math.floor(restaurantData.rating),
                   }).map((_, index) => <StarIcon key={index} />)
-                : state.rating}
+                : Array.from({
+                    length: Math.floor(state.rating),
+                  }).map((_, index) => <StarIcon key={index} />)}
             </Box>
             <Typography variant="h3" sx={{ fontSize: '1.5rem' }}>
               Price Level:{' '}
@@ -279,7 +351,7 @@ export default function RestaurantPage() {
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
 
         <Typography variant="h2">Location and Hours</Typography>
-        <Typography>{restaurantData.price}</Typography>
+        <Typography>{restaurantData.address || state.address}</Typography>
         <Typography>{restaurantData.zipCode}</Typography>
 
         <Typography sx={{ fontWeight: 'bold' }}>
@@ -296,85 +368,85 @@ export default function RestaurantPage() {
         <Typography variant="h2">Reviews</Typography>
         {/* Review section */}
         <Card sx={{ padding: '2rem', marginTop: '2rem' }}>
-          {loginContext.userId ? (
-            <Box>
-              <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
-                Write Your Review
-              </Typography>
-              <TextareaAutosize
-                minRows={4}
-                maxRows={10}
-                placeholder="Your Review"
-                style={{
-                  width: '97%',
-                  padding: '16.5px 14px',
-                  marginBottom: '1rem',
-                  font: 'inherit',
-                  resize: 'none',
-                }}
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-              />
-              <Box
-                sx={{
-                  display: { xs: 'none', sm: 'flex' },
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Box sx={{ display: 'flex' }}>
-                  <Typography variant="h6">Rating:</Typography>
-                  {Array(5)
-                    .fill(0)
-                    .map((_, index) => (
-                      <Button
-                        key={index}
-                        onClick={() => handleStarClick(index + 1)} // Set the rating on click
-                        sx={{
-                          minWidth: '3rem',
-                          width: '3rem',
-                          color: index < rating ? 'gold' : 'gray', // Gold for selected, gray for unselected
-                        }}
-                      >
-                        <StarIcon />
-                      </Button>
-                    ))}
-                </Box>
-                <Button variant="contained" onClick={handleSubmit}>
-                  Submit Review
-                </Button>
+          {/* {loginContext.userId ? ( */}
+          <Box>
+            <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
+              Write Your Review
+            </Typography>
+            <TextareaAutosize
+              minRows={4}
+              maxRows={10}
+              placeholder="Your Review"
+              style={{
+                width: '97%',
+                padding: '16.5px 14px',
+                marginBottom: '1rem',
+                font: 'inherit',
+                resize: 'none',
+              }}
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            />
+            <Box
+              sx={{
+                display: { xs: 'none', sm: 'flex' },
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant="h6">Rating:</Typography>
+                {Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => handleStarClick(index + 1)} // Set the rating on click
+                      sx={{
+                        minWidth: '3rem',
+                        width: '3rem',
+                        color: index < rating ? 'gold' : 'gray', // Gold for selected, gray for unselected
+                      }}
+                    >
+                      <StarIcon />
+                    </Button>
+                  ))}
               </Box>
-
-              {/* Mobile view */}
-              <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                <Box sx={{ display: 'flex' }}>
-                  <Typography variant="h6">Rating:</Typography>
-                  {Array(5)
-                    .fill(0)
-                    .map((_, index) => (
-                      <Button
-                        key={index}
-                        onClick={() => handleStarClick(index + 1)}
-                        sx={{
-                          minWidth: '2rem',
-                          width: '2rem',
-                          color: index < rating ? 'gold' : 'gray',
-                        }}
-                      >
-                        <StarIcon />
-                      </Button>
-                    ))}
-                </Box>
-                <Button variant="contained" onClick={handleSubmit}>
-                  Submit Review
-                </Button>
-              </Box>
+              <Button variant="contained" onClick={handleSubmit}>
+                Submit Review
+              </Button>
             </Box>
-          ) : (
+
+            {/* Mobile view */}
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+              <Box sx={{ display: 'flex' }}>
+                <Typography variant="h6">Rating:</Typography>
+                {Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => handleStarClick(index + 1)}
+                      sx={{
+                        minWidth: '2rem',
+                        width: '2rem',
+                        color: index < rating ? 'gold' : 'gray',
+                      }}
+                    >
+                      <StarIcon />
+                    </Button>
+                  ))}
+              </Box>
+              <Button variant="contained" onClick={handleSubmit}>
+                Submit Review
+              </Button>
+            </Box>
+          </Box>
+          {/* ) : (
             <Typography sx={{ fontWeight: 'bold' }}>
               Must be signed in to write a review!
             </Typography>
-          )}
+          )} */}
         </Card>
 
         <Divider sx={{ marginTop: '2rem', marginBottom: '2rem' }} />
@@ -387,7 +459,7 @@ export default function RestaurantPage() {
                 <ReviewItem
                   user={item.userID}
                   rating={item.rating}
-                  content={item.review_text}
+                  content={item.content}
                 />
               </ListItem>
             ))
