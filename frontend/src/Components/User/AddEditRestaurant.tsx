@@ -32,8 +32,12 @@ const AddRestaurantForm: React.FC<{
   const handleSave = () => {
     const data = {
       ...formData,
-      cuisine: formData.cuisine.split(',').map((c) => c.trim()),
-      photo: formData.photo.split(',').map((p) => p.trim()),
+      cuisine: formData.cuisine
+        ? formData.cuisine.split(',').map((c) => c.trim())
+        : [],
+      photo: formData.photo
+        ? formData.photo.split(',').map((p) => p.trim())
+        : [],
     }
     onSave(data)
     onClose()
@@ -124,10 +128,10 @@ const EditRestaurantForm: React.FC<{
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  console.log("RESTAURANT", restaurant)
+  console.log('RESTAURANT', restaurant)
 
   const handleSave = () => {
-    console.log("EDIT", formData);
+    console.log('EDIT', formData)
     const data = {
       ...formData,
       cuisine: formData.cuisine.split(',').map((c: string) => c.trim()),
@@ -187,14 +191,14 @@ const EditRestaurantForm: React.FC<{
             rows={2}
           />
           <TextField
-            label="Cuisine (comma-separated)"
-            value={formData.cuisine.join(', ')}
+            label="Cuisine"
+            value={formData.cuisine}
             onChange={(e) => handleChange('cuisine', e.target.value)}
             fullWidth
           />
           <TextField
-            label="Photos (comma-separated)"
-            value={formData.photo.join(', ')}
+            label="Photos"
+            value={formData.photo}
             onChange={(e) => handleChange('photo', e.target.value)}
             fullWidth
           />
