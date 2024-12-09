@@ -1,11 +1,4 @@
-import {
-  Typography,
-  Button,
-  Box,
-  Container,
-  CardContent,
-  Card,
-} from '@mui/material'
+import { Typography, Button, Box, Container } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import Header from './Header'
@@ -98,70 +91,7 @@ const LandingPage = () => {
         style={{
           backgroundColor: '#F9F9F7',
         }}
-      >
-        <Container sx={{ flex: 1, padding: 3, backgroundColor: '#F9F9F7' }}>
-          <Box
-            sx={{
-              width: '100%',
-              height: '115px',
-              display: 'flex', // Use flexbox to align content
-              justifyContent: 'space-between', // Center content horizontally
-              textAlign: 'center',
-            }}
-          >
-            {business.map((column, index) => (
-              <Box key={index} sx={{ flex: '1', padding: '0 24px' }}>
-                <Typography variant="h6" align="center">
-                  {column.title}
-                </Typography>
-                <Typography>{column.content}</Typography>
-                <Typography sx={{ marginTop: '16px' }}>
-                  {column.link}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        </Container>
-      </div>
-      <Container sx={{ flex: 1, padding: 4 }}>
-        <Box sx={{ padding: 4 }}>
-          {/* Title for the entire section */}
-          <Typography
-            variant="h4"
-            sx={{ textAlign: 'center', marginBottom: 2 }}
-          >
-            Top 4 Restaurants
-          </Typography>
-          {/* Box containing all the individual boxes */}
-          <Box display="flex" justifyContent="space-between" gap={4}>
-            {boxes.map((box, index) => (
-              <Card key={index} sx={{ flex: 1, borderRadius: '12px' }}>
-                {/* Centering the image */}
-                <img
-                  src={box.image}
-                  alt={box.title}
-                  style={{
-                    display: 'block', // Set image to block
-                    margin: '0 auto', // Center the image horizontally
-                    width: '100%', // Full width of the card
-                    maxHeight: '200px',
-                    height: '100%',
-                    objectFit: 'cover', // Maintain aspect ratio and cover the area
-                  }}
-                />
-                <CardContent>
-                  <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                    {box.title}
-                  </Typography>
-                  <Typography sx={{ textAlign: 'center' }}>
-                    {box.content}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-        </Box>
-      </Container>
+      ></div>
     </div>
   )
 }
