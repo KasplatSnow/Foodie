@@ -1,5 +1,8 @@
 -- starting users
 insert into user (email, username, password, role, phone_number)
+values ("tempowner@gmail.com", "tempowner", "tempowner", "BUSINESS", "(123)123-1234");
+
+insert into user (email, username, password, role, phone_number)
 values ("owenowner@gmail.com", "owenowner", "owenowner", "BUSINESS", "(123)123-1234");
 
 insert into user (email, username, password, role, phone_number)
