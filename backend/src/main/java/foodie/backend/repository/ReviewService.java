@@ -1,6 +1,7 @@
 package foodie.backend.repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import foodie.backend.repository.Review;
 import foodie.backend.repository.ReviewRepository;
@@ -18,6 +19,11 @@ public class ReviewService {
     @Autowired
     private final ReviewRepository reviewRepository;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private UserRepository userRepository;
     /**
      * Constructs the review service object using the review repository
      * 
@@ -34,8 +40,33 @@ public class ReviewService {
      * @param review
      * @return a Review object
      */
-    public Review createReview(Review review) {
-        return reviewRepository.save(review);
+    public ResponseEntity<?> createReview(ReviewWriteRequest writeRequest) {
+            //check if restaurant already exists via
+        if (getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
+            return ResponseEntity.badRequest().body("User wrote review already");
+        }
+    
+        //verify request
+        if (writeRequest.getRating() == null) {
+            return ResponseEntity.badRequest().body("Rating is required");
+        }
+        if (writeRequest.getReviewText() == null || writeRequest.getReviewText().isEmpty()) {
+            return ResponseEntity.badRequest().body("Review is required");
+        }
+        if (writeRequest.getRestaurantID() == null) {
+            return ResponseEntity.badRequest().body("RestaurantID is required");
+        }
+        if (writeRequest.getUserID() == null) {
+            return ResponseEntity.badRequest().body("UserID is required");
+        }
+
+        Review newReview= new Review(userRepository.findByID(writeRequest.getUserID()),
+        restaurantRepository.findByRestaurantID(writeRequest.getRestaurantID()),
+        writeRequest.getReviewText(), writeRequest.getRating());
+
+        reviewRepository.save(newReview);
+
+        return ResponseEntity.ok("Wrote Review");
     }
 
     /**
@@ -54,8 +85,14 @@ public class ReviewService {
      * @param restaurantId
      * @return a review list
      */
-    public List<Review> getReviewByRestaurantID(Long restaurantId){
-        return reviewRepository.findAllRestaurantReviews(restaurantId);
+    public List<ReviewDTO> getReviewByRestaurantID(Long restaurantId){
+        List<Review> reviews = reviewRepository.findAllRestaurantReviews(restaurantId);
+        return reviews.stream().map(review -> new ReviewDTO(
+            review.getReviewID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
+            review.getReviewText(),
+            review.getRating())).collect(Collectors.toList());
     }
 
     /**
@@ -84,7 +121,13 @@ public class ReviewService {
      * @param userID
      * @return a review list
      */
-    public List<Review> getReviewByUserID(Long userID){
-        return reviewRepository.findReviewByUserID(userID);
+    public List<ReviewDTO> getReviewByUserID(Long userID){
+        List<Review> reviews = reviewRepository.findReviewByUserID(userID);
+        return reviews.stream().map(review -> new ReviewDTO(
+            review.getReviewID(),
+            review.getRestaurant().getRestaurantID(),
+            review.getUser().getUserID(),
+            review.getReviewText(),
+            review.getRating())).collect(Collectors.toList());
     }
 }
