@@ -114,7 +114,7 @@ export default function ProfilePage() {
                 {/* Avatar */}
                 <Avatar
                     alt="John Doe"
-                    src="/path/to/avatar.jpg" // Replace with a real image path
+                    src={userData.pfp} // Replace with a real image path
                     sx={{
                     width: 100,
                     height: 100,

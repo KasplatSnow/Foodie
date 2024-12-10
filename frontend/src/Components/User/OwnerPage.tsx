@@ -15,6 +15,7 @@ import {
   DialogActions,
   DialogContentText,
   Snackbar,
+  CircularProgress
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add'
@@ -402,6 +403,15 @@ const OwnerPage: React.FC = () => {
     closeDeleteDialog()
   }
 
+  if (userData == null) {  // If userData is still null, show a loading indicator
+    return (
+        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress />
+            <Typography>Must be logged in</Typography>
+        </Box>
+    );
+}
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       {/* Header */}
@@ -439,7 +449,7 @@ const OwnerPage: React.FC = () => {
           {/* Avatar */}
           <Avatar
             alt="John Doe"
-            src="/path/to/avatar.jpg" // Replace with a real image path
+            src={userData.pfp} // Replace with a real image path
             sx={{
               width: 100,
               height: 100,
