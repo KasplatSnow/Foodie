@@ -53,7 +53,7 @@ public class ReviewController {
      * @param restaurantID
      * @return a list of reviews
      */
-  @GetMapping("/allreviews/restaurantID/{restaurantID}") /* UPDATED PATH  AND CREATED REVIEWDTO*/
+  @GetMapping("/allreviews/restaurantID/{restaurantID}")
     public List<ReviewDTO> getReviews(@PathVariable Long restaurantID) {
         return reviewService.getReviewByRestaurantID(restaurantID);
 
