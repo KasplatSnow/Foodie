@@ -239,7 +239,7 @@ const AdminPage: React.FC = () => {
           paddingBottom: '40px',
         }}
       >
-        {isLoggedIn && userRole === 'admin' ? (
+        {isLoggedIn && userRole === 'ADMIN' ? (
           <Box
             sx={{
               width: '80%',

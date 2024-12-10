@@ -34,8 +34,8 @@ const LoginForm: React.FC = () => {
 
     const loginData = {
       ...data,
-      role: role === 'user' ? 'USER' : 'BUSINESS', // Add role explicitly
-    };
+      role: role.toUpperCase(), // Convert role to uppercase for consistency
+    }
 
     try {
       const response = await fetch(`http://localhost:8080/api/auth/login`, {
@@ -44,26 +44,29 @@ const LoginForm: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginData),
-      });
+      })
 
       if (response.ok) {
-        const responseData = await response.json();
-        console.log("Login successful:", responseData);
+        const responseData = await response.json()
+        console.log("Login successful:", responseData)
 
         // Extract userID and role from the response and set context
-        const { userID, role } = responseData;
+        const { userID, role } = responseData
         logIn(role, userID)
 
-        if (data.role !== 'owner') {
-          navigate('/home')
+        // Redirect based on role
+        if (role === 'ADMIN') {
+          navigate('/restaurants')
+        } else if (role === 'BUSINESS') {
+          navigate('/profile/owner')
         } else {
-          navigate('/user-dashboard')
+          navigate('/home')
         }
       } else {
-        console.error("Registration failed");
+        console.error("Login failed")
       }
     } catch (error) {
-      console.error("Error during registration:", error);
+      console.error("Error during login:", error)
     }
   }
 
@@ -102,18 +105,15 @@ const LoginForm: React.FC = () => {
               centered
             >
               <Tab value="user" label="User" />
-              <Tab value="owner" label="Owner" />
+              <Tab value="business" label="Owner" />
+              <Tab value="admin" label="Admin" />
             </Tabs>
             <Box sx={{ mt: 2 }}>
-              {role === 'user' ? (
-                <Typography variant="body1">
-                  You are logging in as a User
-                </Typography>
-              ) : (
-                <Typography variant="body1">
-                  You are logging in as an Owner
-                </Typography>
-              )}
+              <Typography variant="body1">
+                {`You are logging in as a ${
+                  role.charAt(0).toUpperCase() + role.slice(1)
+                }`}
+              </Typography>
             </Box>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
