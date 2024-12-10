@@ -1,5 +1,6 @@
 package foodie.backend.repository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,25 @@ public class BusinessOwnerService {
      * @param userID the ID of the business owner
      * @return the list of restaurants owned
      */
-    public List<Restaurant> getRestaurantByID(Long userID){
-        return businessOwnerRepository.findRestaurantByOwnerID(userID);
+    public List<RestaurantDTO> getRestaurantByID(Long userID){
+        List<Restaurant> restaurants = businessOwnerRepository.findRestaurantByOwnerID(userID);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+            restaurant.getLng(),
+            restaurant.getLat(),
+            restaurant.getReviewID())).collect(Collectors.toList());
     }
 
     /**
@@ -46,7 +64,14 @@ public class BusinessOwnerService {
      * @param userID the ID to find the business owner
      * @return the business owner object with ID
      */
-    public BusinessOwner getBusinessOwnerByID(Long userID){
-        return businessOwnerRepository.findBusinessOwnerByID(userID);
+    public BusinessOwnerDTO getBusinessOwnerByID(Long userID){
+        BusinessOwner businessOwner = businessOwnerRepository.findBusinessOwnerByID(userID);
+        return new BusinessOwnerDTO(
+            businessOwner.getUserID(),
+            businessOwner.getUsername(),
+            businessOwner.getAddress(),
+            businessOwner.getPhoneNumber(),
+            businessOwner.getEmail(),
+            businessOwner.getRestaurantID());
     }
 }
