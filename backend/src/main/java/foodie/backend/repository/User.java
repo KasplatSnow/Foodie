@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "user")
+@Table(name = "[user]")
 @DiscriminatorColumn(name = "role", discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("USER")
 public class User {
