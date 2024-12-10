@@ -3,9 +3,11 @@ package foodie.backend.repository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 
 import foodie.backend.repository.Restaurant;
 import foodie.backend.repository.RestaurantRegistrationRequest;
@@ -28,6 +30,8 @@ public class RestaurantService {
     @Autowired
     private CuisineRepository cuisineRepository;
     
+    @Autowired
+    private BusinessOwnerRepository businessOwnerRepository;
     /**
      * Create a restaurant in the db using the restaurant object alongisde photos and cuisines.
      * 
@@ -35,14 +39,53 @@ public class RestaurantService {
      * @param photos
      * @param cuisines
      */
-    public void createRestaurant(Restaurant restaurant, List<String> photos, List<String> cuisines) {
-        restaurantRepository.save(restaurant);
+    public ResponseEntity<?> createRestaurant(RestaurantRegistrationRequest registrationRequest) {
+        List<String> photos = registrationRequest.getPhoto();
+        List<String> cuisines = registrationRequest.getCuisine();
+
+        //check if restaurant already exists via
+        if(getAddressExist(registrationRequest.getAddress())){
+            return ResponseEntity.badRequest().body("Address is already registered");
+        }
+
+        //verify request
+        if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (registrationRequest.getZipCode() == null) { //in react, ensure an int
+            return ResponseEntity.badRequest().body("Password is required");
+        }
+        if (registrationRequest.getName() == null || registrationRequest.getName().isEmpty()) {
+            return ResponseEntity.badRequest().body("Role is required");
+        }
+        if (registrationRequest.getBusinessOwnerId() == null) {
+        return ResponseEntity.badRequest().body("Role is required");
+        }
+        if (registrationRequest.getAddress() == null || registrationRequest.getAddress().isEmpty()) {
+        return ResponseEntity.badRequest().body("Role is required");
+        }
+        
+        //Creates new Restaurantt Entity
+        Restaurant newRestaurant = new Restaurant();
+        newRestaurant.setBusinessOwner(businessOwnerRepository.findBusinessOwnerByID(registrationRequest.getBusinessOwnerId()));
+        newRestaurant.setEmail(registrationRequest.getEmail());
+        newRestaurant.setZipCode(registrationRequest.getZipCode());
+        newRestaurant.setName(registrationRequest.getName());
+        newRestaurant.setPhoneNumber(registrationRequest.getPhoneNumber());
+        newRestaurant.setAddress(registrationRequest.getAddress());
+        newRestaurant.setDescription(registrationRequest.getDescription());
+        newRestaurant.setRating(registrationRequest.getRating());
+        newRestaurant.setPrice(registrationRequest.getPrice());
+        newRestaurant.setHours(registrationRequest.getHours());
+        newRestaurant.setLng(registrationRequest.getLng());
+        newRestaurant.setLat(registrationRequest.getLat());
+        restaurantRepository.save(newRestaurant);
 
         // Save cuisines
         for (String cuisine : cuisines) {
             Cuisine cuisineList = new Cuisine();
             cuisineList.setCuisine(cuisine);
-            cuisineList.setRestaurant(restaurant);
+            cuisineList.setRestaurant(newRestaurant);
             cuisineRepository.save(cuisineList);
         }
         
@@ -50,9 +93,11 @@ public class RestaurantService {
         for (String photo : photos) {
             Photo photoList = new Photo();
             photoList.setPhoto(photo);
-            photoList.setRestaurant(restaurant);
+            photoList.setRestaurant(newRestaurant);
             photoRepository.save(photoList);
         }
+
+        return ResponseEntity.ok("Registration successful");
     }
     
     /**
@@ -71,8 +116,8 @@ public class RestaurantService {
      * @param updates
      * @return the updated restaurant
      */
-    public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
-        Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID);
+    Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
+        Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID); //.orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
         if(updates.getName() != null){
             currentRestaurant.setName(updates.getName());
         }
@@ -134,8 +179,25 @@ public class RestaurantService {
      * @param zipCode
      * @return restaurant(s) with the associated zipcode
      */
-    public List<Restaurant> getByZipCode(String zipCode){
-        return restaurantRepository.findByZipCode(zipCode);
+    public List<RestaurantDTO> getByZipCode(String zipCode){
+        List<Restaurant> restaurants = restaurantRepository.findByZipCode(zipCode);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+            restaurant.getLng(),
+            restaurant.getLat(),
+            restaurant.getReviewID())).collect(Collectors.toList());
     }
 
     //finds restaurants in an address
@@ -166,8 +228,25 @@ public class RestaurantService {
      * @param name
      * @return the restaurants with the searched name
      */
-    public List<Restaurant> getByName(String name) {
-        return restaurantRepository.findByName(name);
+    public List<RestaurantDTO> getByName(String name) {
+        List<Restaurant> restaurants = restaurantRepository.findByName(name);
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+            restaurant.getLng(),
+            restaurant.getLat(),
+            restaurant.getReviewID())).collect(Collectors.toList());
     }
 
     /**
@@ -175,8 +254,25 @@ public class RestaurantService {
      * 
      * @return the restaurant list
      */
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.findAll();
+    public List<RestaurantDTO> getAllRestaurants() {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        return restaurants.stream().map(restaurant -> new RestaurantDTO(
+        restaurant.getRestaurantID(),
+        restaurant.getName(),
+        restaurant.getAddress(),
+        restaurant.getZipCode(),
+        restaurant.getPhoneNumber(),
+        restaurant.getEmail(),
+        restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+        restaurant.getHours(),
+        restaurant.getDescription(),
+        restaurant.getRating(),
+        restaurant.getPrice(),
+        restaurant.getOwnerID(),
+        restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+        restaurant.getLng(),
+        restaurant.getLat(),
+        restaurant.getReviewID())).collect(Collectors.toList());
     }
 
     /**
@@ -194,8 +290,25 @@ public class RestaurantService {
      * @param restaurantID
      * @return a restaurant
      */
-    public Restaurant getByRestaurantID(Long restaurantID){
-        return restaurantRepository.findByRestaurantID(restaurantID);
+    public RestaurantDTO getByRestaurantID(Long restaurantID){
+        Restaurant restaurant = restaurantRepository.findByRestaurantID(restaurantID);
+        return new RestaurantDTO(
+            restaurant.getRestaurantID(),
+            restaurant.getName(),
+            restaurant.getAddress(),
+            restaurant.getZipCode(),
+            restaurant.getPhoneNumber(),
+            restaurant.getEmail(),
+            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
+            restaurant.getHours(),
+            restaurant.getDescription(),
+            restaurant.getRating(),
+            restaurant.getPrice(),
+            restaurant.getOwnerID(),
+            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
+            restaurant.getLng(),
+            restaurant.getLat(),
+            restaurant.getReviewID());
     }
     
     /**
