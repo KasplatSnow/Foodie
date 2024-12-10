@@ -1,25 +1,78 @@
 Week 1
-  Established UML Diagrams and UI Desgin
-  Pushed base classes for application
+Established UML Diagrams and UI Desgin
+Pushed base classes for application
 
 Week 2
-
+Updated UML and UI Designs
+Established the basic frontend and backend
+	
 Week 3
-
+Planned the structures for backend
+Homepage UI created
+Designed classes for User, Owner, Admin, BusinessOwner, Restaurant
+Set up Database
+	
 Week 4
+Updated Designs for classes of User, Owner, Admin, BusinessOwner
+Designed API for Review
+Create Login and Register
 
 Week 5
+Created Search bar for name, location, zipcode
+Api for User, Admin, BusinessOwner
+
 
 Week 6
+Created Pages for Admin and Owner
+Created Search bar for cuisine, price, rating
+Api for Restaurant and Review
 
 Week 7
+Pushed new Changes and Implementations, and small bug fixes
 
 Week 8
+Created Repository, Service, and Controller Classes for Restaurant, User, 
+BusinessOwner, and Admin
+Fixed general bugs
+Researched Google Api
+Debugged backend and researched connectivity and Apis for backend
+Set up Cypress for backend to test
+Designed UI for deleting restaurant, restaurant list, google maps
 
 Week 9
-
+Created functions to get BusinessOwners and Users by IDs or usernames
+Created function to get Restaurant details based on BusinessOwner IDs
+Created DTO classes to handle data from the backend better for Restaurants
+	
+	
 Week 10
+Connected backend and frontend
+Added function to retrieve user details and verify them during login, Authentication
+Updated Register function
+Changed data type of price and rating of Restaurant
+Added Login function
+UI design for Admin
 
 Week 11
+Worked on function so Owner could be claim a Restaurant
+Created Photo and Cuisine classes and their helpers
+Created Photo and Cuisine Tables
+Added functionality to get all restaurants
+Queries for Restaurants by Zipcode
 
 Week 12
+Finished register, login, logout, and customer pages
+Fixed error in frontend with listings being overrun by one when and listing is updated
+Added a Wrapper class ShellRestaurant so front end could send a review and basic restaurant details of a restaurant no in the database
+Fixed Deletion of Owners and Users
+Added Photo update function
+Added setOwner function
+Fixed Retaurant Deletion function
+Added Owner being added to a Restaurant function
+Owner being able to close restaurants
+Admin deleting closed restaurants
+Fixed Style
+Code Documentation
+Created Diagrams
+Created and Connected to Azure remote cloud Database
+Modified code to work with Azure connection
