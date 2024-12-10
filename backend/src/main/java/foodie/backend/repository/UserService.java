@@ -1,7 +1,10 @@
 package foodie.backend.repository;
+
 import foodie.backend.repository.User;
 import foodie.backend.repository.UserRepository;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +36,47 @@ public class UserService {
      * @param user
      * @return the user object
      */
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public ResponseEntity<?> createUser(UserRegistrationRequest registrationRequest) {
+        //verify request
+        if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (registrationRequest.getPassword() == null || registrationRequest.getPassword().isEmpty()) {
+            return ResponseEntity.badRequest().body("Password is required");
+        }
+        if (registrationRequest.getRole() == null || registrationRequest.getRole().isEmpty()) {
+            return ResponseEntity.badRequest().body("Role is required");
+        }
+
+        //check if user already exists via
+        if (!checkUserEmail(registrationRequest.getEmail()).isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is already registered");
+        }
+
+        //create User obj then check role to determine type, then set data
+        User newUser;
+        String role = registrationRequest.getRole();
+        if(role.equals("USER")){
+          newUser = new User();
+        }
+        else if(role.equals("BUSINESS")){
+          newUser = new BusinessOwner();
+        }
+        else if (role.equals("ADMIN")){
+          newUser = new Admin();
+        }
+        else{
+          return ResponseEntity.badRequest().body("Invalid User Type");
+
+        }
+
+        newUser.setEmail(registrationRequest.getEmail());
+        newUser.setPassword(registrationRequest.getPassword());
+        newUser.setUsername(registrationRequest.getUsername());
+        newUser.setPhoneNumber(registrationRequest.getPhoneNumber());
+
+        userRepository.save(newUser);
+        return ResponseEntity.ok("Registration successful");
     }
 
     /**
@@ -43,8 +85,18 @@ public class UserService {
      * @param username
      * @return list of users
      */
-    public List<User> getUserByUsername(String username){
-        return userRepository.findByUsername(username);
+    public List<UserDTO> getUserByUsername(String username){
+        List<User> users = userRepository.findByUsername(username);
+        return users.stream().map(user -> new UserDTO(
+            user.getUserID(),
+            user.getUsername(),
+            user.getRole().toString(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getAddress(),
+            user.getPhoneNumber(),
+            user.getReviewID(),
+            user.getPfp())).collect(Collectors.toList());
     }
 
     /**
@@ -62,8 +114,18 @@ public class UserService {
      * @param userId
      * @return the user
      */
-    public User getUserByID(Long userId){
-        return userRepository.findByID(userId);
+    public UserDTO getUserByID(Long userId){
+        User user = userRepository.findByID(userId);
+        return new UserDTO(
+            user.getUserID(),
+            user.getUsername(),
+            user.getRole().toString(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getAddress(),
+            user.getPhoneNumber(),
+            user.getReviewID(),
+            user.getPfp());
     }
 
     /**
