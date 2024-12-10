@@ -10,6 +10,9 @@ Backend: Cameron Lee
 
 Documentation: Patrick Chau
 
+Meeting every MWF at 9PM on Discord.
+2 weeks per sprint.
+
 ## Features
 
     1. Register user
