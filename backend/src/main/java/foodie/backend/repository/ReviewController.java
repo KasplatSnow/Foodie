@@ -22,9 +22,6 @@ public class ReviewController {
 
     @Autowired
     private final ReviewService reviewService;
-    
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private RestaurantService restaurantService;
@@ -44,36 +41,9 @@ public class ReviewController {
      * @param writeRequest
      * @return a response
      */
-  @PostMapping("/write")/*UPDATED BAD REQUEST RESPONSES */
+  @PostMapping("/write")
   public ResponseEntity<?> writeReview(@RequestBody ReviewWriteRequest writeRequest) {
-            //check if restaurant already exists via
-        if (!reviewService.getReviewExist(writeRequest.getRestaurantID(), writeRequest.getUserID())) {
-            return ResponseEntity.badRequest().body("User wrote review already");
-        }
-    
-        //verify request
-        if (writeRequest.getRating() == null) {
-            return ResponseEntity.badRequest().body("Rating is required");
-        }
-        if (writeRequest.getReviewText() == null || writeRequest.getReviewText().isEmpty()) {
-            return ResponseEntity.badRequest().body("Review is required");
-        }
-        if (writeRequest.getRestaurantID() == null) {
-            return ResponseEntity.badRequest().body("RestaurantID is required");
-        }
-        if (writeRequest.getUserID() == null) {
-            return ResponseEntity.badRequest().body("UserID is required");
-        }
-
-        Review newReview= new Review(userService.getUserByID(writeRequest.getUserID()),
-        restaurantService.getByRestaurantID(writeRequest.getRestaurantID()),
-        writeRequest.getReviewText(), writeRequest.getRating());
-        
-        //save the user to the database
-        reviewService.createReview(newReview);
-
-        //return success message
-        return ResponseEntity.ok("Review Creation successful");
+        return reviewService.createReview(writeRequest);
     }
 
     //retrieves all reviews for a restaurant
@@ -83,15 +53,10 @@ public class ReviewController {
      * @param restaurantID
      * @return a list of reviews
      */
-    @GetMapping("/allreviews/restaurantID/{restaurantID}") /* UPDATED PATH  AND CREATED REVIEWDTO*/
+  @GetMapping("/allreviews/restaurantID/{restaurantID}") /* UPDATED PATH  AND CREATED REVIEWDTO*/
     public List<ReviewDTO> getReviews(@PathVariable Long restaurantID) {
-        List<Review> reviews = reviewService.getReviewByRestaurantID(restaurantID);
-        return reviews.stream().map(review -> new ReviewDTO(
-            review.getReviewID(),
-            review.getRestaurant().getRestaurantID(),
-            review.getUser().getUserID(),
-            review.getReviewText(),
-            review.getRating())).collect(Collectors.toList());
+        return reviewService.getReviewByRestaurantID(restaurantID);
+
     }
 
     /**
@@ -100,15 +65,9 @@ public class ReviewController {
      * @param userID
      * @return a list of user reviews
      */
-    @GetMapping("/userreviews/userID/{userID}")
-    public List<ReviewDTO> getUserReviews(@PathVariable Long userID) {
-        List<Review> reviews = reviewService.getReviewByUserID(userID);
-        return reviews.stream().map(review -> new ReviewDTO(
-            review.getReviewID(),
-            review.getRestaurant().getRestaurantID(),
-            review.getUser().getUserID(),
-            review.getReviewText(),
-            review.getRating())).collect(Collectors.toList());    
+   @GetMapping("/userreviews/userID/{userID}")
+    public List<ReviewDTO> getUserReviews(@RequestParam Long userID) {
+        return reviewService.getReviewByUserID(userID);
     }
 
     /**
@@ -118,18 +77,13 @@ public class ReviewController {
      * @return a response
      */
     @PostMapping("/createshellrestaurant")
-    public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody ShellRequest shellRequest ) {
+    public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody ShellRequest shellRequest) {
         RestaurantRegistrationRequest shellRestaurant = shellRequest.getRestaurant();
         ReviewWriteRequest writeRequest = shellRequest.getReview();
+
         restaurantService.createShellRestaurant(shellRestaurant);
 
-        Restaurant newRestaurant = restaurantService.getRestaurantByNameAndAddress(shellRestaurant.getName(), shellRestaurant.getAddress());
-
-        Review newReview= new Review(userService.getUserByID(writeRequest.getUserID()),
-        restaurantService.getByRestaurantID(newRestaurant.getRestaurantID()),
-        writeRequest.getReviewText(), writeRequest.getRating());
-
-        reviewService.createReview(newReview);
+        reviewService.createReview(writeRequest);
 
         return ResponseEntity.ok("Created Shell of a Restaurant and Wrote Review");
     }
