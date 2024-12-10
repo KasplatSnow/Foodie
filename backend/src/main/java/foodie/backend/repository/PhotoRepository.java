@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 
+/**
+ * Repository interface for performing CRUD operations on "Photos".
+ * Extends JpaRepository to provide built-in methods using db queries.
+ */
+
 @Repository
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
     

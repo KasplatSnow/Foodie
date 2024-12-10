@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Controller class for handling API endpoints related to restaurants.
+ * Provides functionality for creating restaurants, getting restaurants, updating restaurants, and setting the owner for a restaurant.
+ */
+
 @RestController
 @RequestMapping("/api/restaurants")
 public class RestaurantController {
@@ -26,6 +31,12 @@ public class RestaurantController {
     @Autowired
     private BusinessOwnerService businessOwnerService;
   
+    /**
+     * Creates a restaurant using a request
+     * 
+     * @param registrationRequest
+     * @return a response
+     */
     @PostMapping("/register")
     public ResponseEntity<?> createRestaurant(@RequestBody RestaurantRegistrationRequest registrationRequest) {
         //check if restaurant already exists via
@@ -71,6 +82,12 @@ public class RestaurantController {
         return ResponseEntity.ok("Registration successful");
     }
 
+    /**
+     * Gets a restaurant or list by zip code
+     * 
+     * @param zipCode
+     * @return a list of restaurant data-transfer-objects
+     */
     @GetMapping("/getrestaurant/restaurantbyzipcode/{zipCode}")
     public List<RestaurantDTO> getRestaurantByZipCode(@PathVariable String zipCode) {
         List<Restaurant> restaurants = restaurantService.getByZipCode(zipCode);
@@ -94,6 +111,12 @@ public class RestaurantController {
 
     }
     
+    /**
+     * Get a list of restaurants by name
+     * 
+     * @param name
+     * @return a list of restaurant data-transfer-objects
+     */
     @GetMapping("/getrestaurant/restaurantbyname/{name}")/*ADDED */
     public List<RestaurantDTO> getRestaurantByName(@PathVariable String name) {
         List<Restaurant> restaurants = restaurantService.getByName(name);
@@ -115,7 +138,13 @@ public class RestaurantController {
             restaurant.getLat(),
             restaurant.getReviewID())).collect(Collectors.toList());
     }
-    
+
+    /**
+     * Get a restaurant by ID
+     * 
+     * @param restaurantID
+     * @return a restaurant data-transfer-objects
+     */
     @GetMapping("/getrestaurant/restaurantbyid/{restaurantID}")
     public RestaurantDTO getRestaurantByName(@PathVariable Long restaurantID) {
         Restaurant restaurant = restaurantService.getByRestaurantID(restaurantID);
@@ -138,6 +167,13 @@ public class RestaurantController {
             restaurant.getReviewID());
     }
     
+    /**
+     * Update a restaurant using the ID and a request
+     * 
+     * @param restaurantID
+     * @param updates
+     * @return the response
+     */
     @PutMapping("update/restaurantid/{restaurantID}")
     public ResponseEntity<RestaurantDTO> putUpdateRestaurant(@PathVariable Long restaurantID, @RequestBody RestaurantRegistrationRequest updates) {
         Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurantID,updates);
@@ -161,6 +197,11 @@ public class RestaurantController {
         return ResponseEntity.ok(updatedRestaurant);
     }
 
+    /**
+     * Get the list of all public restaurants in the db
+     * 
+     * @return the restaurant list
+     */
     @GetMapping("/allrestaurants")
     public List<RestaurantDTO> getAllRestaurants(){
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
@@ -183,6 +224,13 @@ public class RestaurantController {
         restaurant.getReviewID())).collect(Collectors.toList());
     }
     
+    /**
+     * Sets the owner of the restaurant using owner ID and restaurant ID
+     * 
+     * @param businessOwnerID
+     * @param restaurantID
+     * @return the response
+     */
     @PutMapping("setOwner/businessOwnerId/{businessOwnerID}/restaurantID/{restaurantID}")
     public ResponseEntity<?> setOwnerForRestaurant(@PathVariable Long businessOwnerID, @PathVariable Long restaurantID) {
         restaurantService.setRestaurantOwner(businessOwnerID, restaurantID);        

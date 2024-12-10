@@ -5,8 +5,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Configuration class for setting up CORS settings in the application. 
+ * This introduces certain security policies.
+ */
+
 @Configuration
 public class WebConfig {
+
+     /**
+     * Configures CORS settings for the application. This method allows certain
+     * origins, methods, and headers for the API endpoint.
+     * 
+     * @return a WebMvcConfigurer bean with CORS config
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

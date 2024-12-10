@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for performing CRUD operations on "Reviews".
+ * Extends JpaRepository to provide built-in methods using db queries.
+ * Generally finds reviews and if the review exists using DB queries
+ */
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
