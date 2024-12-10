@@ -49,48 +49,8 @@ public class UserController {
    */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationRequest registrationRequest) {
-        //verify request
-        if (registrationRequest.getEmail() == null || registrationRequest.getEmail().isEmpty()) {
-            return ResponseEntity.badRequest().body("Email is required");
-        }
-        if (registrationRequest.getPassword() == null || registrationRequest.getPassword().isEmpty()) {
-            return ResponseEntity.badRequest().body("Password is required");
-        }
-        if (registrationRequest.getRole() == null || registrationRequest.getRole().isEmpty()) {
-            return ResponseEntity.badRequest().body("Role is required");
-        }
-
-        //check if user already exists via
-        if (userService.getUserByEmail(registrationRequest.getEmail()) != null) {
-            return ResponseEntity.badRequest().body("Email is already registered");
-        }
-
-        //create User obj then check role to determine type, then set data
-        User newUser;
-        String role = registrationRequest.getRole();
-        if(role.equals("USER")){
-          newUser = new User();
-        }
-        else if(role.equals("BUSINESS")){
-          newUser = new BusinessOwner();
-        }
-        else if (role.equals("ADMIN")){
-          newUser = new Admin();
-        }
-        else{
-          return ResponseEntity.badRequest().body("Invalid User Type");
-
-        }
-        newUser.setEmail(registrationRequest.getEmail());
-        newUser.setPassword(registrationRequest.getPassword());
-        newUser.setUsername(registrationRequest.getUsername());
-        newUser.setPhoneNumber(registrationRequest.getPhoneNumber());
-        
         //save the user to the database
-        userService.createUser(newUser);
-
-        //return success message
-        return ResponseEntity.ok("Registration successful");
+        return userService.createUser(registrationRequest);
     }
   
     /**
@@ -101,17 +61,7 @@ public class UserController {
      */
     @GetMapping("/getuserbyid/userID/{userID}")
     public UserDTO getUserById(@PathVariable Long userID) {
-        User user = userService.getUserByID(userID);
-        return new UserDTO(
-            user.getUserID(),
-            user.getUsername(),
-            user.getRole().toString(),
-            user.getPassword(),
-            user.getEmail(),
-            user.getAddress(),
-            user.getPhoneNumber(),
-            user.getReviewID(),
-            user.getPfp());
+        return userService.getUserByID(userID);
     }
     
     /**
@@ -122,17 +72,7 @@ public class UserController {
      */
     @GetMapping("/getuserbyusername/username/{username}")
     public List<UserDTO> getUserByUsername(@PathVariable String username) {
-        List<User> users = userService.getUserByUsername(username);
-        return users.stream().map(user -> new UserDTO(
-            user.getUserID(),
-            user.getUsername(),
-            user.getRole().toString(),
-            user.getPassword(),
-            user.getEmail(),
-            user.getAddress(),
-            user.getPhoneNumber(),
-            user.getReviewID(),
-            user.getPfp())).collect(Collectors.toList());
+        return userService.getUserByUsername(username);
     }
   
     /**
