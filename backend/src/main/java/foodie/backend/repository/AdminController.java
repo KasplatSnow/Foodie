@@ -32,12 +32,6 @@ public class AdminController {
 
     @Autowired
     private RestaurantService restaurantService;
-
-/*STILL SPECIFYING */
-/*Could have the repo method return restaurant entities, 
-then the service method check the length of the returning restaurant array.
-If the array is greater than 1 , compares the ID's and deletes a restaurant using the deleteById()
- */
     /**
      * Endpoint to check if a restaurant with the same name and address 
      * exists and delete it if it does.
