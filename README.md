@@ -4,10 +4,8 @@
 
 ## Team member
 
-Frontend:
-Backend:
-
-## Team Contribution Summary
+Frontend: Richard Pham, Brandon Llanes
+Backend: Canmeron Lee
 
 ## Features
 
@@ -28,56 +26,72 @@ Backend:
 
 ## WireFrame:
 
+ <img src="/Documents/wireframe.png" alt="Wire Frame"/>
+
 ## Notes:
 
-Frontend 1. Install Node.js 2. Go into frontend directory 3. Install npm dependencies: npm install 4. Start frontend server: npm run dev
+Frontend
 
-    Deploy
-
-### Sprint Notes
-
-Meeting every MWF
-
-1. Sprint Meeting 1 (09/20):
-   We planned to split the app into 2 parts: front end interface (ReactJS) and backend API(Java Spring Boot). We decided to start with some UI designs on Figma and set up the project including dependiences and tools.
-
-2. Sprint Meeting 2 (09/23, 25, 27):
-   On this sprint, we focus on designing the rest of the system and start implementing basic functions for the front end and back end.
-
-3. Sprint Meeting 3 (09/30, 10/2, 4):
-   Sprint 3 we focus on setting authentication UI page and homepage, continuing setting up the backend and a few API endpoints so the frontend can call and integrate with the backend. More business rules and user models are created.
+1. Install node.js
+2. Go into frontend directory
+3. Install npm dependencies: npm install
+4. Start frontend server: npm run dev
 
 ### SCRUM Task Sheets
 
 1. Sprint 1
 
 - Backlog
-  ![alt text](image-3.png)
+  <img src="/Documents/sprint planning 1.png" alt="Sprint planning 1"/>
 - Burndown Chart
-  ![alt text](image-1.png)
+  <img src="/Documents/burndown 1.png" alt="Burndown chart 1"/>
 - Weekly report
-  ![alt text](image-2.png)
+  <img src="/Documents/weekly report 1_2.png" alt="Weekly report 1 & 2"/>
 
 2. Sprint 2
 
 - Backlog
-  ![alt text](image.png)
+  <img src="/Documents/sprint planning 2.png" alt="Sprint planning 2"/>
 - Burndown Chart
-  ![alt text](image-4.png)
+  <img src="/Documents/burndown 2.png" alt="Burndown chart 2"/>
 - Weekly report
-  ![alt text](image-5.png)
+  <img src="/Documents/weekly report 3_4.png" alt="Weekly report 3 & 4"/>
 
 3. Sprint 3
 
 - Backlog
+  <img src="/Documents/sprint planning 3.png" alt="Sprint planning 3"/>
 - Burndown Chart
+  <img src="/Documents/burndown 3.png" alt="Burndown chart 3"/>
 - Weekly report
+  <img src="/Documents/weekly report 5_6.png" alt="Weekly report 5 & 6"/>
 
 4. Sprint 4
 
 - Backlog
+  <img src="/Documents/sprint planning 4.png" alt="Sprint planning 4"/>
 - Burndown Chart
+  <img src="/Documents/burndown 4.png" alt="Burndown chart 4"/>
 - Weekly report
+  <img src="/Documents/weekly report 7_8.png" alt="Weekly report 7 & 8"/>
+
+5. Sprint 5
+
+- Backlog
+  <img src="/Documents/sprint planning 5.png" alt="Sprint planning 5"/>
+- Burndown Chart
+  <img src="/Documents/burndown 5.png" alt="Burndown chart 5"/>
+- Weekly report
+  <img src="/Documents/weekly report 9_10.png" alt="Weekly report 9 & 10"/>
+
+6. Sprint 6
+
+- Backlog
+  <img src="/Documents/sprint planning 6.png" alt="Sprint planning 6"/>
+- Burndown Chart
+  <img src="/Documents/burndown 6.png" alt="Burndown chart 6"/>
+- Weekly report
+  <img src="/Documents/weekly report 11_12.png" alt="Weekly report 11 & 12"/>
 
 ### XP Core Value
 
@@ -92,4 +106,7 @@ Meeting every MWF
 <img src="/Documents/user diagram.png" alt="User Diagram"/>
 <img src="/Documents/owner diagram.png" alt="Owner Diagram"/>
 <img src="/Documents/admin diagram.png" alt="Admin Diagram"/>
-<img src="/Documents/CMPE202_ClassUML.JPG" alt="Initial Class Diagram"/>
+
+### Architecture Diagram
+
+<img src="/Documents/architecture diagram.png" alt=" Architecture Diagram"/>
