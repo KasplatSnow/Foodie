@@ -14,6 +14,11 @@ import foodie.backend.repository.BusinessOwnerRepository;
 import foodie.backend.repository.BusinessOwnerService;
 import foodie.backend.repository.RestaurantService;
 
+/**
+ * Controller class for handling API endpoints related to business owners.
+ * Provides functionality for retrieving business owner details and details for the restaurants they own.
+ */
+
 @RestController
 @RequestMapping("/api/business-owner")
 public class BusinessOwnerController {
@@ -22,6 +27,13 @@ public class BusinessOwnerController {
     private BusinessOwnerService businessOwnerService;
     
     //get All restaurants of a BusinessOwner
+    /**
+     * Endpoint to retrieve a list of all restaurants and their details. 
+     * For business owners.
+     * 
+     * @param userID the business owner ID
+     * @return  the list of restaurants and their details
+     */
     @GetMapping("/getrestaurants/userID/{userID}")
     public List<RestaurantDTO> getRestaurantsByID(@PathVariable Long userID) {
         List<Restaurant> restaurants = businessOwnerService.getRestaurantByID(userID);
@@ -47,6 +59,12 @@ public class BusinessOwnerController {
 
     //gets ALL BusinessOwner details
     //check if has userID property(if wanting to check properties)
+    /**
+     * Endpoint to retrieve the details of a specific business owner by their user ID.
+     * 
+     * @param userID the unique ID of the business owner
+     * @return a BusinessOwnerDTO object with the business owner's details
+     */
     @GetMapping("/getbusinessowner/userID/{userID}")
     public BusinessOwnerDTO getBusinessOwnerByID(@PathVariable Long userID) {
         BusinessOwner businessOwner = businessOwnerService.getBusinessOwnerByID(userID);

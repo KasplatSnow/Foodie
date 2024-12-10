@@ -10,6 +10,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * Repository interface for performing CRUD operations on "Business Owners".
+ * Extends JpaRepository to provide built-in methods and also provides some db queries.
+ */
+
 @Repository
 public interface BusinessOwnerRepository extends JpaRepository<BusinessOwner, Long> {
   BusinessOwner findByEmail(String email);

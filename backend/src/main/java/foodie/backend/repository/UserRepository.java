@@ -10,6 +10,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Modifying;
 
+/**
+ * Repository interface for performing CRUD operations on "Users".
+ * Extends JpaRepository to provide built-in methods using db queries.
+ * Includes methods that find a user by a detail, find all users, if an email exists, or update a profile picture.
+ */
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 

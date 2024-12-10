@@ -20,6 +20,11 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * Creates a table for "Users" in the db alongside an one to many association between reviews.
+ * Includes the creation of setters and getters.
+ * 
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "[user]")
@@ -42,6 +47,15 @@ public class User {
 
     private String username, password, email, address, pfp;
 
+    /**
+     * Constructs the User object with the necessary info
+     * 
+     * @param username
+     * @param password
+     * @param email
+     * @param address
+     * @param phoneNumber
+     */
     public User(
     String username,
     String password,
@@ -56,6 +70,9 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Default constructor
+     */
     public User(){
 
     }
@@ -78,6 +95,13 @@ public class User {
    */
 
   // Submit a review and rating
+  /**
+   * Submit a review to a restaurant with text and rating, not implemented
+   * 
+   * @param restaurant
+   * @param reviewText
+   * @param rating
+   */
   public void submitReview(
     Restaurant restaurant,
     String reviewText,
@@ -87,77 +111,173 @@ public class User {
   }
 
   // View restaurant details including reviews
+  /**
+   * View all the details of a restaurant alongisde the reviews, not implemented
+   * 
+   * @param restaurantId
+   * @return a restaurant object
+   */
   public Restaurant viewRestaurantDetails(Long restaurantId) {
     // Implementation to fetch restaurant details, reviews, and ratings
     return null;
   }
 
+  /**
+   * Get the user ID
+   * 
+   * @return the user ID
+   */
     public long getUserID(){
       return userID;
   }
 
+  /**
+   * Get the username of the User
+   * 
+   * @return the username string
+   */
   public String getUsername(){
       return username;
   }
 
+  /**
+   * Get the user's password
+   * 
+   * @return a password
+   */
   public String getPassword(){
       return password;
   }
 
+  /**
+   * Get the email of the user
+   * 
+   * @return an email
+   */
   public String getEmail() {
       return email;
   }
 
+  /**
+   * Get the user's address
+   * 
+   * @return an address
+   */
   public String getAddress(){
       return address;
   }
 
+  /**
+   * Get the user's phone number
+   * 
+   * @return
+   */
   public String getPhoneNumber(){
       return phoneNumber;
   }
 
+  /**
+   * Get the list of user's reviews
+   * 
+   * @return list of user reviews
+   */
   public List<Review> getReviews() {
       return reviews;
   }
   
+  /**
+   * Get the user's role
+   * 
+   * @return the role
+   */
   public Role getRole() {
     return role;
   }
+
+  /**
+   * Set the user's ID
+   * 
+   * @param userID
+   */
   public void setUserID(long userID){
       this.userID = userID;
   }
 
+  /** 
+   * Sets the user's reviews
+   */
   public void setReviews(List<Review> reviews) {
       this.reviews = reviews;
   }
+
+  /**
+   * Sets the user's email
+   * 
+   * @param email
+   */
   public void setEmail(String email) {
     this.email = email;
   }
 
+  /**
+   * Sets the user's password
+   * 
+   * @param password
+   */
   public void setPassword(String password) {
     this.password = password;
   }
 
+  /**
+   * Sets the user's username
+   * 
+   * @param username
+   */
   public void setUsername(String username) {
     this.username = username;
   }
 
+  /**
+   * Sets the user's phone number
+   * 
+   * @param phoneNumber
+   */
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
+  /**
+   * Sets the user's role
+   * 
+   * @param role
+   */
   public void setRole(Role role) {
       this.role = role;
   }
  
+  /**
+   * Gets the id list of user's reviews
+   * 
+   * @return
+   */
   public List<Long> getReviewID(){
       return reviews.stream().map(Review::getReviewID).collect(Collectors.toList());
   }
    
+  /**
+   * Get the user's profile picture
+   * 
+   * @return a picture string
+   */
   public String getPfp() {
         return pfp;
   }
 
+  /**
+   * Sets the user's profile picture
+   * 
+   * @param pfp
+   */
   public void setPfp(String pfp) {
         this.pfp = pfp;
   }

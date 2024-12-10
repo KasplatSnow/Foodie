@@ -9,6 +9,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Repository interface for performing CRUD operations on "Restaurants".
+ * Extends JpaRepository to provide built-in methods using db queries.
+ * Introduces methods that find a restaurant by any detail, a full list of restaurants, deletion, and update restaurant owner 
+ */
+
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
   

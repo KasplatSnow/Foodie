@@ -11,6 +11,11 @@ import foodie.backend.repository.Restaurant;
 import foodie.backend.repository.RestaurantRegistrationRequest;
 import foodie.backend.repository.RestaurantRepository;
 
+/**
+ * Service class that provides a Restaurant creation method for the db.
+ * Also retrieves list of restaurants, updating owners, and deletion of restaurants
+ */
+
 @Service
 public class RestaurantService {
 
@@ -23,6 +28,13 @@ public class RestaurantService {
     @Autowired
     private CuisineRepository cuisineRepository;
     
+    /**
+     * Create a restaurant in the db using the restaurant object alongisde photos and cuisines.
+     * 
+     * @param restaurant
+     * @param photos
+     * @param cuisines
+     */
     public void createRestaurant(Restaurant restaurant, List<String> photos, List<String> cuisines) {
         restaurantRepository.save(restaurant);
 
@@ -43,10 +55,22 @@ public class RestaurantService {
         }
     }
     
+    /**
+     * Creates a shell restaurant in the db that can be updated with more info
+     * 
+     * @param shellRestaurant
+     */
     public void createShellRestaurant(RestaurantRegistrationRequest shellRestaurant){
         restaurantRepository.saveShellRestaurant(shellRestaurant.getName(), shellRestaurant.getAddress(), shellRestaurant.getLng(), shellRestaurant.getLat());
     }
     
+    /**
+     * Updates a restaurant in the db using the ID and a request
+     * 
+     * @param restaurantID
+     * @param updates
+     * @return the updated restaurant
+     */
     public Restaurant updateRestaurant(Long restaurantID, RestaurantRegistrationRequest updates) {
         Restaurant currentRestaurant = restaurantRepository.findByRestaurantID(restaurantID);
         if(updates.getName() != null){
@@ -104,36 +128,83 @@ public class RestaurantService {
         return restaurantRepository.save(currentRestaurant);
     }
 
+    /**
+     * Searches for restaurants in the DB by zipcode
+     * 
+     * @param zipCode
+     * @return restaurant(s) with the associated zipcode
+     */
     public List<Restaurant> getByZipCode(String zipCode){
         return restaurantRepository.findByZipCode(zipCode);
     }
 
     //finds restaurants in an address
+    /**
+     * Finds restaurants in the DB by real-life address
+     * 
+     * @param address
+     * @return the restaurants
+     */
     public List<Restaurant> getByAddress(String address) {
         return restaurantRepository.findByAddressContainingIgnoreCase(address);
     }
 
     //checks if an address already exists
+    /**
+     * Checks if the address exists in the DB
+     * 
+     * @param address
+     * @return a boolean
+     */
     public boolean getAddressExist(String address){
         return restaurantRepository.existsByAddress(address);
     }
 
+    /**
+     * Searches for restaurants with the same name as searched, in the db
+     * 
+     * @param name
+     * @return the restaurants with the searched name
+     */
     public List<Restaurant> getByName(String name) {
         return restaurantRepository.findByName(name);
     }
 
+    /**
+     * Gets all restaurants available publically in the db
+     * 
+     * @return the restaurant list
+     */
     public List<Restaurant> getAllRestaurants() {
         return restaurantRepository.findAll();
     }
 
+    /**
+     * Deletes a restaurant by ID in the db
+     * 
+     * @param restaurantID
+     */
     public void deleteById(Long restaurantID) {
         restaurantRepository.deleteById(restaurantID);
     }
 
+    /**
+     * Gets a restaurant by ID in the db
+     * 
+     * @param restaurantID
+     * @return a restaurant
+     */
     public Restaurant getByRestaurantID(Long restaurantID){
         return restaurantRepository.findByRestaurantID(restaurantID);
     }
     
+    /**
+     * Checks if a restaurant exists by a certain name and address(and deletes it?)
+     * 
+     * @param name
+     * @param address
+     * @return boolean if the restaurant exists
+     */
     public boolean checkExistByNameAndAddress(String name, String address){
         List<Restaurant> restaurants = restaurantRepository.existsByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(name, address);
         if(restaurants.size() > 1){
@@ -145,10 +216,23 @@ public class RestaurantService {
         return false;    
     }
         
+    /**
+     * Updates the owner of a restaurant by ID of owner and restaurant
+     * 
+     * @param businessOwnerID
+     * @param restaurantID
+     */
     public void setRestaurantOwner(Long businessOwnerID, Long restaurantID){
         restaurantRepository.updateOwner(businessOwnerID, restaurantID);
     }
 
+    /**
+     * Retrieves a restaurant in the db by name and address
+     * 
+     * @param name
+     * @param address
+     * @return the restaurant
+     */
     public Restaurant getRestaurantByNameAndAddress(String name, String address){
         return restaurantRepository.findByNameContainingIgnoreCaseAndAddressContainingIgnoreCase(name, address);
     }

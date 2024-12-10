@@ -16,6 +16,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+/**
+ * Represents an admin user in the system. This class extends the
+ * "User" class and includes specific fields and behaviors for an admin user.
+ * The "Admin" class inherits the attributes of a "User", including
+ * the username, password, email, address, and phone number. It also provides a
+ * constructor for initializing these fields and a default constructor.
+ * 
+ */
+
 @Entity
 @DiscriminatorValue("ADMIN")
 public class Admin extends User{
@@ -26,6 +35,16 @@ public class Admin extends User{
 
     private String username, password, email, phoneNumber;
 
+
+   /**
+     * Constructs an "Admin" object with the specified values.
+     *
+     * @param username The username 
+     * @param password The password
+     * @param email The email address
+     * @param address The real-life address 
+     * @param phoneNumber The phone number
+     */
   public Admin(
     String username,
     String password,
@@ -36,6 +55,9 @@ public class Admin extends User{
     super(username, password, email, address, phoneNumber);
   }
 
+/**
+     * Default constructor for the "Admin" class.
+     */
   public Admin(){
 
   }

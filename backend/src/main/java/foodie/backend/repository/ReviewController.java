@@ -11,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for handling API endpoints related to reviews.
+ * Provides functionality for creating reviews, getting reviews, and creating a shell restaurant with a review.
+ */
+
 @RestController
 @RequestMapping("/api/review")
 public class ReviewController {
@@ -24,10 +29,21 @@ public class ReviewController {
     @Autowired
     private RestaurantService restaurantService;
     
+    /**
+     * Constructs the review controller with the review service
+     * 
+     * @param reviewService
+     */
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
+    /**
+     * Creates a review and returns a response, using a request
+     * 
+     * @param writeRequest
+     * @return a response
+     */
   @PostMapping("/write")/*UPDATED BAD REQUEST RESPONSES */
   public ResponseEntity<?> writeReview(@RequestBody ReviewWriteRequest writeRequest) {
             //check if restaurant already exists via
@@ -61,6 +77,12 @@ public class ReviewController {
     }
 
     //retrieves all reviews for a restaurant
+    /**
+     * Gets all the reviews for a certain restaurant using the restaurant's ID
+     * 
+     * @param restaurantID
+     * @return a list of reviews
+     */
     @GetMapping("/allreviews/restaurantID/{restaurantID}") /* UPDATED PATH  AND CREATED REVIEWDTO*/
     public List<ReviewDTO> getReviews(@PathVariable Long restaurantID) {
         List<Review> reviews = reviewService.getReviewByRestaurantID(restaurantID);
@@ -72,6 +94,12 @@ public class ReviewController {
             review.getRating())).collect(Collectors.toList());
     }
 
+    /**
+     * Gets all the reviews a certain user has made, using their ID
+     * 
+     * @param userID
+     * @return a list of user reviews
+     */
     @GetMapping("/userreviews/userID/{userID}")
     public List<ReviewDTO> getUserReviews(@PathVariable Long userID) {
         List<Review> reviews = reviewService.getReviewByUserID(userID);
@@ -83,6 +111,12 @@ public class ReviewController {
             review.getRating())).collect(Collectors.toList());    
     }
 
+    /**
+     * Creates a shell restaurant and a review using a request. And creates a response.
+     * 
+     * @param shellRequest
+     * @return a response
+     */
     @PostMapping("/createshellrestaurant")
     public ResponseEntity<?> createShellRestaurantAndWriteReview(@RequestBody ShellRequest shellRequest ) {
         RestaurantRegistrationRequest shellRestaurant = shellRequest.getRestaurant();
