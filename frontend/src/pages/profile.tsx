@@ -75,65 +75,6 @@ export default function ProfilePage() {
         );
     }
 
-    if (userData && userData.reviewID && userData.reviewID.length <= 0) {
-        return (
-            <Box sx={{ height: '100%' }}>
-                <Header />
-
-                <Box sx={{ marginTop: '0', background: `url('https://foodie.sysco.com/wp-content/uploads/2024/08/Sysco_Panchetta-64.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Card sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 2, width: "40%", height: { xs: '70%', md: '100%' }, marginTop: { xs: '3rem', md: '4rem' } }}>
-                        <Avatar
-                            alt="Profile Picture"
-                            src={userData.profilePicture || "/path/to/your/image.jpg"}  // Assuming profilePicture exists in the user data
-                            sx={{
-                                width: { xs: 100, md: 200 },
-                                height: { xs: 100, md: 200 },
-                                marginBottom: { xs: '2rem', md: '2rem' },
-                                borderRadius: 0, // Make it square
-                            }}
-                        />
-                        <Typography
-                            variant="h6"
-                            fontWeight={"bold"}
-                            sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' }, marginBottom: { xs: '2rem', md: '2rem' }, }}
-                        >
-                            No Reviews Yet
-                        </Typography>
-
-                        <Typography
-                            variant="h5"
-                            fontWeight={"bold"}
-                            sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}
-                        >
-                            {userData.username}
-                        </Typography>
-
-                        <Typography
-                            variant="h6"
-                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
-                        >
-                            {userData.email}
-                        </Typography>
-
-                        <Typography
-                            variant="h6"
-                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem' }, marginBottom: 1 }}
-                        >
-                            {userData.address || 'No address available'}
-                        </Typography>
-
-                        <Typography
-                            variant="h6"
-                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
-                        >
-                            {userData.phoneNumber || 'No phone number available'}
-                        </Typography>
-                    </Card>
-                </Box>
-            </Box>
-        );
-    }
-
     return (
         <Box sx={{ height: '100%' }}>
             <Header />
