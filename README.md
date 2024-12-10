@@ -41,7 +41,7 @@ Documentation: Patrick Chau
 
 ### Deployment Diagram
 
-<img src="/Documents/deployment_diagram.png" alt=" Deployment Diagram"/>
+<img src="/Documents/deployment_Diagram.png" alt=" Deployment Diagram"/>
 
 ### Use case Diagrams
 
