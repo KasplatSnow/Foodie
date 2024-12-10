@@ -5,7 +5,9 @@
 ## Team member
 
 Frontend: Richard Pham, Brandon Llanes
+
 Backend: Cameron Lee
+
 Documentation: Patrick Chau
 
 ## Features
