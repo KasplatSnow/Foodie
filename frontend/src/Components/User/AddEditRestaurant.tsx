@@ -135,19 +135,22 @@ const EditRestaurantForm: React.FC<{
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-  console.log('EDIT', formData)
 
   const handleSave = () => {
     const data = {
       ...formData,
-      cuisine:
-        typeof formData.cuisine === 'string'
-          ? formData.cuisine.split(',').map((c) => c.trim())
-          : [],
-      photo:
-        typeof formData.photo === 'string'
-          ? formData.photo.split(',').map((p) => p.trim())
-          : [],
+      cuisine: formData.cuisine
+        ? formData.cuisine
+            .split(',')
+            .map((c) => c.trim())
+            .filter((c) => c)
+        : [],
+      photo: formData.photo
+        ? formData.photo
+            .split(',')
+            .map((p) => p.trim())
+            .filter((p) => p)
+        : [],
     }
     onSave(data)
     onClose()
