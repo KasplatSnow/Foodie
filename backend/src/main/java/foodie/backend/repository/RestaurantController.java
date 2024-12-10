@@ -68,7 +68,7 @@ public class RestaurantController {
      * @return a restaurant data-transfer-objects
      */
     @GetMapping("/getrestaurant/restaurantbyid/{restaurantID}")
-    public RestaurantDTO getRestaurantByName(@PathVariable Long restaurantID) {
+    public RestaurantDTO getRestaurantByID(@PathVariable Long restaurantID) {
         return restaurantService.getByRestaurantID(restaurantID);
     }
     
