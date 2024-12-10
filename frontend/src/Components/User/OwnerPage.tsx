@@ -145,7 +145,7 @@ interface PostRestaurantParams {
   }
 */
 const postRestaurant = ({ newRestaurant, setError }: PostRestaurantParams) => {
-  console.log("NEW", newRestaurant);
+  console.log('NEW', newRestaurant)
   return fetch(`http://localhost:8080/api/restaurants/register`, {
     method: 'POST',
     headers: {
@@ -303,7 +303,7 @@ const OwnerPage: React.FC = () => {
       ...data,
       lat,
       lng,
-      "businessOwnerId": loginContext.userId
+      businessOwnerId: loginContext.userId,
     }
     // Add new restaurant
     setRestaurants((prevRestaurants) => [
@@ -420,6 +420,7 @@ const OwnerPage: React.FC = () => {
           display: 'flex',
           flexGrow: 1,
           overflow: 'hidden',
+          marginTop: '50px',
         }}
       >
         {/* Left Column: Customer Info */}
