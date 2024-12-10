@@ -36,25 +36,7 @@ public class BusinessOwnerController {
      */
     @GetMapping("/getrestaurants/userID/{userID}")
     public List<RestaurantDTO> getRestaurantsByID(@PathVariable Long userID) {
-        List<Restaurant> restaurants = businessOwnerService.getRestaurantByID(userID);
-
-        return restaurants.stream().map(restaurant -> new RestaurantDTO(
-            restaurant.getRestaurantID(),
-            restaurant.getName(),
-            restaurant.getAddress(),
-            restaurant.getZipCode(),
-            restaurant.getPhoneNumber(),
-            restaurant.getEmail(),
-            restaurant.getCuisine().stream().map(Cuisine::getCuisine).collect(Collectors.toList()),
-            restaurant.getHours(),
-            restaurant.getDescription(),
-            restaurant.getRating(),
-            restaurant.getPrice(),
-            restaurant.getOwnerID(),
-            restaurant.getPhoto().stream().map(Photo::getPhoto).collect(Collectors.toList()),
-            restaurant.getLng(),
-            restaurant.getLat(),
-            restaurant.getReviewID())).collect(Collectors.toList());
+        return businessOwnerService.getRestaurantByID(userID);
     }
 
     //gets ALL BusinessOwner details
@@ -67,13 +49,6 @@ public class BusinessOwnerController {
      */
     @GetMapping("/getbusinessowner/userID/{userID}")
     public BusinessOwnerDTO getBusinessOwnerByID(@PathVariable Long userID) {
-        BusinessOwner businessOwner = businessOwnerService.getBusinessOwnerByID(userID);
-        return new BusinessOwnerDTO(
-            businessOwner.getUserID(),
-            businessOwner.getUsername(),
-            businessOwner.getAddress(),
-            businessOwner.getPhoneNumber(),
-            businessOwner.getEmail(),
-            businessOwner.getRestaurantID());
+        return businessOwnerService.getBusinessOwnerByID(userID);
     }
 }
