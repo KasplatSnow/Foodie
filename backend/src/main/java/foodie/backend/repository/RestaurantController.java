@@ -82,7 +82,7 @@ public class RestaurantController {
     @PutMapping("update/restaurantid/{restaurantID}")
     public ResponseEntity<?> putUpdateRestaurant(@PathVariable Long restaurantID, @RequestBody RestaurantRegistrationRequest updates) {
         Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurantID, updates);
-        return ResponseEntity.ok(updatedRestaurant);
+        return ResponseEntity.ok(updateRestaurant);
     }
 
     /**

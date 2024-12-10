@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import foodie.backend.repository.Review;
 import foodie.backend.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
