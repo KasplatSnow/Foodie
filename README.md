@@ -28,15 +28,23 @@ Backend: Canmeron Lee
 
  <img src="/Documents/wireframe.png" alt="Wire Frame"/>
 
-### Diagrams
+### Architecture Diagram
+
+<img src="/Documents/architecture diagram.png" alt=" Architecture Diagram"/>
+
+### Component Diagram
+
+<img src="/Documents/component.png" alt=" Component Diagram"/>
+
+### Deployment Diagram
+
+<img src="/Documents/deployment_diagram.png" alt=" Deployment Diagram"/>
+
+### Use case Diagrams
 
 <img src="/Documents/user diagram.png" alt="User Diagram"/>
 <img src="/Documents/owner diagram.png" alt="Owner Diagram"/>
 <img src="/Documents/admin diagram.png" alt="Admin Diagram"/>
-
-### Architecture Diagram
-
-<img src="/Documents/architecture diagram.png" alt=" Architecture Diagram"/>
 
 ## Notes:
 
