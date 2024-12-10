@@ -92,3 +92,4 @@ Meeting every MWF
 <img src="/Documents/user diagram.png" alt="User Diagram"/>
 <img src="/Documents/owner diagram.png" alt="Owner Diagram"/>
 <img src="/Documents/admin diagram.png" alt="Admin Diagram"/>
+<img src="/Documents/CMPE202_ClassUML.JPG" alt="Initial Class Diagram"/>
