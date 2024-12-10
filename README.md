@@ -29,7 +29,7 @@ Documentation: Patrick Chau
 
 ## WireFrame:
 
- <img src="/Documents/wireframe.png" alt="Wire Frame"/>
+ <img src="/Documents/wireframe2.png" alt="Wire Frame"/>
 
 ### Architecture Diagram
 
@@ -41,7 +41,7 @@ Documentation: Patrick Chau
 
 ### Deployment Diagram
 
-<img src="/Documents/deployment_diagram.png" alt=" Deployment Diagram"/>
+<img src="/Documents/deployment.png" alt=" Deployment Diagram"/>
 
 ### Use case Diagrams
 
@@ -65,7 +65,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 1.png" alt="Sprint planning 1"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 1.png" alt="Burndown chart 1"/>
+
 - Weekly report
   <img src="/Documents/weekly report 1_2.png" alt="Weekly report 1 & 2"/>
 
@@ -74,7 +76,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 2.png" alt="Sprint planning 2"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 2.png" alt="Burndown chart 2"/>
+
 - Weekly report
   <img src="/Documents/weekly report 3_4.png" alt="Weekly report 3 & 4"/>
 
@@ -83,7 +87,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 3.png" alt="Sprint planning 3"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 3.png" alt="Burndown chart 3"/>
+
 - Weekly report
   <img src="/Documents/weekly report 5_6.png" alt="Weekly report 5 & 6"/>
 
@@ -92,7 +98,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 4.png" alt="Sprint planning 4"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 4.png" alt="Burndown chart 4"/>
+
 - Weekly report
   <img src="/Documents/weekly report 7_8.png" alt="Weekly report 7 & 8"/>
 
@@ -101,7 +109,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 5.png" alt="Sprint planning 5"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 5.png" alt="Burndown chart 5"/>
+
 - Weekly report
   <img src="/Documents/weekly report 9_10.png" alt="Weekly report 9 & 10"/>
 
@@ -110,7 +120,9 @@ Frontend
 - Backlog
   <img src="/Documents/sprint planning 6.png" alt="Sprint planning 6"/>
 - Burndown Chart
+
   <img src="/Documents/burndown 6.png" alt="Burndown chart 6"/>
+
 - Weekly report
   <img src="/Documents/weekly report 11_12.png" alt="Weekly report 11 & 12"/>
 
